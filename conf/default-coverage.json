@@ -1,0 +1,14 @@
+{
+  "ignore": {
+    "clientside": {
+      "inapp": [
+
+      ],
+      "public": [
+      ]
+    },
+    "serverside": {
+
+    }
+  }
+}
