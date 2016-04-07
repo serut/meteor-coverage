@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/TODO.png?branch=master)](https://travis-ci.org/TODO)
+[![Build Status](https://travis-ci.org/serut/meteor-coverage.png?branch=master)](https://travis-ci.org/serut/meteor-coverage)
 
 meteor-coverage
 =========================
