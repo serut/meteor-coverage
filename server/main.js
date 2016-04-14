@@ -1,3 +1,3 @@
-if (process.env["COVERAGE"] === "1") {
-    Core.hookLoader();
+if (IS_COVERAGE_ACTIVE) {
+    Instrumenter.hookLoader();
 }

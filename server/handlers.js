@@ -1,20 +1,18 @@
-if (process.env["COVERAGE"] === "1") {
+if (IS_COVERAGE_ACTIVE) {
     var fs = Npm.require('fs'),
         path = Npm.require('path');
 
 
-    showFolderCoverage = function(params, req, res, next) {
+    showCoverage = function (params, req, res, next) {
         var url = params.query.p;
         Core.render(url, res, '/coverage/');
-    }
-    showcoverage = function (params, req, res, next) {
-        Core.render(null, res, '/coverage/');
     }
 
     // @Todo: use async functions
     getAsset = function(params, req, res, next) {
-        var assetsDir = path.join(path.resolve('.'), "assets/packages/meteor-coverage/assets/"),
+        var assetsDir = path.join(path.resolve('.'), "assets/packages/lmieulet_meteor-coverage/assets/"),
             filename = params.filename;
+        Log.info(assetsDir)
         if (fs.existsSync(path.join(assetsDir, filename))) {
             var fileContent = fs.readFileSync(assetsDir + '/' + filename);
             res.end(fileContent);
@@ -37,7 +35,7 @@ if (process.env["COVERAGE"] === "1") {
         var clientCoverage
         for (var property in body) {
             if (body.hasOwnProperty(property)) {
-                clientCoverage = JSON.parse(property);
+                clientCoverage = body[property];
             }
         }
         if (clientCoverage) {
@@ -45,26 +43,32 @@ if (process.env["COVERAGE"] === "1") {
             res.end('Thanks !');
         } else {
             res.writeHead(400);
-            res.end();
+            res.end("Nothing has been imported");
         }
     }
 
     instrumentClientJs = function(params, req, res, next) {
         var fileurl = req.url.split('?')[0];
-        if (Core.shallInstrumentClientScript(fileurl)) {
+        if (Instrumenter.shallInstrumentClientScript(fileurl)) {
             var path,
                 pathLabel;
+            // Either a package
             if (req.url.indexOf('/packages') == 0) {
                 path = '../web.browser'
                 pathLabel = path + fileurl;
+            } else if (req.url.indexOf('/app') == 0){
+                // Or the app/app.js
+                path = '../web.browser'
+                pathLabel = path + fileurl;
             } else {
+                // Or a public file
                 path = '../web.browser/app'
                 pathLabel = path + fileurl;
             }
             if (fs.existsSync(path + fileurl)) {
                 var fileContent = fs.readFileSync(path + fileurl, 'utf8');
                 res.setHeader('Content-type', 'application/javascript')
-                res.end(Core.instrumentSync(fileContent, pathLabel));
+                res.end(Instrumenter.instrumentClientScriptSync(fileContent, pathLabel));
             } else {
                 next();
             }
@@ -74,8 +78,7 @@ if (process.env["COVERAGE"] === "1") {
     }
 
     Handlers = {
-        showFolderCoverage: showFolderCoverage,
-        showcoverage: showcoverage,
+        showCoverage: showCoverage,
         getAsset: getAsset,
         addClientCoverage: addClientCoverage,
         instrumentClientJs: instrumentClientJs

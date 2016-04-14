@@ -1,6 +1,6 @@
 Package.describe({
   name: 'lmieulet:meteor-coverage',
-  version: '0.1.0',
+  version: '0.2.0',
   // Brief, one-line summary of the package.
   summary: 'Server and client coverage for Meteor',
   // URL to the Git repository containing the source code for this package.
@@ -13,8 +13,7 @@ Package.describe({
 
 Package.onUse(function(api) {
   api.versionsFrom('METEOR@1.3.1');
-  api.use(['ecmascript', 'meteorhacks:picker@1.0.3'], 'server');
-  api.use('underscore');
+  api.use(['ecmascript', 'meteorhacks:picker', 'underscore'], 'server');
 
 
   // Add datasets
@@ -30,17 +29,23 @@ Package.onUse(function(api) {
       , 'server');
 
   api.addFiles([
+    'server/log.js',
     'server/conf.js',
     'server/core.js',
     'server/handlers.js',
     'server/routes.js',
+    'server/instrumenter.js',
+    'server/source-map.js',
     'server/main.js',
   ], 'server');
+
+  api.addFiles([
+    'client/methods.js'
+  ], 'client');
 });
 
 
 Npm.depends({
-  "istanbul": "1.0.0-alpha.2",
   "istanbul-api": "1.0.0-alpha.13",
   'body-parser': '1.15.0'
 });
