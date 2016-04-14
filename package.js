@@ -16,6 +16,7 @@ Package.onUse(function(api) {
   api.use(['ecmascript', 'meteorhacks:picker@1.0.3', 'underscore'], 'server');
 
 
+  api.use("modules");
   // Add datasets
   api.addAssets('conf/default-coverage.json', 'server');
 

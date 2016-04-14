@@ -4,7 +4,7 @@
 Meteor.sendCoverage = function (callback) {
     var coverageReport = {},
         stats = {SUCCESS: 0, FAILED: 0, TOTAL: 0};
-    if (!__coverage__) {
+    if (global['__coverage__'] == undefined) {
         return callback(stats);
     }
     // Send each property alone
