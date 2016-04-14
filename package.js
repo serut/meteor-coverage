@@ -13,7 +13,7 @@ Package.describe({
 
 Package.onUse(function(api) {
   api.versionsFrom('METEOR@1.3.1');
-  api.use(['ecmascript', 'meteorhacks:picker', 'underscore'], 'server');
+  api.use(['ecmascript', 'meteorhacks:picker@1.0.3', 'underscore'], 'server');
 
 
   // Add datasets
