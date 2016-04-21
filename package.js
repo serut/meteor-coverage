@@ -1,14 +1,10 @@
 Package.describe({
   name: 'lmieulet:meteor-coverage',
-  version: '0.2.1',
-  // Brief, one-line summary of the package.
+  version: '0.3.0',
   summary: 'Server and client coverage for Meteor',
-  // URL to the Git repository containing the source code for this package.
   git: 'https://github.com/serut/meteor-coverage',
-  // By default, Meteor will default to using README.md for documentation.
-  // To avoid submitting documentation, set this field to null.
   documentation: 'README.md',
-  debugOnly: true // this package is not included in builds
+  debugOnly: true // this package is not included on prod
 });
 
 Package.onUse(function(api) {

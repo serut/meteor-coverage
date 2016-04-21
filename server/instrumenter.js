@@ -41,15 +41,17 @@ if (IS_COVERAGE_ACTIVE) {
         if (fileurl.indexOf('.js') > -1) {
             if (fileurl.indexOf('packages') === 1) {
                 if (!_.contains(Conf.ignore.clientside.inapp, fileurl)) {
+                    Log.info("[ClientSide][InApp] file instrumented: " + fileurl)
                     return true;
                 } else {
-                    Log.info("[DEBUG][CLIENT] - Ignore the file " + file)
+                    Log.info("[ClientSide][InApp] file ignored: " + fileurl)
                 }
             } else {
                 if (!_.contains(Conf.ignore.clientside.public, fileurl)) {
+                    Log.info("[ClientSide][Public] file instrumented: " + fileurl)
                     return true;
                 } else {
-                    Log.info("[DEBUG][CLIENT] - Ignore the file /public" + file)
+                    Log.info("[ClientSide][Public] file ignored: " + fileurl)
                 }
             }
         }
@@ -66,31 +68,27 @@ if (IS_COVERAGE_ACTIVE) {
     shallInstrumentServerScript = function (file) {
         var root = __meteor_bootstrap__.serverDir;
         if (file.indexOf(root) !== 0) {
+            Log.info("[ServerSide][OutsideApp] file ignored: " + file)
             return false;
-        } else {
-            Log.info("Ignore the file " + file)
         }
         file = file.substring(root.length);
         if (file.indexOf('node_modules') >= 0) {
+            Log.info("[ServerSide][node_modules] file ignored: " + file)
             return false;
-        } else {
-            Log.info("Ignore this node_modules " + file)
         }
         if (file.indexOf('/packages') >= 0) {
             var packageName = file.split('/packages/');
-            if (!_.contains(Conf.ignore.serverside.packages, packageName[1])) {
+            if (!_.contains(Conf.ignore.serverside, packageName[1])) {
                 SourceMap.registerSourceMap(root+file);
+                Log.info("[ServerSide][Package] file instrumented: " + file)
                 return true;
             } else {
-                Log.info("coverage.json ignore the file " + file)
+                Log.info("[ServerSide][Package] file ignored: " + file)
             }
         } else {
-            if (!_.contains(Conf.ignore.serverside.inapp, file)) {
-                SourceMap.registerSourceMap(root+file);
-                return true;
-            } else {
-                Log.info("coverage.json ignore the file " + file)
-            }
+            SourceMap.registerSourceMap(root+file);
+            Log.info("[ServerSide][App.js] file instrumented: " + file)
+            return true;
         }
         return false;
     }

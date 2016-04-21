@@ -12,7 +12,6 @@ if (IS_COVERAGE_ACTIVE) {
     getAsset = function(params, req, res, next) {
         var assetsDir = path.join(path.resolve('.'), "assets/packages/lmieulet_meteor-coverage/assets/"),
             filename = params.filename;
-        Log.info(assetsDir)
         if (fs.existsSync(path.join(assetsDir, filename))) {
             var fileContent = fs.readFileSync(assetsDir + '/' + filename);
             res.end(fileContent);

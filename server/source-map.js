@@ -2,20 +2,21 @@ if (IS_COVERAGE_ACTIVE) {
     var istanbulAPI = Npm.require('istanbul-api'),
         fs = Npm.require('fs'),
         sourceMap = istanbulAPI.libSourceMaps.createSourceMapStore({verbose: true}),
-        meteor_dir = COVERAGE_APP_FOLDER;
+        meteor_dir = COVERAGE_APP_FOLDER,
+        regexAlterationSourceMapPath = new RegExp(/(packages\/)([a-zA-Z-]*)[_:]([a-zA-Z-_]*)(.*)/);
 
 
     // Alter inside the source map the path of each sources
     alterSourceMapPaths = function (map) {
+        var match;
         for (var i = 0; i < map.sources.length; i++) {
             // Magic character inside the path
             var paths = map.sources[i].split(String.fromCharCode(56507) + "app/");
             if (paths.length == 2) {
                 var path = paths[1];
                 // if it's a package the path is wrong
-                if (path.indexOf(':') > -1) {
-                    var p = path.split(':');
-                    map.sources[i] = meteor_dir + "packages/" + p[1];
+                if (match = regexAlterationSourceMapPath.exec(path)) {
+                    map.sources[i] = meteor_dir + match[1] + match[3] + match[4];
                 } else {
                     map.sources[i] = meteor_dir + path;
                 }

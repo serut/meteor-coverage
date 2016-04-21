@@ -4,7 +4,7 @@ if (IS_COVERAGE_ACTIVE) {
     var fs = Npm.require('fs'),
         path = Npm.require('path'),
         get = function() {
-        var coverageFile = path.join(process.env["COVERAGE_APP_FOLDER"], '.coverage.json'),
+        var coverageFile = path.join(COVERAGE_APP_FOLDER, '.coverage.json'),
             fileContent;
         if (coverageFile !== undefined) {
             if (fs.existsSync(coverageFile)) {
