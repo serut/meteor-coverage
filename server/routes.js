@@ -18,6 +18,10 @@ if (IS_COVERAGE_ACTIVE) {
     // Show static assets
     getRoute.route('/coverage/asset/:filename', Handlers.getAsset);
 
+    getRoute.route('/coverage/export/:type?', Handlers.exportFile);
+
+    getRoute.route('/coverage/import', Handlers.importCoverage);
+
     getRoute.route('/:arg1?/:arg2?/:arg3?/:arg4?', Handlers.instrumentClientJs);
 
     //merge client coverage posted from browser

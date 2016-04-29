@@ -8,21 +8,25 @@ if (IS_COVERAGE_ACTIVE) {
         Core.render(url, res, '/coverage/');
     }
 
-    // @Todo: use async functions
     getAsset = function(params, req, res, next) {
         var assetsDir = path.join(path.resolve('.'), "assets/packages/lmieulet_meteor-coverage/assets/"),
             filename = params.filename;
-        if (fs.existsSync(path.join(assetsDir, filename))) {
-            var fileContent = fs.readFileSync(assetsDir + '/' + filename);
-            res.end(fileContent);
-        } else {
-            if (fs.existsSync(path.join(assetsDir, '/vendor/', filename))) {
-                var fileContent = fs.readFileSync(assetsDir + '/vendor/' + filename);
-                res.end(fileContent);
+        fs.exists(path.join(assetsDir, filename), function(exists) {
+            if (!exists) {
+              fs.exists(path.join(assetsDir, '/vendor/', filename), function(exists) {
+                  if (!exists) return next();
+                  fs.readFile(assetsDir + '/vendor/' + filename, function (err, fileContent) {
+                      if (err) throw err;
+                      res.end(fileContent);
+                  });
+              });
             } else {
-                next();
+              fs.readFile(assetsDir + '/' + filename, function (err, fileContent) {
+                  if (err) throw err;
+                  res.end(fileContent);
+              });
             }
-        }
+        });
     }
 
     addClientCoverage = function (params, req, res, next) {
@@ -46,6 +50,30 @@ if (IS_COVERAGE_ACTIVE) {
         }
     }
 
+
+    exportFile = function (params, req, res, next) {
+        var _type = params.type,
+            allowedTypes = ['cobertura', 'html', 'json', 'json-summary', 'lcov', 'none', 'teamcity', 'text', 'text-lcov', 'text-summary', 'lcovonly', 'coverage'];
+            type = (_.contains(_type, allowedTypes)) ? _type : 'coverage';
+
+        try {
+            Core.exportFile(res, type);
+        } catch (e) {
+            Log.error("Failed to export", e, e.stack)
+            res.writeHead(400);
+            res.end("Nothing has been export");
+        }
+    }
+    importCoverage = function (params, req, res, next) {
+        try {
+            Core.importCoverage(res);
+        } catch (e) {
+            Log.error("Failed to import", e, e.stack)
+            res.writeHead(400);
+            res.end("No file has been import");
+        }
+    }
+
     instrumentClientJs = function(params, req, res, next) {
         var fileurl = req.url.split('?')[0];
         if (Instrumenter.shallInstrumentClientScript(fileurl)) {
@@ -64,13 +92,17 @@ if (IS_COVERAGE_ACTIVE) {
                 path = '../web.browser/app'
                 pathLabel = path + fileurl;
             }
-            if (fs.existsSync(path + fileurl)) {
-                var fileContent = fs.readFileSync(path + fileurl, 'utf8');
-                res.setHeader('Content-type', 'application/javascript')
-                res.end(Instrumenter.instrumentClientScriptSync(fileContent, pathLabel));
-            } else {
-                next();
-            }
+            res.setHeader('Content-type', 'application/javascript')
+            fs.exists(path + fileurl, function(exists) {
+                if (!exists) return next();
+                fs.readFile(path + fileurl, 'utf8', function (err, fileContent) {
+                    if (err) return next();
+                    Instrumenter.instrumentJs(fileContent, pathLabel, function(err, data) {
+                        if (err) throw err;
+                        res.end(data);
+                    })
+                })
+            })
         } else {
             next();
         }
@@ -80,7 +112,9 @@ if (IS_COVERAGE_ACTIVE) {
         showCoverage: showCoverage,
         getAsset: getAsset,
         addClientCoverage: addClientCoverage,
-        instrumentClientJs: instrumentClientJs
+        instrumentClientJs: instrumentClientJs,
+        exportFile: exportFile,
+        importCoverage: importCoverage
     }
 
 }

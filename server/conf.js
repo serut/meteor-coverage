@@ -22,6 +22,4 @@ if (IS_COVERAGE_ACTIVE) {
         return JSON.parse(fileContent);
     }
     Conf = get();
-} else {
-    Log.error("Coverage not launched, process.env.COVERAGE != 1")
 }

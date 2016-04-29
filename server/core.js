@@ -6,7 +6,8 @@ if (IS_COVERAGE_ACTIVE) {
         ReportImpl = istanbulAPI.reportsImpl,
         Coverage = istanbulAPI.libCoverage,
         path = Npm.require('path'),
-        fs = Npm.require('fs');
+        fs = Npm.require('fs'),
+        reportFilename = 'report.json';
 
 
     // Log.info(istanbulAPI)
@@ -84,20 +85,20 @@ if (IS_COVERAGE_ACTIVE) {
         return {
             verbose: true,
                 linkMapper: {
-            getPath: function (node) {
-                if (typeof node === 'string') {
-                    return node;
+                getPath: function (node) {
+                    if (typeof node === 'string') {
+                        return node;
+                    }
+                    var filePath = node.getQualifiedName();
+                    return filePath;
+                },
+                relativePath: function (source, target) {
+                    return prefix + "show?p=" + this.getPath(target);;
+                },
+                assetPath: function (node, name) {
+                    return prefix + "asset/" + name;
                 }
-                var filePath = node.getQualifiedName();
-                return filePath;
-            },
-            relativePath: function (source, target) {
-                return prefix + "show?p=" + this.getPath(target);;
-            },
-            assetPath: function (node, name) {
-                return prefix + "asset/" + name;
             }
-        }
         }
     }
 
@@ -111,8 +112,116 @@ if (IS_COVERAGE_ACTIVE) {
         setCoverageObject(coverageMap.toJSON());
     }
 
+    function exportFile (res, type) {
+        Log.info("export coverage to file using type ", type)
+
+        switch (type) {
+            case 'lcovonly':
+                var opts = exportFile_getOpts(type),
+                    report = ReportImpl.create(type, opts);
+                report.file = path.join(COVERAGE_APP_FOLDER, report.file);
+                var context = exportFile_getContext(report.file)
+
+                break;
+        }
+        var coverage = getCoverageObject();
+
+        switch (type) {
+            case 'clover':
+            case 'cobertura':
+            case 'html':
+            case 'json':
+            case 'json-summary':
+            case 'lcov':
+            case 'none':
+            case 'teamcity':
+            case 'text':
+            case 'text-lcov':
+            case 'text-summary':
+                res.end('Not working yet');
+                // not working
+                break;
+            case 'lcovonly':
+                coverageMap = SourceMap.lib.transformCoverage(
+                    Coverage.createCoverageMap(coverage)
+                ).map,
+                coverageMap = SourceMap.lib.transformCoverage(coverageMap).map;
+                var node = Report.summarizers.flat(coverageMap)
+                var childs = node.getRoot().getChildren();
+                report.onStart(null, context);
+                for (var i = 0; i < childs.length; i++) {
+                    report.onDetail(childs[i], context);
+                }
+                res.end('Thanks !');
+                break;
+            case 'coverage':
+                var coverageReport = JSON.stringify(coverage),
+                    reportPath = path.join(COVERAGE_APP_FOLDER, reportFilename);
+                fs.writeFile(reportPath, coverageReport, function (err) {
+                    if (err) {
+                        throw "failed to write report file: "+reportPath
+                    }
+                    res.end('Thanks !');
+                })
+                break;
+        }
+    }
+    function exportFile_getOpts(type) {
+        var opts = IS_COVERAGE_VERBOSE ? {verbose: true} : {};
+        switch (type) {
+            case 'teamcity':
+                opts.file = 'teamcity.file'
+        }
+        return opts;
+    }
+    function exportFile_getContext(filepath) {
+        var context = Report.createContext();
+        fs.writeFileSync(filepath, '');
+        Object.defineProperty(context, 'writer', {
+            value: {
+                writeFile: function(){
+                    return {
+                        write: function(data) {
+                            fs.appendFileSync(filepath, data, {flag: 'a'});
+                        },
+                        println: function(data) {
+                            fs.appendFileSync(filepath, data + '\r', {flag: 'a'});
+                        },
+                        close: function() {
+                        }
+                    };
+                }
+            }
+        });
+        return context;
+    }
+
+    function importCoverage (res){
+        Log.info("import coverage")
+        var reportPath = path.join(COVERAGE_APP_FOLDER, reportFilename);
+        fs.exists(reportPath, function(exists) {
+            if (!exists) {
+                throw "report file not found: "+reportPath
+            }
+            fs.readFile(reportPath, 'utf8', function (err, fileContent) {
+                if (err) {
+                    throw "failed to read report file: "+reportPath
+                }
+                var coverageObj = JSON.parse(fileContent);
+                for (var property in coverageObj) {
+                    if (coverageObj.hasOwnProperty(property)) {
+                        mergeCoverageWith(coverageObj[property]);
+                    }
+                    res.end('Thanks !');
+                }
+            })
+        })
+    }
+
     Core = {
         render: render,
         mergeClientCoverage: mergeCoverageWith,
+        exportFile: exportFile,
+        importCoverage: importCoverage
     }
 }

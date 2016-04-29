@@ -1,5 +1,5 @@
 /**
- * Usage: Meteor.sendCoverage(function(stats) {console.log(stats);});
+ * Usage: Meteor.sendCoverage(function(stats,err) {console.log(stats,err);});
  */
 Meteor.sendCoverage = function (callback) {
     var coverageReport = {},
@@ -34,4 +34,37 @@ Meteor.sendCoverage = function (callback) {
             })
         }
     }
+}
+
+/**
+* Usage: Meteor.exportCoverage(null, function(err) {console.log(err)})
+*/
+Meteor.exportCoverage = function (type, callback) {
+    var url = type ? '/coverage/export/'+type : '/coverage/export';
+    $.ajax({
+        method: 'GET',
+        url: url,
+        success: function() {
+            callback();
+        },
+        error: function() {
+            callback(arguments);
+        }
+    })
+}
+
+/**
+* Usage: Meteor.importCoverage(function(err) {console.log(err)})
+*/
+Meteor.importCoverage = function (callback) {
+    $.ajax({
+        method: 'GET',
+        url: '/coverage/import',
+        success: function() {
+           callback();
+        },
+        error: function() {
+           callback(arguments);
+        }
+    })
 }

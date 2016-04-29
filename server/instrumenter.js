@@ -31,9 +31,9 @@ if (IS_COVERAGE_ACTIVE) {
         );
     }
 
-    instrumentClientScript = function (content, path) {
+    instrumentJs = function (content, path, callback) {
         SourceMap.registerSourceMap(path);
-        return instrumenter.instrumentSync(content, path);
+        return instrumenter.instrument(content, path, callback);
     }
 
 
@@ -94,7 +94,7 @@ if (IS_COVERAGE_ACTIVE) {
     }
 
     Instrumenter = {
-        instrumentClientScriptSync: instrumentClientScript,
+        instrumentJs: instrumentJs,
         shallInstrumentClientScript: shallInstrumentClientScript,
         hookLoader: hookLoader
     }
