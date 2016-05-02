@@ -41,6 +41,8 @@ You need to set up these environment variables:
 
 ## Client API
 
+See this [spacejam fork](https://github.com/serut/spacejam/commit/8cd3be8b4566f473de716531d07daad719a511f0#diff-d996d1b7a7cbf9674912e74ab1f89d0bR52) to see a real example of a test runner that save the coverage into lcovonly format.
+
 #### Meteor.sendCoverage(callback)
 
 Run the following command in your browser and the client coverage will be saved into the server  

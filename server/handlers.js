@@ -50,11 +50,10 @@ if (IS_COVERAGE_ACTIVE) {
         }
     }
 
-
     exportFile = function (params, req, res, next) {
         var _type = params.type,
             allowedTypes = ['cobertura', 'html', 'json', 'json-summary', 'lcov', 'none', 'teamcity', 'text', 'text-lcov', 'text-summary', 'lcovonly', 'coverage'];
-            type = (_.contains(_type, allowedTypes)) ? _type : 'coverage';
+            type = (_.contains(allowedTypes, _type)) ? _type : 'coverage';
 
         try {
             Core.exportFile(res, type);
