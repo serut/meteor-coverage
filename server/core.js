@@ -30,31 +30,18 @@ if (IS_COVERAGE_ACTIVE) {
             res.setHeader('Content-type', 'text/plain');
             return res.end('No coverage information has been collected');
         }
+        res.setHeader('Content-type', 'text/html');
 
         var opts = render_getReportOpts(prefix);
         render_alterFS(res);
         var context = render_getContext(res);
         var report = ReportImpl.create('html', opts)
-        var coverageMap = Coverage.createCoverageMap(coverage);
-        coverageMap = SourceMap.lib.transformCoverage(coverageMap).map;
-
-
-
-        res.setHeader('Content-type', 'text/html');
-        if (filePath && coverageMap) {
-            //coverageMap = coverageMap.fileCoverageFor(filePath);
-            var node = Report.summarizers.flat(coverageMap)
-            var childs = node.getRoot().getChildren();
-            var child = undefined;
-            for (var i = 0; i < childs.length; i++) {
-                if (childs[i].getRelativeName() == filePath) {
-                    child = childs[i];
-                }
-            }
+        if (filePath) {
+            var child = CoverageData.getFileReport(coverage, filePath);
             report.onDetail(child, context);
         } else {
-            var node = Report.summarizers.flat(coverageMap)
-            report.onSummary(node.getRoot(), context);
+            var root = CoverageData.getTreeReport(coverage)
+            report.onSummary(root, context);
         }
     }
     function render_getContext(res) {
@@ -83,14 +70,13 @@ if (IS_COVERAGE_ACTIVE) {
 
     function render_getReportOpts(prefix) {
         return {
-            verbose: true,
-                linkMapper: {
+            verbose: IS_COVERAGE_VERBOSE,
+            linkMapper: {
                 getPath: function (node) {
                     if (typeof node === 'string') {
                         return node;
                     }
-                    var filePath = node.getQualifiedName();
-                    return filePath;
+                    return node.getQualifiedName();
                 },
                 relativePath: function (source, target) {
                     return prefix + "show?p=" + this.getPath(target);;
@@ -113,7 +99,7 @@ if (IS_COVERAGE_ACTIVE) {
     }
 
     function exportFile (res, type) {
-        Log.info("export coverage to file using type ", type)
+        Log.info("export coverage using the following format:", type)
 
         switch (type) {
             case 'lcovonly':
@@ -142,15 +128,12 @@ if (IS_COVERAGE_ACTIVE) {
                 // not working
                 break;
             case 'lcovonly':
-                coverageMap = SourceMap.lib.transformCoverage(
-                    Coverage.createCoverageMap(coverage)
-                ).map,
-                coverageMap = SourceMap.lib.transformCoverage(coverageMap).map;
-                var node = Report.summarizers.flat(coverageMap)
-                var childs = node.getRoot().getChildren();
+                var childs = CoverageData.getLcovonlyReport(coverage);
                 report.onStart(null, context);
                 for (var i = 0; i < childs.length; i++) {
-                    report.onDetail(childs[i], context);
+                    // Remove the COVERAGE_APP_FOLDER from the filepath
+                    childs[i].fileCoverage.data.path = childs[i].fileCoverage.data.path.replace(COVERAGE_APP_FOLDER, '');
+                    report.onDetail(childs[i]);
                 }
                 res.end('Thanks !');
                 break;

@@ -1,6 +1,6 @@
 Package.describe({
   name: 'lmieulet:meteor-coverage',
-  version: '0.4.1',
+  version: '0.4.2',
   summary: 'Server and client coverage for Meteor',
   git: 'https://github.com/serut/meteor-coverage',
   documentation: 'README.md',
@@ -33,6 +33,7 @@ Package.onUse(function(api) {
     'server/routes.js',
     'server/instrumenter.js',
     'server/source-map.js',
+    'server/coverage-data.js',
     'server/main.js',
   ], 'server');
 
