@@ -130,11 +130,27 @@ if (IS_COVERAGE_ACTIVE) {
             case 'lcovonly':
                 var childs = CoverageData.getLcovonlyReport(coverage);
                 report.onStart(null, context);
+                if (childs.length == 0) {
+                    res.setHeader('Content-type', 'text/plain');
+                    res.statusCode = 500;
+                    return res.end('No coverage file to export');
+                }
                 for (var i = 0; i < childs.length; i++) {
                     // Remove the COVERAGE_APP_FOLDER from the filepath
-                    childs[i].fileCoverage.data.path = childs[i].fileCoverage.data.path.replace(COVERAGE_APP_FOLDER, '');
+                    if (Meteor.isPackageTest) {
+                        var regex = childs[i].fileCoverage.data.path.match(/.*packages\/[a-zA-Z\-\_]+\/(.*)/);
+                        if (regex && regex.length == 2) {
+                            childs[i].fileCoverage.data.path = regex[1];
+                        } else {
+                            childs[i].fileCoverage.data.path = childs[i].fileCoverage.data.path.replace(COVERAGE_APP_FOLDER, '');
+                        }
+                    } else {
+                        childs[i].fileCoverage.data.path = childs[i].fileCoverage.data.path.replace(COVERAGE_APP_FOLDER, '');
+                    }
+
                     report.onDetail(childs[i]);
                 }
+                report.onEnd();
                 res.end('Thanks !');
                 break;
             case 'coverage':
@@ -159,16 +175,16 @@ if (IS_COVERAGE_ACTIVE) {
     }
     function exportFile_getContext(filepath) {
         var context = Report.createContext();
-        fs.writeFileSync(filepath, '');
+        fs.writeFileSync(filepath, 'w');
         Object.defineProperty(context, 'writer', {
             value: {
                 writeFile: function(){
                     return {
                         write: function(data) {
-                            fs.appendFileSync(filepath, data, {flag: 'a'});
+                            fs.appendFileSync(filepath, data);
                         },
                         println: function(data) {
-                            fs.appendFileSync(filepath, data + '\r', {flag: 'a'});
+                            fs.appendFileSync(filepath, data + '\r\n');
                         },
                         close: function() {
                         }

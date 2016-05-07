@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/serut/meteor-coverage.png?branch=master)](https://travis-ci.org/serut/meteor-coverage)
+[![Coverage Status](https://coveralls.io/repos/github/serut/meteor-coverage/badge.svg?branch=master)](https://coveralls.io/github/serut/meteor-coverage?branch=master)
 
 meteor-coverage
 =========================
@@ -41,7 +42,7 @@ You need to set up these environment variables:
 
 ## Client API
 
-See this [spacejam fork](https://github.com/serut/spacejam/commit/8cd3be8b4566f473de716531d07daad719a511f0#diff-d996d1b7a7cbf9674912e74ab1f89d0bR52) to see a real example of a test runner that save the coverage into lcovonly format.
+See the .travis.yml of this package to see a real example of a test runner that save the coverage into lcovonly format and send it to coveralls.
 
 #### Meteor.sendCoverage(callback)
 
@@ -95,7 +96,6 @@ To create your custom config file, run the project with COVERAGE_VERBOSE=1 env v
 * The current version of Meteor does not create a source maps for every js file during a local build. Sadness when you cannot see the coverage of your local package.
 * Error with web report: Unable to lookup source
     * HTML templates are processed into js files, and currently we have no way to detect and remove these files from coverage because they look like any other js file. That's why a template `foo.html` will exists in report as `template.foo.js`.
-    * If you use a Meteor application depends on a package that you don't have in your `packages` directory, the report will try to read a file that does not exists.
 
 ## Contributing
 

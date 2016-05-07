@@ -3,6 +3,7 @@ if (IS_COVERAGE_ACTIVE) {
 
     var istanbulAPI = Npm.require('istanbul-api'),
         Report = istanbulAPI.libReport,
+        path = Npm.require('path'),
         Coverage = istanbulAPI.libCoverage;
     CoverageData = {
         filterCoverageReport: function(report) {
@@ -33,7 +34,16 @@ if (IS_COVERAGE_ACTIVE) {
                     // Internal package
                     return true;
                 } else {
-                    // You don't have the source of this package in your workspace
+                    if (Meteor.isPackageTest) {
+                        // Special case when it is a package-test run
+                        // check file is located in the root directory and not the in a package directory
+                        // this algorithm may autorise some files because a file with the same name 
+                        var regexFilepath = filename.match(/.*packages\/[a-zA-Z\-\_]+\/(.*)/);
+                        if (regexFilepath && regexFilepath.length > 1 && fs.existsSync(path.join(COVERAGE_APP_FOLDER, regexFilepath[1]))) {
+                            return true;
+                        }
+                    }
+                    // You don't have the source of this package file in your workspace
                     return false;
                 }
             }

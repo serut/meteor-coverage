@@ -1,6 +1,6 @@
 Package.describe({
   name: 'lmieulet:meteor-coverage',
-  version: '0.4.2',
+  version: '0.5.0',
   summary: 'Server and client coverage for Meteor',
   git: 'https://github.com/serut/meteor-coverage',
   documentation: 'README.md',
@@ -40,6 +40,8 @@ Package.onUse(function(api) {
   api.addFiles([
     'client/methods.js'
   ], 'client');
+
+  api.export("CoverageData", 'server');
 });
 
 
@@ -53,7 +55,8 @@ Package.onTest(function (api) {
   api.use('jquery', 'client');
   api.use('tinytest');
 
+  api.addFiles('tests/methods.js', 'client');
   api.addFiles([
-    'tests/tests.js',
-  ]);
+      'tests/tests.js'
+  ], 'server');
 });
