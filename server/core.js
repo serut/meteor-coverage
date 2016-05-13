@@ -35,12 +35,12 @@ if (IS_COVERAGE_ACTIVE) {
         var opts = render_getReportOpts(prefix);
         render_alterFS(res);
         var context = render_getContext(res);
-        var report = ReportImpl.create('html', opts)
+        var report = ReportImpl.create('html', opts);
         if (filePath) {
             var child = CoverageData.getFileReport(coverage, filePath);
             report.onDetail(child, context);
         } else {
-            var root = CoverageData.getTreeReport(coverage)
+            var root = CoverageData.getTreeReport(coverage);
             report.onSummary(root, context);
         }
     }
@@ -64,7 +64,7 @@ if (IS_COVERAGE_ACTIVE) {
     function render_alterFS(res) {
         res.close = function() {
             this.end();
-        }
+        };
     }
 
 
@@ -85,7 +85,7 @@ if (IS_COVERAGE_ACTIVE) {
                     return prefix + "asset/" + name;
                 }
             }
-        }
+        };
     }
 
     function mergeCoverageWith(obj) {
@@ -99,14 +99,14 @@ if (IS_COVERAGE_ACTIVE) {
     }
 
     function exportFile (res, type) {
-        Log.info("export coverage using the following format:", type)
+        Log.info("export coverage using the following format:", type);
 
         switch (type) {
             case 'lcovonly':
                 var opts = exportFile_getOpts(type),
                     report = ReportImpl.create(type, opts);
                 report.file = path.join(COVERAGE_APP_FOLDER, report.file);
-                var context = exportFile_getContext(report.file)
+                var context = exportFile_getContext(report.file);
 
                 break;
         }
@@ -158,10 +158,10 @@ if (IS_COVERAGE_ACTIVE) {
                     reportPath = path.join(COVERAGE_APP_FOLDER, reportFilename);
                 fs.writeFile(reportPath, coverageReport, function (err) {
                     if (err) {
-                        throw "failed to write report file: "+reportPath
+                        throw "failed to write report file: "+reportPath;
                     }
                     res.end('Thanks !');
-                })
+                });
                 break;
         }
     }
@@ -169,7 +169,7 @@ if (IS_COVERAGE_ACTIVE) {
         var opts = IS_COVERAGE_VERBOSE ? {verbose: true} : {};
         switch (type) {
             case 'teamcity':
-                opts.file = 'teamcity.file'
+                opts.file = 'teamcity.file';
         }
         return opts;
     }
@@ -196,15 +196,15 @@ if (IS_COVERAGE_ACTIVE) {
     }
 
     function importCoverage (res){
-        Log.info("import coverage")
+        Log.info("import coverage");
         var reportPath = path.join(COVERAGE_APP_FOLDER, reportFilename);
         fs.exists(reportPath, function(exists) {
             if (!exists) {
-                throw "report file not found: "+reportPath
+                throw "report file not found: "+reportPath;
             }
             fs.readFile(reportPath, 'utf8', function (err, fileContent) {
                 if (err) {
-                    throw "failed to read report file: "+reportPath
+                    throw "failed to read report file: "+reportPath;
                 }
                 var coverageObj = JSON.parse(fileContent);
                 for (var property in coverageObj) {
@@ -213,8 +213,8 @@ if (IS_COVERAGE_ACTIVE) {
                     }
                     res.end('Thanks !');
                 }
-            })
-        })
+            });
+        });
     }
 
     Core = {
@@ -222,5 +222,5 @@ if (IS_COVERAGE_ACTIVE) {
         mergeClientCoverage: mergeCoverageWith,
         exportFile: exportFile,
         importCoverage: importCoverage
-    }
+    };
 }

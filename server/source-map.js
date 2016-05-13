@@ -21,27 +21,27 @@ if (IS_COVERAGE_ACTIVE) {
                     map.sources[i] = meteor_dir + path;
                 }
             } else {
-                Log.error("Failed to alter source map path", map.sources[i])
+                Log.error("Failed to alter source map path", map.sources[i]);
             }
         }
         return map;
-    }
+    };
 
     registerSourceMap = function (filepath) {
         // SIDE EFFECTS
         sourceMapPath = filepath + ".map";
         if (fs.existsSync(sourceMapPath)) {
             fileContent = JSON.parse(fs.readFileSync(sourceMapPath, "utf8"));
-            fileContent = alterSourceMapPaths(fileContent)
-            Log.info("Add source map for file " + sourceMapPath)
+            fileContent = alterSourceMapPaths(fileContent);
+            Log.info("Add source map for file " + sourceMapPath);
             sourceMap.registerMap(filepath, fileContent);
         } else {
             Log.error("Source map not found", sourceMapPath);
         }
-    }
+    };
 
     SourceMap = {
         registerSourceMap: registerSourceMap,
         lib: sourceMap
-    }
+    };
 }

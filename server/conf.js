@@ -1,4 +1,4 @@
-IS_COVERAGE_ACTIVE = process.env["COVERAGE"] === "1"
+IS_COVERAGE_ACTIVE = process.env["COVERAGE"] === "1";
 if (IS_COVERAGE_ACTIVE) {
     COVERAGE_APP_FOLDER = process.env["COVERAGE_APP_FOLDER"] || '/SET/ENV/COVERAGE_APP_FOLDER/OR/READ/README/';
     var fs = Npm.require('fs'),
@@ -20,6 +20,6 @@ if (IS_COVERAGE_ACTIVE) {
         }
         //TODO validate the json
         return JSON.parse(fileContent);
-    }
+    };
     Conf = get();
 }

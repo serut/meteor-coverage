@@ -17,7 +17,7 @@ Tinytest.addAsync(
         Meteor.exportCoverage(
             'coverage',
             function(err) {
-                test.isUndefined(err, "failed to export coverage")
+                test.isUndefined(err, "failed to export coverage");
                 next();
             }
         );
@@ -28,7 +28,7 @@ Tinytest.addAsync(
     function (test, next) {
         Meteor.importCoverage(
             function(err) {
-                test.isUndefined(err, "failed to import coverage")
+                test.isUndefined(err, "failed to import coverage");
                 next();
             }
         );
@@ -41,7 +41,7 @@ Tinytest.addAsync(
         Meteor.exportCoverage(
             'lcovonly',
             function(err) {
-                test.isUndefined(err, "failed to export lcovonly")
+                test.isUndefined(err, "failed to export lcovonly");
                 next();
             }
         );

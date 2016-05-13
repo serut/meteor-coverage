@@ -1,6 +1,6 @@
 Package.describe({
   name: 'lmieulet:meteor-coverage',
-  version: '0.5.0',
+  version: '0.6.0',
   summary: 'Server and client coverage for Meteor',
   git: 'https://github.com/serut/meteor-coverage',
   documentation: 'README.md',
@@ -9,8 +9,7 @@ Package.describe({
 
 Package.onUse(function(api) {
   api.versionsFrom('METEOR@1.3.1');
-  api.use(['ecmascript', 'meteorhacks:picker@1.0.3', 'underscore'], 'server');
-
+  api.use(['ecmascript', 'meteorhacks:picker@1.0.3'], 'server');
 
   api.use("modules");
   // Add datasets
@@ -51,9 +50,8 @@ Npm.depends({
 });
 
 Package.onTest(function (api) {
-  api.use('lmieulet:meteor-coverage');
+  api.use(['lmieulet:meteor-coverage', 'tinytest'], ['server', 'client']);
   api.use('jquery', 'client');
-  api.use('tinytest');
 
   api.addFiles('tests/methods.js', 'client');
   api.addFiles([

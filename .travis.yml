@@ -21,6 +21,8 @@ before_install:
   # Install spacejam
   - npm install -g https://github.com/serut/spacejam/tarball/master
   - npm install -g https://github.com/nickmerwin/node-coveralls/tarball/master
+  - npm install -g eslint
 
 script:
   - spacejam test-packages ./ --loglevel debug --coverage && cat lcov.info | coveralls
+  - eslint .

@@ -6,7 +6,7 @@ if (IS_COVERAGE_ACTIVE) {
     showCoverage = function (params, req, res, next) {
         var url = params.query.p;
         Core.render(url, res, '/coverage/');
-    }
+    };
 
     getAsset = function(params, req, res, next) {
         var assetsDir = path.join(path.resolve('.'), "assets/packages/lmieulet_meteor-coverage/assets/"),
@@ -27,7 +27,7 @@ if (IS_COVERAGE_ACTIVE) {
               });
             }
         });
-    }
+    };
 
     addClientCoverage = function (params, req, res, next) {
         var body = req.body;
@@ -35,7 +35,7 @@ if (IS_COVERAGE_ACTIVE) {
             res.writeHead(400);
             res.end();
         }
-        var clientCoverage
+        var clientCoverage;
         for (var property in body) {
             if (body.hasOwnProperty(property)) {
                 clientCoverage = body[property];
@@ -48,30 +48,30 @@ if (IS_COVERAGE_ACTIVE) {
             res.writeHead(400);
             res.end("Nothing has been imported");
         }
-    }
+    };
 
     exportFile = function (params, req, res, next) {
         var _type = params.type,
             allowedTypes = ['cobertura', 'html', 'json', 'json-summary', 'lcov', 'none', 'teamcity', 'text', 'text-lcov', 'text-summary', 'lcovonly', 'coverage'];
-            type = (_.contains(allowedTypes, _type)) ? _type : 'coverage';
+            type = (allowedTypes.indexOf(_type) > -1) ? _type : 'coverage';
 
         try {
             Core.exportFile(res, type);
         } catch (e) {
-            Log.error("Failed to export", e, e.stack)
+            Log.error("Failed to export", e, e.stack);
             res.writeHead(400);
             res.end("Nothing has been export");
         }
-    }
+    };
     importCoverage = function (params, req, res, next) {
         try {
             Core.importCoverage(res);
         } catch (e) {
-            Log.error("Failed to import", e, e.stack)
+            Log.error("Failed to import", e, e.stack);
             res.writeHead(400);
             res.end("No file has been import");
         }
-    }
+    };
 
     instrumentClientJs = function(params, req, res, next) {
         var fileurl = req.url.split('?')[0];
@@ -80,18 +80,18 @@ if (IS_COVERAGE_ACTIVE) {
                 pathLabel;
             // Either a package
             if (req.url.indexOf('/packages') == 0) {
-                path = '../web.browser'
+                path = '../web.browser';
                 pathLabel = path + fileurl;
             } else if (req.url.indexOf('/app') == 0){
                 // Or the app/app.js
-                path = '../web.browser'
+                path = '../web.browser';
                 pathLabel = path + fileurl;
             } else {
                 // Or a public file
-                path = '../web.browser/app'
+                path = '../web.browser/app';
                 pathLabel = path + fileurl;
             }
-            res.setHeader('Content-type', 'application/javascript')
+            res.setHeader('Content-type', 'application/javascript');
             fs.exists(path + fileurl, function(exists) {
                 if (!exists) return next();
                 fs.readFile(path + fileurl, 'utf8', function (err, fileContent) {
@@ -99,13 +99,13 @@ if (IS_COVERAGE_ACTIVE) {
                     Instrumenter.instrumentJs(fileContent, pathLabel, function(err, data) {
                         if (err) throw err;
                         res.end(data);
-                    })
-                })
-            })
+                    });
+                });
+            });
         } else {
             next();
         }
-    }
+    };
 
     Handlers = {
         showCoverage: showCoverage,
@@ -114,6 +114,6 @@ if (IS_COVERAGE_ACTIVE) {
         instrumentClientJs: instrumentClientJs,
         exportFile: exportFile,
         importCoverage: importCoverage
-    }
+    };
 
 }

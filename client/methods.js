@@ -31,10 +31,10 @@ Meteor.sendCoverage = function (callback) {
                         callback(stats, arguments);
                     }
                 }
-            })
+            });
         }
     }
-}
+};
 
 /**
 * Usage: Meteor.exportCoverage(null, function(err) {console.log(err)})
@@ -50,8 +50,8 @@ Meteor.exportCoverage = function (type, callback) {
         error: function() {
             callback(arguments);
         }
-    })
-}
+    });
+};
 
 /**
 * Usage: Meteor.importCoverage(function(err) {console.log(err)})
@@ -66,5 +66,5 @@ Meteor.importCoverage = function (callback) {
         error: function() {
            callback(arguments);
         }
-    })
-}
+    });
+};

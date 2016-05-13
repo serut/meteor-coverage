@@ -8,16 +8,16 @@ if (IS_COVERAGE_ACTIVE) {
     CoverageData = {
         filterCoverageReport: function(report) {
             if (report.data == undefined) {
-                throw "Invalid report"
+                throw "Invalid report";
             }
             var newData = {};
             for (var property in report.data) {
                 if (report.data.hasOwnProperty(property)) {
                     if (this.isAccepted(property)) {
                         //Log.info('isAccepted', property)
-                        newData[property] = report.data[property]
+                        newData[property] = report.data[property];
                     } else {
-                        Log.info('isRefused', property)
+                        Log.info('isRefused', property);
                     }
                 }
             }
@@ -76,7 +76,7 @@ if (IS_COVERAGE_ACTIVE) {
         },
         getFileReport: function(coverage, filePath) {
             var coverageMap = this.getReport(coverage);
-            var node = Report.summarizers.flat(coverageMap)
+            var node = Report.summarizers.flat(coverageMap);
             var childs = node.getRoot().getChildren();
             var child = undefined;
             for (var i = 0; i < childs.length; i++) {
@@ -88,13 +88,13 @@ if (IS_COVERAGE_ACTIVE) {
         },
         getTreeReport: function (coverage) {
             var coverageMap = this.getReport(coverage);
-            var node = Report.summarizers.flat(coverageMap)
+            var node = Report.summarizers.flat(coverageMap);
             return node.getRoot();
         },
         getLcovonlyReport: function (coverage) {
             coverageMap = this.getReport(coverage);
-            var node = Report.summarizers.flat(coverageMap)
+            var node = Report.summarizers.flat(coverageMap);
             return node.getRoot().getChildren();
         }
-    }
+    };
 }
