@@ -101,3 +101,11 @@ To create your custom config file, run the project with COVERAGE_VERBOSE=1 env v
 
 Anyone is welcome to contribute.  
 Fork, make and then submit a pull request.
+
+## Credits
+
+This package would not exist without the amazing work of:
+* [Xolv.io](http://xolv.io) and their work on the original [meteor-coverage](https://github.com/xolvio/meteor-coverage) package;
+* All contributors of [istanbul-api](https://github.com/istanbuljs/istanbul-api) and [istanbul-middleware](https://github.com/gotwarlost/istanbul-middleware) projects. 
+
+Both were very helpful in the development of this package. It saves me so many hours so many thanks to them.
