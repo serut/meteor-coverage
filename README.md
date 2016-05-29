@@ -39,17 +39,21 @@ You need to set up these environment variables:
     * Used when importing or exporting coverage reports
 * `COVERAGE_VERBOSE=1` to see logs (optional)
 
+## Continuous Integration
+
+
+See the .travis.yml of this real example of Meteor application [meteor-coverage-app-exemple](https://github.com/serut/meteor-coverage-app-exemple) to see how a test runner can execute yours tests, save coverage and send it to coveralls. Works for test package (tinytest, mocha) & mocha test Meteor apps (unit, --full-app). Using `spacejam --coverage` you do not have to set up global environment variable.
 
 ## Client API
 
-See the .travis.yml of this package to see a real example of a test runner that save the coverage into lcovonly format and send it to coveralls.
-
 #### Meteor.sendCoverage(callback)
 
-Run the following command in your browser and the client coverage will be saved into the server  
+Run the following command in your browser and the client coverage will be saved into the `COVERAGE_APP_FOLDER` folder.  
 ```js
     Meteor.sendCoverage(function(stats,err) {console.log(stats,err);});
 ```
+When a browser opens the client side of your application, this package intercept all queries matching `*.js` to respond the instrumented version of the original script. All these instrumented scripts are autonomous and they save the coverage in a global variable when you execute a line of a file. This global variable needs to be sent back to the server to create a full coverage report.
+
 #### Meteor.exportCoverage(type, callback)
 * type: the type of report you want to create inside your `COVERAGE_APP_FOLDER`
     * Default: `coverage`, used to dump the coverage object in a file because when there are several types of test, we want to merge results, and the server reloads between each one.
@@ -92,10 +96,11 @@ To create your custom config file, run the project with COVERAGE_VERBOSE=1 env v
 
 ## Limitation(s) / open issues
 
-
-* The current version of Meteor does not create a source maps for every js file during a local build. Sadness when you cannot see the coverage of your local package.
-* Error with web report: Unable to lookup source
-    * HTML templates are processed into js files, and currently we have no way to detect and remove these files from coverage because they look like any other js file. That's why a template `foo.html` will exists in report as `template.foo.js`.
+* Tests files are covered - they need to be ignored
+* CircleCI support
+* `meteor --settings` support
+* Cannot control the name of files reports
+* A lot of new filters have been added recently, needs to create corresponding entry in the configuration file.
 
 ## Contributing
 
@@ -106,6 +111,6 @@ Fork, make and then submit a pull request.
 
 This package would not exist without the amazing work of:
 * [Xolv.io](http://xolv.io) and their work on the original [meteor-coverage](https://github.com/xolvio/meteor-coverage) package;
-* All contributors of [istanbul-api](https://github.com/istanbuljs/istanbul-api) and [istanbul-middleware](https://github.com/gotwarlost/istanbul-middleware) projects. 
+* All contributors of [istanbul-api](https://github.com/istanbuljs/istanbul-api) and [istanbul-middleware](https://github.com/gotwarlost/istanbul-middleware) projects.
 
 Both were very helpful in the development of this package. It saves me so many hours so many thanks to them.

@@ -1,5 +1,3 @@
-sudo: false
-
 language: node_js
 
 node_js:
@@ -19,8 +17,8 @@ before_install:
   - if [ ! -e $HOME/.meteor/meteor ]; then curl https://install.meteor.com | sh; fi
 
   # Install spacejam
-  - npm install -g https://github.com/serut/spacejam/tarball/master
-  - npm install -g https://github.com/nickmerwin/node-coveralls/tarball/master
+  - npm install -g coffee-script@1.8.0
+  - npm install -g https://github.com/serut/spacejam/tarball/refactor coveralls
   - npm install -g eslint
 
 script:

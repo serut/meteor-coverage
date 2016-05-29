@@ -1,6 +1,6 @@
 Package.describe({
   name: 'lmieulet:meteor-coverage',
-  version: '0.7.1',
+  version: '0.7.2',
   summary: 'Server and client coverage for Meteor',
   git: 'https://github.com/serut/meteor-coverage',
   documentation: 'README.md',
@@ -40,16 +40,18 @@ Package.onUse(function(api) {
     'client/methods.js'
   ], 'client');
 
-  api.export("CoverageData", 'server');
+  api.export(["CoverageData", "SourceMap"], 'server');
 });
 
 
 Npm.depends({
   "istanbul-api": "1.0.0-alpha.13",
-  'body-parser': '1.15.0'
+  'body-parser': '1.15.1'
 });
 
 Package.onTest(function (api) {
+  api.use(['lmieulet:meteor-coverage-self-instrumenter@1.0.0'], ['server']);
+  api.use('ecmascript');
   api.use(['lmieulet:meteor-coverage', 'tinytest'], ['server', 'client']);
   api.use('jquery', 'client');
 
