@@ -36,23 +36,36 @@ if (IS_COVERAGE_ACTIVE) {
         return instrumenter.instrument(content, path, callback);
     };
 
+    checkIfAutorised = function (filters, file) {
+        let allowed = true;
+        for (let i = 0; i < filters.length; i ++) {
+            let filterRegex = new RegExp(filters[i], "i");
+            allowed = allowed && filterRegex.test(file) === false;
+            if (!allowed) {
+                return false;
+            }
+        }
+        return allowed;
+    }
 
     shallInstrumentClientScript = function (fileurl) {
         if (fileurl.indexOf('.js') > -1) {
             if (fileurl.indexOf('packages') === 1) {
-                if (Conf.ignore.clientside.inapp.indexOf(fileurl) == -1) {
+                if (checkIfAutorised(Conf.ignore.clientside.inapp, fileurl)) {
                     Log.info("[ClientSide][InApp] file instrumented: " + fileurl);
                     return true;
                 } else {
                     Log.info("[ClientSide][InApp] file ignored: " + fileurl);
+                    return false;
                 }
             } else {
-                if (Conf.ignore.clientside.public.indexOf(fileurl) == -1) {
+                let instrumented = checkIfAutorised(Conf.ignore.clientside.public, fileurl);
+                if (instrumented) {
                     Log.info("[ClientSide][Public] file instrumented: " + fileurl);
-                    return true;
                 } else {
                     Log.info("[ClientSide][Public] file ignored: " + fileurl);
                 }
+                return instrumented;
             }
         }
         return false;
@@ -76,9 +89,8 @@ if (IS_COVERAGE_ACTIVE) {
             Log.info("[ServerSide][node_modules] file ignored: " + file);
             return false;
         }
-        if (file.indexOf('/packages') >= 0) {
-            var packageName = file.split('/packages/');
-            if (Conf.ignore.serverside.indexOf(packageName[1]) == -1) {
+        if (file.indexOf('packages') === 1) {
+            if (checkIfAutorised(Conf.ignore.serverside, file)) {
                 SourceMap.registerSourceMap(root+file);
                 Log.info("[ServerSide][Package] file instrumented: " + file);
                 return true;

@@ -37,7 +37,7 @@ if (IS_COVERAGE_ACTIVE) {
                     if (Meteor.isPackageTest) {
                         // Special case when it is a package-test run
                         // check file is located in the root directory and not the in a package directory
-                        // this algorithm may autorise some files because a file with the same name 
+                        // this algorithm may autorise some files because a file has the same name 
                         var regexFilepath = filename.match(/.*packages\/[a-zA-Z\-\_]+\/(.*)/);
                         if (regexFilepath && regexFilepath.length > 1 && fs.existsSync(path.join(COVERAGE_APP_FOLDER, regexFilepath[1]))) {
                             return true;

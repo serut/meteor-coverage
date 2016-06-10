@@ -1,13 +1,72 @@
 {
-  "ignore": {
-    "clientside": {
-      "inapp": [
-
-      ],
-      "public": [
-      ]
-    },
-    "serverside": [
-    ]
-  }
+    "ignore": {
+        "clientside": {
+            "inapp": [
+                "/underscore.js",
+                "/meteor.js",
+                "/meteor-base.js",
+                "/mobile-experience.js",
+                "/babel-compiler.js",
+                "/ecmascript.js",
+                "/base64.js",
+                "/ejson.js",
+                "/id-map.js",
+                "/ordered-dict.js",
+                "/tracker.js",
+                "/modules-runtime.js",
+                "/modules.js",
+                "/es5-shim.js",
+                "/promise.js",
+                "/ecmascript-runtime.js",
+                "/babel-runtime.js",
+                "/random.js",
+                "/mongo-id.js",
+                "/diff-sequence.js",
+                "/geojson-utils.js",
+                "/minimongo.js",
+                "/check.js",
+                "/retry.js",
+                "/ddp-common.js",
+                "/reload.js",
+                "/ddp-client.js",
+                "/ddp.js",
+                "/ddp-server.js",
+                "/allow-deny.js",
+                "/insecure.js",
+                "/mongo.js",
+                "/blaze-html-templates.js",
+                "/reactive-var.js",
+                "/jquery.js",
+                "/standard-minifier-css.js",
+                "/standard-minifier-js.js",
+                "/autopublish.js",
+                "/dburles_eslint.js",
+                "/webapp.js",
+                "/livedata.js",
+                "/hot-code-push.js",
+                "/deps.js",
+                "/htmljs.js",
+                "/observe-sequence.js",
+                "/blaze.js",
+                "/spacebars.js",
+                "/templating.js",
+                "/launch-screen.js",
+                "/ui.js",
+                "/autoupdate.js",
+                "/global-imports.js",
+                "/lmieulet_meteor-coverage.js"
+            ],
+            "public": [
+            ]
+        },
+        "serverside": [
+            "livedata.js",
+            "hot-code-push.js",
+            "launch-screen.js",
+            "templating.js",
+            "autoupdate.js",
+            "reload.js",
+            "global-imports.js"
+        ]
+    }
 }
