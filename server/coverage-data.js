@@ -56,11 +56,7 @@ if (IS_COVERAGE_ACTIVE) {
                     return false;
                 }
             }
-            if (filename.indexOf('/npm/node_modules') > 0) {
-                // this is a browser file?
-                return false;
-            }
-            if (filename.indexOf('node_modules/meteor') > 0) {
+            if (filename.indexOf('node_modules') > 0) {
                 // this is a browser file?
                 return false;
             }
