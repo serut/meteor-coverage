@@ -29,6 +29,7 @@ if (IS_COVERAGE_ACTIVE) {
 
     registerSourceMap = function (filepath) {
         // SIDE EFFECTS
+        Log.time("registerSourceMap" + filepath);
         sourceMapPath = filepath + ".map";
         if (fs.existsSync(sourceMapPath)) {
             fileContent = JSON.parse(fs.readFileSync(sourceMapPath, "utf8"));
@@ -38,6 +39,7 @@ if (IS_COVERAGE_ACTIVE) {
         } else {
             Log.error("Source map not found", sourceMapPath);
         }
+        Log.timeEnd("registerSourceMap" + filepath);
     };
 
     SourceMap = {

@@ -28,6 +28,8 @@ If you have internal packages inside your app and you want to hook their server 
 
 If you have packages used by your project (ex: aldeed:simple-schema) or libraries on your client side (ex: OpenLayers, Jquery), you can hide the coverage of these files of your report. See [config file](#config-file)
 
+If you want to cover a package, you need to add `api.use(['lmieulet:meteor-coverage@0.8.0']);` to your `Package.onTest` function of the `package.js` file.
+
 ## Global environment variable
 
 You need to set up these environment variables:
@@ -52,7 +54,7 @@ Run the following command in your browser and the client coverage will be saved 
 ```js
     Meteor.sendCoverage(function(stats,err) {console.log(stats,err);});
 ```
-When a browser opens the client side of your application, this package intercept all queries matching `*.js` to respond the instrumented version of the original script. All these instrumented scripts are autonomous and they save the coverage in a global variable when you execute a line of a file. This global variable needs to be sent back to the server to create a full coverage report.
+Why? When a browser opens the client side of your application, this package intercepts all queries matching `*.js` to respond the instrumented version of the original script, if they are not ignored by the configuration file. All these instrumented scripts are autonomous and they save the coverage in a global variable when you execute a line of a file. This global variable needs to be sent back to the server to create a full coverage report.
 
 #### Meteor.exportCoverage(type, callback)
 * type: the type of report you want to create inside your `COVERAGE_APP_FOLDER`
@@ -77,20 +79,37 @@ Meteor.importCoverage(function(err) {console.log(err)})
 You can specify which files will not be covered in reports in a `.coverage.json` file inside the `COVERAGE_APP_FOLDER` folder.
 ```json
 {
-  "ignore": {
-    "clientside": {
-      "inapp": [
-
-      ],
-      "public": [
-      ]
-    },
-    "serverside": [
-    ]
-  }
+    "ignore": {
+        "clientside": {
+            "inapp": [
+                "You may want to ignore here modules from client side instrumentation",
+                "to get the lightest version of your browser app",
+                "/underscore.js",
+                "/meteor.js",
+                "...",
+                "And even dependencies / internal packages:",
+                "/lmieulet_meteor-coverage.js",
+                "==> if you cloned that package into your package directory",
+                "it will ignores all files stored in packages/meteor-coverage/* from client instrumentation"
+            ],
+            "public": [
+                "if you have js in your public directory like",
+                "openlayers.min.js"  
+                "==> stored in public/openlayers.min.js",
+                "and you don't want to instrument them"
+            ]
+        },
+        "serverside": [
+        ],
+        "others": [
+            "here you can ignore any file from your project coverage report",
+            ".*/tests/.*.js"
+        ]
+    }
 }
+
 ```
-If you do not have this file, this package will use the default one (`conf/default-coverage.json`).
+If you do not have this file, this package will use the default one (`conf/default-coverage.json`). If you do not define a key in the `.coverage.json` file, the default one will be used.
 
 To create your custom config file, run the project with COVERAGE_VERBOSE=1 env variable and use logs to see which filenames were hooked or hidden. PR welcome.
 
@@ -100,7 +119,7 @@ To create your custom config file, run the project with COVERAGE_VERBOSE=1 env v
 * CircleCI support
 * `meteor --settings` support
 * Cannot control the name of files reports
-* A lot of new filters have been added recently, needs to create corresponding entry in the configuration file.
+* No feedback from typescript and coffeescript users
 
 ## Contributing
 

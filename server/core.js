@@ -200,7 +200,7 @@ if (IS_COVERAGE_ACTIVE) {
         var reportPath = path.join(COVERAGE_APP_FOLDER, reportFilename);
         fs.exists(reportPath, function(exists) {
             if (!exists) {
-                throw "report file not found: "+reportPath;
+                throw "report file not found: reportPath="+reportPath + " COVERAGE_APP_FOLDER="+COVERAGE_APP_FOLDER;
             }
             fs.readFile(reportPath, 'utf8', function (err, fileContent) {
                 if (err) {
@@ -211,8 +211,8 @@ if (IS_COVERAGE_ACTIVE) {
                     if (coverageObj.hasOwnProperty(property)) {
                         mergeCoverageWith(coverageObj[property]);
                     }
-                    res.end('Thanks !');
                 }
+                res.end('Thanks !');
             });
         });
     }

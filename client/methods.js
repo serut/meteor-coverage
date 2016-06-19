@@ -3,7 +3,19 @@
  */
 Meteor.sendCoverage = function (callback) {
     var coverageReport = {},
-        stats = {SUCCESS: 0, FAILED: 0, TOTAL: 0};
+        stats = {SUCCESS: 0, FAILED: 0, TOTAL: 0},
+        successCallback = function () {
+            stats.SUCCESS++;
+            if (stats.SUCCESS + stats.FAILED === stats.TOTAL) {
+                callback(stats);
+            }
+        },
+        errorCallback = function() {
+            stats.FAILED++;
+            if (stats.SUCCESS + stats.FAILED === stats.TOTAL) {
+                callback(stats, arguments);
+            }
+        };
     if (global['__coverage__'] == undefined) {
         return callback(stats);
     }
@@ -19,18 +31,8 @@ Meteor.sendCoverage = function (callback) {
                 data: JSON.stringify(coverageReport),
                 contentType: 'application/json; charset=UTF-8',
                 processData: false,
-                success: function() {
-                    stats.SUCCESS++;
-                    if (stats.SUCCESS + stats.FAILED === stats.TOTAL) {
-                        callback(stats);
-                    }
-                },
-                error: function() {
-                    stats.FAILED++;
-                    if (stats.SUCCESS + stats.FAILED === stats.TOTAL) {
-                        callback(stats, arguments);
-                    }
-                }
+                success: successCallback,
+                error: errorCallback
             });
         }
     }
