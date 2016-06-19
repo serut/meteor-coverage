@@ -46,7 +46,7 @@ if (IS_COVERAGE_ACTIVE) {
             }
         }
         return allowed;
-    }
+    };
 
     shallInstrumentClientScript = function (fileurl) {
         if (fileurl.indexOf('.js') > -1) {
@@ -108,6 +108,7 @@ if (IS_COVERAGE_ACTIVE) {
     Instrumenter = {
         instrumentJs: instrumentJs,
         shallInstrumentClientScript: shallInstrumentClientScript,
-        hookLoader: hookLoader
+        hookLoader: hookLoader,
+        checkIfAutorised: checkIfAutorised
     };
 }

@@ -7,5 +7,13 @@ Log = {
     info: function() {
         if (IS_COVERAGE_VERBOSE)
             console.log(...arguments);
+    },
+    time: function() {
+        if (IS_COVERAGE_VERBOSE)
+            console.log(...arguments);
+    },
+    timeEnd: function() {
+        if (IS_COVERAGE_VERBOSE)
+            console.log(...arguments);
     }
 };

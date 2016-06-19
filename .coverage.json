@@ -53,22 +53,11 @@
                 "/launch-screen.js",
                 "/ui.js",
                 "/autoupdate.js",
-                "/global-imports.js",
-                "/lmieulet_meteor-coverage.js"
-            ],
-            "public": [
+                "/global-imports.js"
             ]
         },
-        "serverside": [
-            "livedata.js",
-            "hot-code-push.js",
-            "launch-screen.js",
-            "templating.js",
-            "autoupdate.js",
-            "reload.js",
-            "global-imports.js"
-        ],
         "others": [
+            ".*/tests/.*.js"
         ]
     }
 }
