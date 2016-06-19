@@ -18,7 +18,7 @@ before_install:
 
   # Install spacejam
   - npm install -g coffee-script@1.8.0
-  - npm install -g https://github.com/serut/spacejam/tarball/refactor coveralls codecov.io
+  - npm install -g https://github.com/serut/spacejam/tarball/master coveralls codecov.io
   - npm install -g eslint
 
 script:
