@@ -11,5 +11,3 @@ checkout:
 test:
   override:
     - spacejam test-packages ./ --coverage || spacejam test-packages ./  --loglevel debug
-    - cat lcov.info | coveralls || true # ignore coveralls error
-    - cat lcov.info | codecov || true # ignore codecov error
