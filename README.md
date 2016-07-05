@@ -1,9 +1,34 @@
-[![Build Status](https://travis-ci.org/serut/meteor-coverage.png?branch=master)](https://travis-ci.org/serut/meteor-coverage)
-[![Coverage Status](https://coveralls.io/repos/github/serut/meteor-coverage/badge.svg?branch=master)](https://coveralls.io/github/serut/meteor-coverage?branch=master)
 
 meteor-coverage
-=========================
+=========================  
 
+<table>
+    <thead>
+    <th>
+      <th>Travis</th>
+      <th>Circle CI</th>
+      <th>Coveralls</th>
+      <th>Codecov</th>
+    </th>
+    </thead>
+    <tbody>
+      <tr>
+        <th>lmieulet:meteor-coverage</th>
+        <td>[![Build Status](https://travis-ci.org/serut/meteor-coverage.png?branch=master)](https://travis-ci.org/serut/meteor-coverage)</td>
+        <td>[![Circle CI](https://circleci.com/gh/serut/meteor-coverage.svg?style=svg)](https://circleci.com/gh/serut/meteor-coverage)</td>
+        <td>
+        [![Coverage Status](https://coveralls.io/repos/github/serut/meteor-coverage/badge.svg?branch=master)](https://coveralls.io/github/serut/meteor-coverage?branch=master)</td>
+        <td>[![codecov](https://codecov.io/gh/serut/meteor-coverage/branch/master/graph/badge.svg)](https://codecov.io/gh/serut/meteor-coverage)</td>
+      </tr>
+      <tr>
+        <th>[meteor-coverage-app-exemple](https://github.com/serut/meteor-coverage-app-exemple)</th>
+        <td>[![Build Status](https://travis-ci.org/serut/meteor-coverage-app-exemple.svg?branch=master)](https://travis-ci.org/serut/meteor-coverage-app-exemple)</td>
+        <td>[![Circle CI](https://circleci.com/gh/serut/meteor-coverage-app-exemple.svg?style=svg)](https://circleci.com/gh/serut/meteor-coverage-app-exemple)</td>
+        <td>[![Coverage Status](https://coveralls.io/repos/github/serut/meteor-coverage-app-exemple/badge.svg?branch=master)](https://coveralls.io/github/serut/meteor-coverage-app-exemple?branch=master)</td>
+        <td>[![codecov](https://codecov.io/gh/serut/meteor-coverage-app-exemple/branch/master/graph/badge.svg)](https://codecov.io/gh/serut/meteor-coverage-app-exemple)</td>
+      </tr>
+    </tbody>
+</table>
 A meteor package that allows you to get the statement, line, function and branch coverage of Meteor project and package.  
 This package uses the [istanbuljs/istanbul-api](https://github.com/istanbuljs/istanbul-api) package for coverage report and [meteorhacks:picker](https://github.com/meteorhacks/picker) for server side routing.  
 It's a debug only package, so it does not affect your production build.
@@ -50,9 +75,9 @@ See the .travis.yml of this real example of Meteor application [meteor-coverage-
 
 #### Meteor.sendCoverage(callback)
 
-Run the following command in your browser and the client coverage will be saved into the `COVERAGE_APP_FOLDER` folder.  
+Run the following command in your browser and the client coverage will be saved into the server coverage report.  
 ```js
-    Meteor.sendCoverage(function(stats,err) {console.log(stats,err);});
+Meteor.sendCoverage(function(stats,err) {console.log(stats,err);});
 ```
 Why? When a browser opens the client side of your application, this package intercepts all queries matching `*.js` to respond the instrumented version of the original script, if they are not ignored by the configuration file. All these instrumented scripts are autonomous and they save the coverage in a global variable when you execute a line of a file. This global variable needs to be sent back to the server to create a full coverage report.
 
@@ -65,7 +90,7 @@ Why? When a browser opens the client side of your application, this package inte
     * PR welcome
 
 ```js
-    Meteor.exportCoverage(null, function(err) {console.log(err)})
+Meteor.exportCoverage(null, function(err) {console.log(err)})
 ```
 #### Meteor.importCoverage(callback)
 Import a `coverage` export.
@@ -94,7 +119,7 @@ You can specify which files will not be covered in reports in a `.coverage.json`
             ],
             "public": [
                 "if you have js in your public directory like",
-                "openlayers.min.js"  
+                "openlayers.min.js",  
                 "==> stored in public/openlayers.min.js",
                 "and you don't want to instrument them"
             ]

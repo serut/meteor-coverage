@@ -1,7 +1,7 @@
 language: node_js
 
 node_js:
-  - 0.10.40
+  - 0.10.43
 
 cache:
   directories:
@@ -24,5 +24,5 @@ before_install:
 script:
   - spacejam test-packages ./ --coverage || spacejam test-packages ./  --loglevel debug # if it fails, I want to see how tests fail without coverage
   - cat lcov.info | coveralls || true # ignore coveralls error
-  - cat lcov.info  | codecov || true # ignore codecov error
+  - cat lcov.info | codecov || true # ignore codecov error
   - eslint . || true # ignore eslint error
