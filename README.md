@@ -4,7 +4,7 @@ A meteor package that allows you to get the statement, line, function and branch
 This package uses the [istanbuljs/istanbul-api](https://github.com/istanbuljs/istanbul-api) package for coverage report and [meteorhacks:picker](https://github.com/meteorhacks/picker) for server side routing.  
 It's a debug only package, so it does not affect your production build.
 
-## Platforms supported
+## CI Platforms supported
 |               | Travis        | Circle CI  | Coveralls  | Codecov  |
 | ------------- |:-------------:|----------:|----------:|----------:|
 | lmieulet:meteor-coverage      | [![Build Status](https://travis-ci.org/serut/meteor-coverage.png?branch=master)](https://travis-ci.org/serut/meteor-coverage) | [![Circle CI](https://circleci.com/gh/serut/meteor-coverage.svg?style=svg)](https://circleci.com/gh/serut/meteor-coverage) | [![Coverage Status](https://coveralls.io/repos/github/serut/meteor-coverage/badge.svg?branch=master)](https://coveralls.io/github/serut/meteor-coverage?branch=master) | [![codecov](https://codecov.io/gh/serut/meteor-coverage/branch/master/graph/badge.svg)](https://codecov.io/gh/serut/meteor-coverage) |
@@ -12,25 +12,88 @@ It's a debug only package, so it does not affect your production build.
 
 ## Installation
 
-In your Meteor app directory, enter:
-
-```bash
-$ meteor add lmieulet:meteor-coverage
-$ COVERAGE=1 \
-COVERAGE_VERBOSE=1 \
-COVERAGE_APP_FOLDER=/path/to/your/meteor/app/ meteor
+- In a Meteor app, add these dependencies to your `.meteor/packages` file :
+```
+practicalmeteor:chai
+practicalmeteor:mocha@2.4.5_5
+practicalmeteor:mocha-console-runner
+lmieulet:meteor-coverage@0.8.1
 ```
 
-And open this page to see the report:
+- If you want to cover a package, you need to add `api.use(['lmieulet:meteor-coverage@0.8.1']);` to your `Package.onTest` function of the `package.js` file.
+
+#### Then test if it works
+
+You need to set up environment variable (for now) if you want this package to be active and to process all yours files. Using these instructions, try to run your app and check if it looks good when you open the report page:
 ```URL
-http://localhost:3000/coverage
+Windows$ SET COVERAGE=1
+         SET COVERAGE_VERBOSE=1
+         SET COVERAGE_APP_FOLDER=/path/to/your/meteor/app/
+         meteor
+
+Others $ COVERAGE=1 \
+         COVERAGE_VERBOSE=1 \
+         COVERAGE_APP_FOLDER=/path/to/your/meteor/app/ meteor
+
+# 1. Open your app http://localhost:3000/
+#    Open the console (F12) and execute
+#    Meteor.sendCoverage(function(stats,err) {console.log(stats,err);});
+#    It just sends the client coverage (stored in a global variable) to the server
+# 2. See the coverage report http://localhost:3000/coverage
+
 ```
 
-If you have internal packages inside your app and you want to hook their server side js, open the file `.meteor/packages` and move the line `lmieulet:meteor-coverage` to be above these packages.
+## Go further with meteor app (CI, reports..)
 
-If you have packages used by your project (ex: aldeed:simple-schema) or libraries on your client side (ex: OpenLayers, Jquery), you can hide the coverage of these files of your report. See [config file](#config-file)
+This is still in an **early phase**, it works for test package (mocha) & mocha test on Meteor apps (unit, --full-app). If you have any trouble, refer to this example of Meteor application [meteor-coverage-app-exemple](https://github.com/serut/meteor-coverage-app-exemple) to see how a test runner can execute yours tests, save coverage and send it to coveralls. Or feel free to open an issue.
 
-If you want to cover a package, you need to add `api.use(['lmieulet:meteor-coverage@0.8.0']);` to your `Package.onTest` function of the `package.js` file.
+For app, edit your `package.json` with the following
+```
+{
+"devDependencies": {
+    [...]
+    "spacejam": "https://github.com/serut/spacejam/tarball/windows-suppport-rc4",
+    "coveralls": "^2.11.11",
+    "codecov.io": "^0.1.6"
+},
+{
+"scripts": {
+    [...]
+    "test-coverage-app-unit": "spacejam test                  --driver-package practicalmeteor:mocha-console-runner --coverage out_coverage",
+    "test-coverage-app-full": "spacejam test --full-app       --driver-package practicalmeteor:mocha-console-runner --coverage 'in_coverage|out_lcovonly'",
+    "test-coverage-packages-mocha": "spacejam test-packages   --driver-package practicalmeteor:mocha-console-runner --coverage out_lcovonly"
+},
+"devDependencies": {
+    [...]
+    "spacejam": "https://github.com/serut/spacejam/tarball/windows-suppport-rc4",
+    "coveralls": "^2.11.11",
+    "codecov.io": "^0.1.6"
+},
+```
+Now, you can run your test (here is an extract of a [circle.yml](https://github.com/serut/meteor-coverage-app-exemple/blob/master/circle.yml)), merge coverage between tests, export the coverage report and sent it to a coverage platform:
+```
+- meteor npm install
+# Unit test using mocha
+- meteor npm run test-coverage-app-unit
+# Integration test using mocha
+- meteor npm run test-coverage-app-full
+# Package test using mocha
+- meteor npm run test-coverage-packages-mocha
+# Send coverage report
+- cat lcov.info | ./node_modules/coveralls/bin/coveralls.js || true # ignore coveralls error
+- cat lcov.info | ./node_modules/codecov.io/bin/codecov.io.js || true # ignore codecov error
+```
+
+
+For packages, install spacejam globally and run it manually (as this package does).
+
+
+## spacejam --coverage possibilities
+
+- `out_coverage` creates a dump of the coverage - used when you want to merge several coverage
+- `in_coverage` imports a coverage dump (previously create with `out_coverage`)
+- `out_lcovonly` creates a lcov report
+
 
 ## Global environment variable
 
@@ -43,42 +106,16 @@ You need to set up these environment variables:
     * Used when importing or exporting coverage reports
 * `COVERAGE_VERBOSE=1` to see logs (optional)
 
-## Continuous Integration
+Using `spacejam --coverage` you do not have to set up global environment variable.
 
+## My files are missing from my app coverage report
 
-See the .travis.yml of this real example of Meteor application [meteor-coverage-app-exemple](https://github.com/serut/meteor-coverage-app-exemple) to see how a test runner can execute yours tests, save coverage and send it to coveralls. Works for test package (tinytest, mocha) & mocha test Meteor apps (unit, --full-app). Using `spacejam --coverage` you do not have to set up global environment variable.
-
-## Client API
-
-#### Meteor.sendCoverage(callback)
-
-Run the following command in your browser and the client coverage will be saved into the server coverage report.  
-```js
-Meteor.sendCoverage(function(stats,err) {console.log(stats,err);});
-```
-Why? When a browser opens the client side of your application, this package intercepts all queries matching `*.js` to respond the instrumented version of the original script, if they are not ignored by the configuration file. All these instrumented scripts are autonomous and they save the coverage in a global variable when you execute a line of a file. This global variable needs to be sent back to the server to create a full coverage report.
-
-#### Meteor.exportCoverage(type, callback)
-* type: the type of report you want to create inside your `COVERAGE_APP_FOLDER`
-    * Default: `coverage`, used to dump the coverage object in a file because when there are several types of test, we want to merge results, and the server reloads between each one.
-    * Allowed values: `cobertura`, `html`, `json`, `json-summary`, `lcov`, `none`, `teamcity`, `text`, `text-lcov`, `text-summary`, `lcovonly`, `coverage`
-    * **Working values:** `lcovonly`, `coverage`
-    * Except for `coverage`, the file generation is handled by  [istanbuljs/istanbul-reports](https://github.com/istanbuljs/istanbul-reports)
-    * PR welcome
-
-```js
-Meteor.exportCoverage(null, function(err) {console.log(err)})
-```
-#### Meteor.importCoverage(callback)
-Import a `coverage` export.
-
-```js
-Meteor.importCoverage(function(err) {console.log(err)})
-```
+If you have **internal packages** inside your app and you want to get their **server side** coverage. Open the file `.meteor/packages` and move the line `lmieulet:meteor-coverage` to be above these packages.
 
 ## Config file
 
-You can specify which files will not be covered in reports in a `.coverage.json` file inside the `COVERAGE_APP_FOLDER` folder.
+
+If you have packages used by your project (ex: aldeed:simple-schema) or libraries on your client side (ex: OpenLayers, Jquery), you can hide the coverage of these files of your report. You can specify which files will not be covered in reports in a `.coverage.json` file inside the `COVERAGE_APP_FOLDER` folder.
 ```json
 {
     "ignore": {
@@ -115,12 +152,39 @@ If you do not have this file, this package will use the default one (`conf/defau
 
 To create your custom config file, run the project with COVERAGE_VERBOSE=1 env variable and use logs to see which filenames were hooked or hidden. PR welcome.
 
+## Client API
+
+#### Meteor.sendCoverage(callback)
+
+Run the following command in your browser and the client coverage will be saved into the server coverage report.  
+```js
+Meteor.sendCoverage(function(stats,err) {console.log(stats,err);});
+```
+Why? When a browser opens the client side of your application, this package intercepts all queries matching `*.js` to respond the instrumented version of the original script, if they are not ignored by the configuration file. All these instrumented scripts are autonomous and they save the coverage in a global variable when you execute a line of a file. This global variable needs to be sent back to the server to create a full coverage report.
+
+#### Meteor.exportCoverage(type, callback)
+* type: the type of report you want to create inside your `COVERAGE_APP_FOLDER`
+    * Default: `coverage`, used to dump the coverage object in a file because when there are several types of test, we want to merge results, and the server reloads between each one.
+    * Allowed values: `cobertura`, `html`, `json`, `json-summary`, `lcov`, `none`, `teamcity`, `text`, `text-lcov`, `text-summary`, `lcovonly`, `coverage`
+    * **Working values:** `lcovonly`, `coverage`
+    * Except for `coverage`, the file generation is handled by  [istanbuljs/istanbul-reports](https://github.com/istanbuljs/istanbul-reports)
+    * PR welcome
+
+```js
+Meteor.exportCoverage(null, function(err) {console.log(err)})
+```
+#### Meteor.importCoverage(callback)
+Import a `coverage` export.
+
+```js
+Meteor.importCoverage(function(err) {console.log(err)})
+```
+
+
 ## Limitation(s) / open issues
 
-* Tests files are covered - they need to be ignored
-* CircleCI support
 * `meteor --settings` support
-* Cannot control the name of files reports
+* Need to add options when exporting
 * No feedback from typescript and coffeescript users
 
 ## Contributing
