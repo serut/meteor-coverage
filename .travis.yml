@@ -1,8 +1,9 @@
-language: node_js
 
+
+language: node_js
 node_js:
   - 0.10.43
-
+  - 4
 cache:
   directories:
     - $HOME/.meteor
@@ -11,14 +12,14 @@ cache:
 before_cache:
   - rm -f $HOME/.meteor/log/*.log
 
-before_install:
-  # Download Meteor
+ before_install:
+  # Download Meteor - Keep in mind that you need
+  # to remove your travis cache to get meteor updates
   - PATH=$PATH:$HOME/.meteor
   - if [ ! -e $HOME/.meteor/meteor ]; then curl https://install.meteor.com | sh; fi
 
-  # Install spacejam
-  - npm install -g coffee-script@1.8.0
-  - npm install -g https://github.com/serut/spacejam/tarball/master coveralls codecov.io
+  # Install dependencies
+  - npm install https://github.com/serut/spacejam/tarball/windows-suppport-rc4 coveralls codecov.io
   - npm install -g eslint
 
 script:
