@@ -19,11 +19,11 @@ It's a debug only package, so it does not affect your production build.
 practicalmeteor:chai
 practicalmeteor:mocha@2.4.5_5
 practicalmeteor:mocha-console-runner
-lmieulet:meteor-coverage@0.8.1
+lmieulet:meteor-coverage@0.9.0
 ```
 
 -   If you are using flow-router, there are [an issue](https://github.com/kadirahq/flow-router/pull/615) that prevents tests to succeed.
--   If you want to cover a package, you need to add `api.use(['lmieulet:meteor-coverage@0.8.1']);` to your `Package.onTest` function of the `package.js` file.
+-   If you want to cover a package, you need to add `api.use(['lmieulet:meteor-coverage@0.9.0']);` to your `Package.onTest` function of the `package.js` file.
 
 #### Then test if it works
 
