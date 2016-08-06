@@ -23,7 +23,7 @@ before_cache:
   - npm install -g eslint
 
 script:
-  - spacejam test-packages ./ --coverage || spacejam test-packages ./  --loglevel debug # if it fails, I want to see how tests fail without coverage
+  - spacejam test-packages ./ --coverage out_lcovonly || spacejam test-packages ./  --loglevel debug # if it fails, I want to see how tests fail without coverage
   - cat lcov.info | coveralls || true # ignore coveralls error
   - cat lcov.info | codecov || true # ignore codecov error
   - eslint . || true # ignore eslint error

@@ -10,4 +10,4 @@ checkout:
     - git submodule update --init
 test:
   override:
-    - spacejam test-packages ./ --coverage || spacejam test-packages ./  --loglevel debug
+    - spacejam test-packages ./ --coverage out_lcovonly || spacejam test-packages ./  --loglevel debug
