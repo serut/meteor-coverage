@@ -1,9 +1,9 @@
-
-
 language: node_js
+
 node_js:
   - 0.10.43
-  - 4
+  - 4.4.7
+
 cache:
   directories:
     - $HOME/.meteor
@@ -23,7 +23,8 @@ before_cache:
   - npm install -g eslint
 
 script:
-  - spacejam test-packages ./ --coverage out_lcovonly || spacejam test-packages ./  --loglevel debug # if it fails, I want to see how tests fail without coverage
-  - cat lcov.info | coveralls || true # ignore coveralls error
-  - cat lcov.info | codecov || true # ignore codecov error
+  - mkdir .coverage
+  - spacejam test-packages ./ --coverage out_lcovonly --loglevel debug || spacejam test-packages ./  --loglevel debug # if it fails, I want to see how tests fail without coverage
+  - cat lcov.info | coveralls || cat lcov.info || true # ignore coveralls error
+  - cat lcov.info | codecov || cat lcov.info || true # ignore codecov error
   - eslint . || true # ignore eslint error
