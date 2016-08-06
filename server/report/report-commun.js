@@ -1,6 +1,8 @@
 import fs from 'fs';
 import mkdirp from 'mkdirp';
 import path from 'path'
+import Log from './../context/log';
+
 var istanbulAPI = Npm.require('istanbul-api'),
     Report = istanbulAPI.libReport;
 
@@ -44,11 +46,11 @@ export default ReportCommun = {
             const stat = fs.statSync(dirpath)
         } catch (e) {
             succeed = false;
-            console.log("Creating a new folder", dirpath)
+            Log.info("Creating a new folder", dirpath)
             try {
                 mkdirp.sync(dirpath)
             } catch (e) {
-                console.log("Something went wrong while creating folder", e, e.stack)
+                console.error("Something went wrong while creating folder", e, e.stack)
             }
         }
         return succeed;
@@ -57,11 +59,11 @@ export default ReportCommun = {
         let succeed = true;
         // Reset file
         try {
-            console.log("Try to reset", filepath)
+            Log.info("Try to remove the content & create the file", filepath)
             fs.writeFileSync(filepath, '');
         } catch (e) {
             succeed = false;
-            console.log("Something went wrong while creating the file", filepath, e, e.stack)
+            console.error("Something went wrong while creating the file", filepath, e, e.stack)
         }
         return succeed;
     }

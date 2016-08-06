@@ -16,8 +16,7 @@ export default class {
             path: path.join(Conf.COVERAGE_APP_FOLDER, Conf.COVERAGE_EXPORT_FOLDER),
             verbose: Conf.IS_COVERAGE_VERBOSE ? true : false
         }, options);
-        console.log("Service", options)
-        Log.info("export coverage using the following format:", type);
+        Log.info("export coverage using the following format:", type, options);
         try {
             switch (type) {
                 case "lcovonly":

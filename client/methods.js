@@ -48,7 +48,6 @@ Package['meteor']['Meteor'].exportCoverage = function (type, callback) {
         method: 'GET',
         url: url,
         success: function(data) {
-            console.log("The api has done his job, receive", data)
             try {
                 let result = JSON.parse(data);
                 if (result.type === "success") {
