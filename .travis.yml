@@ -25,6 +25,6 @@ before_install:
 script:
   - mkdir .coverage
   - spacejam test-packages ./ --coverage out_lcovonly  --driver-package practicalmeteor:mocha-console-runner || spacejam test-packages ./   --driver-package practicalmeteor:mocha-console-runner --loglevel debug # if it fails, I want to see how tests fail without coverage
-  - cat lcov.info | coveralls || cat lcov.info || true # ignore coveralls error
-  - cat lcov.info | codecov || cat lcov.info || true # ignore codecov error
+  - cat .coverage/lcov.info | coveralls || cat .coverage/lcov.info || true # ignore coveralls error
+  - cat .coverage/lcov.info | codecov || cat .coverage/lcov.info || true # ignore codecov error
   - eslint . || true # ignore eslint error
