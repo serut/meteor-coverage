@@ -57,7 +57,8 @@
             ]
         },
         "others": [
-            ".*/tests/.*.js"
+            ".*/tests/.*.js",
+            ".*tests.js"
         ]
     }
 }

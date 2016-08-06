@@ -11,4 +11,4 @@ checkout:
 test:
   override:
     - mkdir .coverage
-    - spacejam test-packages ./ --coverage out_lcovonly --loglevel debug || spacejam test-packages ./  --loglevel debug
+    - spacejam test-packages ./ --coverage out_lcovonly  --driver-package practicalmeteor:mocha-console-runner || spacejam test-packages ./   --driver-package practicalmeteor:mocha-console-runner --loglevel debug

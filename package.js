@@ -9,9 +9,9 @@ Package.describe({
 
 Package.onUse(function(api) {
 	api.versionsFrom('METEOR@1.3.1');
-	api.use(['ecmascript', 'meteorhacks:picker@1.0.3'], 'server');
+	api.use(['meteorhacks:picker@1.0.3'], 'server');
 
-	api.use("modules");
+	api.use(['ecmascript']);
 	// Add datasets
 	api.addAssets('conf/default-coverage.json', 'server');
 
@@ -25,12 +25,7 @@ Package.onUse(function(api) {
 	], 'server');
 
 	api.mainModule('server/main.js', 'server');
-
-	api.addFiles([
-		'client/methods.js'
-	], 'client');
-
-	api.export(["MeteorCoverage"], 'server');
+	api.mainModule('client/methods.js', 'client');
 });
 
 
@@ -41,16 +36,11 @@ Npm.depends({
 });
 
 Package.onTest(function(api) {
+    api.use('ecmascript');
 	api.use(['lmieulet:meteor-coverage-self-instrumenter@3.0.0'], ['server']);
-	api.use('ecmascript');
-	api.use(['practicalmeteor:mocha', 'practicalmeteor:chai']);
-	api.use(['lmieulet:meteor-coverage', 'tinytest']);
+	api.use(['practicalmeteor:mocha', 'practicalmeteor:chai', 'lmieulet:meteor-coverage']);
 	api.use('jquery', 'client');
 
-	api.mainModule('tests/server/index.js', 'server');
-	api.addFiles('tests/client/methods.js', 'client');
-	api.addFiles([
-		'tests/server/tests.js',
-		'tests/server/instrumenter.tests.js'
-	], 'server');
+	api.mainModule('server/tests.js', 'server');
+	api.mainModule('client/methods.tests.js', 'client');
 });
