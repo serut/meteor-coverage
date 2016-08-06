@@ -24,17 +24,7 @@ Package.onUse(function(api) {
 		'assets/sorter.js'
 	], 'server');
 
-	api.addFiles([
-		'server/log.js',
-		'server/conf.js',
-		'server/core.js',
-		'server/handlers.js',
-		'server/routes.js',
-		'server/instrumenter.js',
-		'server/source-map.js',
-		'server/coverage-data.js',
-		'server/main.js',
-	], 'server');
+	api.mainModule('server/main.js', 'server');
 
 	api.addFiles([
 		'client/methods.js'
@@ -46,15 +36,18 @@ Package.onUse(function(api) {
 
 Npm.depends({
 	"istanbul-api": "1.1.0-alpha.1",
-	'body-parser': '1.15.2'
+	'body-parser': '1.15.2',
+	'mkdirp': '0.5.1'
 });
 
 Package.onTest(function(api) {
-	api.use(['lmieulet:meteor-coverage-self-instrumenter@2.0.0'], ['server']);
+	api.use(['lmieulet:meteor-coverage-self-instrumenter@3.0.0'], ['server']);
 	api.use('ecmascript');
-	api.use(['lmieulet:meteor-coverage', 'tinytest'], ['server', 'client']);
+	api.use(['practicalmeteor:mocha', 'practicalmeteor:chai']);
+	api.use(['lmieulet:meteor-coverage', 'tinytest']);
 	api.use('jquery', 'client');
 
+	api.mainModule('tests/server/index.js', 'server');
 	api.addFiles('tests/client/methods.js', 'client');
 	api.addFiles([
 		'tests/server/tests.js',

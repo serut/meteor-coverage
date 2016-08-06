@@ -46,8 +46,16 @@ Meteor.exportCoverage = function (type, callback) {
     $.ajax({
         method: 'GET',
         url: url,
-        success: function() {
-            callback();
+        success: function(data) {
+            try {
+                let result = JSON.parse(data);
+                if (result.type === "success") {
+                    return callback();
+                }
+            } catch (e) {
+                return callback(e);
+            }
+            return callback("sdqf");
         },
         error: function() {
             callback(arguments);
@@ -62,8 +70,15 @@ Meteor.importCoverage = function (callback) {
     $.ajax({
         method: 'GET',
         url: '/coverage/import',
-        success: function() {
-           callback();
+        success: function(data) {
+            try {
+                let result = JSON.parse(data);
+                if (result.type === "success") {
+                    callback();
+                }
+            } catch (e) {
+                callback(arguments);
+            }
         },
         error: function() {
            callback(arguments);

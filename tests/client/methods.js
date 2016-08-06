@@ -34,7 +34,6 @@ Tinytest.addAsync(
         );
     }
 );
-
 Tinytest.addAsync(
     'meteor-coverage - export lcovonly',
     function (test, next) {
@@ -42,6 +41,58 @@ Tinytest.addAsync(
             'lcovonly',
             function(err) {
                 test.isUndefined(err, "failed to export lcovonly");
+                next();
+            }
+        );
+    }
+);
+
+
+Tinytest.addAsync(
+    'meteor-coverage - export json',
+    function (test, next) {
+        Meteor.exportCoverage(
+            'json',
+            function(err) {
+                test.isUndefined(err, "failed to export json");
+                next();
+            }
+        );
+    }
+);
+Tinytest.addAsync(
+    'meteor-coverage - export json-summary',
+    function (test, next) {
+        Meteor.exportCoverage(
+            'json-summary',
+            function(err) {
+                test.isUndefined(err, "failed to export json-summary");
+                next();
+            }
+        );
+    }
+);
+/*
+Tinytest.addAsync(
+    'meteor-coverage - export teamcity',
+    function (test, next) {
+        Meteor.exportCoverage(
+            'teamcity',
+            function(err) {
+                test.isUndefined(err, "failed to export teamcity");
+                next();
+            }
+        );
+    }
+);
+*/
+Tinytest.addAsync(
+    'meteor-coverage - export html',
+    function (test, next) {
+        Meteor.exportCoverage(
+            'html',
+            function(err) {
+                test.isUndefined(err, "failed to export html");
                 next();
             }
         );
