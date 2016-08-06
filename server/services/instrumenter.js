@@ -1,6 +1,9 @@
-import { _ } from 'meteor/underscore';
+import {_} from 'meteor/underscore';
+import Log from './../context/log';
+import Conf from './../context/conf'
+let hookLoader, instrumentJs, checkIfAutorised, shallInstrumentClientScript, shallInstrumentServerScript
 
-if (IS_COVERAGE_ACTIVE) {
+if (Conf.IS_COVERAGE_ACTIVE) {
     //var im = Npm.require('istanbul-middleware');
     var istanbulAPI = Npm.require('istanbul-api'),
         Hook = istanbulAPI.libHook,
@@ -38,7 +41,7 @@ if (IS_COVERAGE_ACTIVE) {
 
     checkIfAutorised = function (filters, file) {
         let allowed = true;
-        for (let i = 0; i < filters.length; i ++) {
+        for (let i = 0; i < filters.length; i++) {
             let filterRegex = new RegExp(filters[i], "i");
             allowed = allowed && filterRegex.test(file) === false;
             if (!allowed) {
@@ -91,24 +94,24 @@ if (IS_COVERAGE_ACTIVE) {
         }
         if (file.indexOf('packages') === 1) {
             if (checkIfAutorised(Conf.ignore.serverside, file)) {
-                SourceMap.registerSourceMap(root+file);
+                SourceMap.registerSourceMap(root + file);
                 Log.info("[ServerSide][Package] file instrumented: " + file);
                 return true;
             } else {
                 Log.info("[ServerSide][Package] file ignored: " + file);
             }
         } else {
-            SourceMap.registerSourceMap(root+file);
+            SourceMap.registerSourceMap(root + file);
             Log.info("[ServerSide][App.js] file instrumented: " + file);
             return true;
         }
         return false;
     };
-
-    Instrumenter = {
-        instrumentJs: instrumentJs,
-        shallInstrumentClientScript: shallInstrumentClientScript,
-        hookLoader: hookLoader,
-        checkIfAutorised: checkIfAutorised
-    };
 }
+export default Instrumenter = {
+    hookLoader,
+    instrumentJs,
+    checkIfAutorised,
+    shallInstrumentClientScript,
+    shallInstrumentServerScript,
+};

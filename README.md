@@ -15,23 +15,24 @@ It's a debug only package, so it does not affect your production build.
 
 -   In a Meteor app, add these dependencies to your `.meteor/packages` file :
 
+```txt
+practicalmeteor:chai
+practicalmeteor:mocha@2.4.5_5
+practicalmeteor:mocha-console-runner
+lmieulet:meteor-coverage@0.9.0
+```
 
-    practicalmeteor:chai
-    practicalmeteor:mocha@2.4.5_5
-    practicalmeteor:mocha-console-runner
-    lmieulet:meteor-coverage@0.8.1
-
--   If you are using flow-router, there are [an issue](https://github.com/kadirahq/flow-router/issues/668) that prevents tests to succeed.
--   If you want to cover a package, you need to add `api.use(['lmieulet:meteor-coverage@0.8.1']);` to your `Package.onTest` function of the `package.js` file.
+-   If you are using flow-router, there are [an issue](https://github.com/kadirahq/flow-router/pull/615) that prevents tests to succeed.
+-   If you want to cover a package, you need to add `api.use(['lmieulet:meteor-coverage@0.9.0']);` to your `Package.onTest` function of the `package.js` file.
 
 #### Then test if it works
 
 You need to set up environment variable (for now) if you want this package to be active and to process all yours files. Using these instructions, try to run your app and check if it looks good when you open the report page:
 
 ```URL
-Windows$ SET COVERAGE=1
-         SET COVERAGE_VERBOSE=1 # if you have trouble
-         SET COVERAGE_APP_FOLDER=/path/to/your/meteor/app/
+Windows$ SET COVERAGE 1
+         SET COVERAGE_VERBOSE 1 # if you have trouble
+         SET COVERAGE_APP_FOLDER C:\Users\john\meteor-app\ # With ending slash
          meteor
 
 Others $ COVERAGE=1 \
@@ -86,6 +87,9 @@ Now, you can run your test (here is an extract of a [circle.yml](https://github.
     - cat lcov.info | ./node_modules/codecov.io/bin/codecov.io.js || true # ignore codecov error
 
 For packages, install spacejam globally and run it manually (as this package does).
+
+    npm install -g https://github.com/serut/spacejam/tarball/windows-suppport-rc4
+    spacejam test-packages ./ --coverage out_lcovonly
 
 ## spacejam --coverage possibilities
 
@@ -151,7 +155,7 @@ Copy the `conf/default-coverage.json`, rename it into `.coverage.json`, remove k
 }
 ```
 
-To create your custom config file, run the project with COVERAGE_VERBOSE=1 env variable and use logs to see which filenames were hooked or hidden. PR welcome.
+To create your custom config file, run the project with `COVERAGE_VERBOSE=1` env variable and use logs to see which filenames were hooked or hidden. PR welcome.
 
 ## Client API
 
@@ -197,6 +201,11 @@ Meteor.importCoverage(function(err) {console.log(err)})
 Anyone is welcome to contribute.  
 Fork, make and then submit a pull request.
 
+Don't forget to test :
+
+-   set environment variables `COVERAGE` and `COVERAGE_APP_FOLDER` (e.g. `set COVERAGE 1` or `COVERAGE=1`)
+-   meteor test-packages
+
 ## Credits
 
 This package would not exist without the amazing work of:
@@ -205,3 +214,4 @@ This package would not exist without the amazing work of:
 -   All contributors of [istanbul-api](https://github.com/istanbuljs/istanbul-api) and [istanbul-middleware](https://github.com/gotwarlost/istanbul-middleware) projects.
 
 Both were very helpful in the development of this package. It saves me so many hours so many thanks to them.
+.

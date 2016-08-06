@@ -1,6 +1,6 @@
 Package.describe({
 	name: 'lmieulet:meteor-coverage',
-	version: '0.8.1',
+	version: '0.9.0',
 	summary: 'Server and client coverage for Meteor',
 	git: 'https://github.com/serut/meteor-coverage',
 	documentation: 'README.md',
@@ -9,9 +9,9 @@ Package.describe({
 
 Package.onUse(function(api) {
 	api.versionsFrom('METEOR@1.3.1');
-	api.use(['ecmascript', 'meteorhacks:picker@1.0.3'], 'server');
+	api.use(['meteorhacks:picker@1.0.3'], 'server');
 
-	api.use("modules");
+	api.use(['ecmascript']);
 	// Add datasets
 	api.addAssets('conf/default-coverage.json', 'server');
 
@@ -24,40 +24,23 @@ Package.onUse(function(api) {
 		'assets/sorter.js'
 	], 'server');
 
-	api.addFiles([
-		'server/log.js',
-		'server/conf.js',
-		'server/core.js',
-		'server/handlers.js',
-		'server/routes.js',
-		'server/instrumenter.js',
-		'server/source-map.js',
-		'server/coverage-data.js',
-		'server/main.js',
-	], 'server');
-
-	api.addFiles([
-		'client/methods.js'
-	], 'client');
-
-	api.export(["MeteorCoverage"], 'server');
+	api.mainModule('server/main.js', 'server');
+	api.mainModule('client/methods.js', 'client');
 });
 
 
 Npm.depends({
 	"istanbul-api": "1.1.0-alpha.1",
-	'body-parser': '1.15.2'
+	'body-parser': '1.15.2',
+	'mkdirp': '0.5.1'
 });
 
 Package.onTest(function(api) {
-	api.use(['lmieulet:meteor-coverage-self-instrumenter@2.0.0'], ['server']);
-	api.use('ecmascript');
-	api.use(['lmieulet:meteor-coverage', 'tinytest'], ['server', 'client']);
+    api.use('ecmascript');
+	api.use(['lmieulet:meteor-coverage-self-instrumenter@3.0.0'], ['server']);
+	api.use(['practicalmeteor:mocha', 'practicalmeteor:chai', 'lmieulet:meteor-coverage']);
 	api.use('jquery', 'client');
 
-	api.addFiles('tests/client/methods.js', 'client');
-	api.addFiles([
-		'tests/server/tests.js',
-		'tests/server/instrumenter.tests.js'
-	], 'server');
+	api.mainModule('server/tests.js', 'server');
+	api.mainModule('client/methods.tests.js', 'client');
 });

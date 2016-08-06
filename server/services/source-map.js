@@ -1,11 +1,16 @@
-if (IS_COVERAGE_ACTIVE) {
+import Log from './../context/log';
+import Conf from './../context/conf'
+let alterSourceMapPaths = registerSourceMap = function () {
+    throw "COVERAGE_NOT_ACTIVE"
+}
+if (Conf.IS_COVERAGE_ACTIVE) {
+
+
     var istanbulAPI = Npm.require('istanbul-api'),
         fs = Npm.require('fs'),
         sourceMap = istanbulAPI.libSourceMaps.createSourceMapStore({verbose: true}),
-        meteor_dir = COVERAGE_APP_FOLDER,
+        meteor_dir = Conf.COVERAGE_APP_FOLDER,
         regexAlterationSourceMapPath = new RegExp(/(packages\/)([a-zA-Z-]*)[_:]([a-zA-Z-_]*)(.*)/);
-
-
     // Alter inside the source map the path of each sources
     alterSourceMapPaths = function (map) {
         var match;
@@ -41,9 +46,8 @@ if (IS_COVERAGE_ACTIVE) {
         }
         Log.timeEnd("registerSourceMap" + filepath);
     };
-
-    SourceMap = {
-        registerSourceMap: registerSourceMap,
-        lib: sourceMap
-    };
 }
+export default SourceMap = {
+    lib: sourceMap,
+    registerSourceMap
+};

@@ -1,7 +1,9 @@
+import { $ } from 'meteor/jquery';
+
 /**
  * Usage: Meteor.sendCoverage(function(stats,err) {console.log(stats,err);});
  */
-Meteor.sendCoverage = function (callback) {
+Package['meteor']['Meteor'].sendCoverage = function (callback) {
     var coverageReport = {},
         stats = {SUCCESS: 0, FAILED: 0, TOTAL: 0},
         successCallback = function () {
@@ -37,17 +39,24 @@ Meteor.sendCoverage = function (callback) {
         }
     }
 };
-
 /**
 * Usage: Meteor.exportCoverage(null, function(err) {console.log(err)})
 */
-Meteor.exportCoverage = function (type, callback) {
+Package['meteor']['Meteor'].exportCoverage = function (type, callback) {
     var url = type ? '/coverage/export/'+type : '/coverage/export';
     $.ajax({
         method: 'GET',
         url: url,
-        success: function() {
-            callback();
+        success: function(data) {
+            try {
+                let result = JSON.parse(data);
+                if (result.type === "success") {
+                    return callback();
+                }
+            } catch (e) {
+                return callback(e);
+            }
+            return callback("sdqf");
         },
         error: function() {
             callback(arguments);
@@ -58,15 +67,24 @@ Meteor.exportCoverage = function (type, callback) {
 /**
 * Usage: Meteor.importCoverage(function(err) {console.log(err)})
 */
-Meteor.importCoverage = function (callback) {
+Package['meteor']['Meteor'].importCoverage = function (callback) {
     $.ajax({
         method: 'GET',
         url: '/coverage/import',
-        success: function() {
-           callback();
+        success: function(data) {
+            try {
+                let result = JSON.parse(data);
+                if (result.type === "success") {
+                    callback();
+                }
+            } catch (e) {
+                callback(arguments);
+            }
         },
         error: function() {
            callback(arguments);
         }
     });
 };
+
+export default Package['meteor']['Meteor'];
