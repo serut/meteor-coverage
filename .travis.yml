@@ -19,12 +19,13 @@ before_install:
   - if [ ! -e $HOME/.meteor/meteor ]; then curl https://install.meteor.com | sh; fi
 
   # Install dependencies
-  - npm install https://github.com/serut/spacejam/tarball/windows-suppport-rc4 coveralls codecov.io
-  - npm install -g eslint
+  - npm install -g https://github.com/serut/spacejam/tarball/windows-suppport-rc4
+  - npm install -g eslint coveralls codecov.io codacy-coverage
 
 script:
   - mkdir .coverage
   - spacejam test-packages ./ --coverage out_lcovonly --driver-package practicalmeteor:mocha-console-runner
   - cat .coverage/lcov.info | coveralls || cat .coverage/lcov.info || true # ignore coveralls error
   - cat .coverage/lcov.info | codecov || cat .coverage/lcov.info || true # ignore codecov error
+  - cat .coverage/lcov.info | codacy-coverage || true # ignore codacy error
   - eslint . || true # ignore eslint error

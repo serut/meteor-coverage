@@ -108,6 +108,11 @@ if (Conf.IS_COVERAGE_ACTIVE) {
         return false;
     };
 }
+if (hookLoader === undefined) {
+    hookLoader = function () {
+
+    }
+}
 export default Instrumenter = {
     hookLoader,
     instrumentJs,

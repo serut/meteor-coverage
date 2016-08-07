@@ -19,11 +19,11 @@ It's a debug only package, so it does not affect your production build.
 practicalmeteor:chai
 practicalmeteor:mocha@2.4.5_5
 practicalmeteor:mocha-console-runner
-lmieulet:meteor-coverage@0.9.0
+lmieulet:meteor-coverage@0.9.1
 ```
 
 -   If you are using flow-router, there are [an issue](https://github.com/kadirahq/flow-router/pull/615) that prevents tests to succeed.
--   If you want to cover a package, you need to add `api.use(['lmieulet:meteor-coverage@0.9.0']);` to your `Package.onTest` function of the `package.js` file.
+-   If you want to cover a package, you need to add `api.use(['lmieulet:meteor-coverage@0.9.1']);` to your `Package.onTest` function of the `package.js` file.
 
 #### Then test if it works
 
@@ -96,6 +96,10 @@ For packages, install spacejam globally and run it manually (as this package doe
 -   `out_coverage` creates a dump of the coverage - used when you want to merge several coverage
 -   `in_coverage` imports a coverage dump (previously create with `out_coverage`)
 -   `out_lcovonly` creates a lcov report
+-   `out_html` creates a html report
+-   `out_json_report` creates a json report
+-   `out_json_summary` creates a json_summary report
+-   `out_teamcity` is not working yet
 
 ## Global environment variable
 
@@ -151,7 +155,8 @@ Copy the `conf/default-coverage.json`, rename it into `.coverage.json`, remove k
             "here you can ignore any file from your project coverage report",
             ".*/tests/.*.js"
         ]
-    }
+    },
+    "output": "./.coverage"
 }
 ```
 
@@ -199,7 +204,7 @@ Meteor.importCoverage(function(err) {console.log(err)})
 ## Contributing
 
 Anyone is welcome to contribute.  
-Fork, make and then submit a pull request.
+Fork meteor-coverage-app-exemple, make and then submit a pull request.
 
 Don't forget to test :
 
