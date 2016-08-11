@@ -1,36 +1,69 @@
 import { $ } from 'meteor/jquery';
+import { Meteor } from 'meteor/meteor';
+
+var stats = {SUCCESS: 0, FAILED: 0, TOTAL: 0};
+Meteor.getStats = function () {
+  return stats;
+};
+
+Meteor.increaseSuccess = function () {
+  stats.SUCCESS++;
+};
+
+Meteor.increaseFailures = function () {
+  stats.FAILED++;
+};
+
+Meteor.increaseTotal = function () {
+  stats.TOTAL++;
+};
+
+Meteor.getCoverageObject = function () {
+  return global['__coverage__'];
+};
+
+Meteor.getCoverageReportObject = function (propertyKey, value) {
+  var coverageReport = {};
+  coverageReport[propertyKey] = value;
+
+  return JSON.stringify(coverageReport);
+};
 
 /**
- * Usage: Meteor.sendCoverage(function(stats,err) {console.log(stats,err);});
- */
-Package['meteor']['Meteor'].sendCoverage = function (callback) {
+* Usage: Meteor.sendCoverage(function(stats,err) {console.log(stats,err);});
+*/
+Meteor.sendCoverage = function (callback) {
     var coverageReport = {},
-        stats = {SUCCESS: 0, FAILED: 0, TOTAL: 0},
         successCallback = function () {
-            stats.SUCCESS++;
+            Meteor.increaseSuccess();
+            var stats = Meteor.getStats();
             if (stats.SUCCESS + stats.FAILED === stats.TOTAL) {
                 callback(stats);
             }
         },
         errorCallback = function() {
-            stats.FAILED++;
+            Meteor.increaseFailures();
+            var stats = Meteor.getStats();
             if (stats.SUCCESS + stats.FAILED === stats.TOTAL) {
                 callback(stats, arguments);
             }
         };
-    if (global['__coverage__'] == undefined) {
-        return callback(stats);
+
+    var globalCoverage = Meteor.getCoverageObject();
+    if (!globalCoverage) {
+        return callback(Meteor.getStats());
     }
+
     // Send each property alone
-    for (var property in __coverage__) {
-        if (__coverage__.hasOwnProperty(property)) {
-            stats.TOTAL++;
-            coverageReport = {};
-            coverageReport[property] = __coverage__[property];
+    for (var property in globalCoverage) {
+
+        if (globalCoverage.hasOwnProperty(property)) {
+            Meteor.increaseTotal();
+
             $.ajax({
                 method: 'POST',
                 url: '/coverage/client',
-                data: JSON.stringify(coverageReport),
+                data: Meteor.getCoverageReportObject(property, globalCoverage[property]),
                 contentType: 'application/json; charset=UTF-8',
                 processData: false,
                 success: successCallback,
@@ -42,7 +75,8 @@ Package['meteor']['Meteor'].sendCoverage = function (callback) {
 /**
 * Usage: Meteor.exportCoverage(null, function(err) {console.log(err)})
 */
-Package['meteor']['Meteor'].exportCoverage = function (type, callback) {
+Meteor.exportCoverage = function (type, callback) {
+
     var url = type ? '/coverage/export/'+type : '/coverage/export';
     $.ajax({
         method: 'GET',
@@ -50,13 +84,14 @@ Package['meteor']['Meteor'].exportCoverage = function (type, callback) {
         success: function(data) {
             try {
                 let result = JSON.parse(data);
-                if (result.type === "success") {
-                    return callback();
+                if (result.type !== "success") {
+                  throw new Error('An unexpected error occurred while trying to export coverage data');
                 }
+
+                return callback();
             } catch (e) {
                 return callback(e);
             }
-            return callback("sdqf");
         },
         error: function() {
             callback(arguments);
@@ -67,24 +102,26 @@ Package['meteor']['Meteor'].exportCoverage = function (type, callback) {
 /**
 * Usage: Meteor.importCoverage(function(err) {console.log(err)})
 */
-Package['meteor']['Meteor'].importCoverage = function (callback) {
+Meteor.importCoverage = function (callback) {
     $.ajax({
         method: 'GET',
         url: '/coverage/import',
         success: function(data) {
             try {
                 let result = JSON.parse(data);
-                if (result.type === "success") {
-                    callback();
+                if (result.type !== "success") {
+                  throw new Error('An unexpected error occurred while trying to import coverage data');
                 }
+
+                return callback();
             } catch (e) {
-                callback(arguments);
+                callback(e, arguments);
             }
         },
         error: function() {
-           callback(arguments);
+           callback(e, arguments);
         }
     });
 };
 
-export default Package['meteor']['Meteor'];
+export default Meteor;

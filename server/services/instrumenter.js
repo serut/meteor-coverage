@@ -1,7 +1,9 @@
 import {_} from 'meteor/underscore';
 import Log from './../context/log';
 import Conf from './../context/conf'
-let hookLoader, instrumentJs, checkIfAutorised, shallInstrumentClientScript, shallInstrumentServerScript
+import minimatch from 'minimatch';
+
+let hookLoader, instrumentJs, shouldIgnore, shallInstrumentClientScript, shallInstrumentServerScript;
 
 if (Conf.IS_COVERAGE_ACTIVE) {
     //var im = Npm.require('istanbul-middleware');
@@ -39,22 +41,63 @@ if (Conf.IS_COVERAGE_ACTIVE) {
         return instrumenter.instrument(content, path, callback);
     };
 
-    checkIfAutorised = function (filters, file) {
-        let allowed = true;
-        for (let i = 0; i < filters.length; i++) {
-            let filterRegex = new RegExp(filters[i], "i");
-            allowed = allowed && filterRegex.test(file) === false;
-            if (!allowed) {
-                return false;
-            }
+    shouldIgnore = function (filePath, isAServerSideFile) {
+
+      if(!Conf) {
+        Log.info("[Config file not found or invalid]:  ", Conf);
+        return false;
+      }
+
+      if (Conf.include) {
+        Log.info("[Including]");
+        Log.info("[Verifying]: ", filePath);
+        if (Conf.include.some(pattern => fileMatch(pattern))) {
+          Log.info("[Included]: ", filePath);
+          return false;
         }
-        return allowed;
+      }
+
+      let shouldIgnore = false;
+      if (!Conf.exclude) return false;
+      if (Conf.exclude.general) {
+        shouldIgnore = Conf.exclude.general.some(pattern => fileMatch(pattern));
+        Log.info("[Ignoring][general]");
+        Log.info("[Verifying]: ", filePath);
+        if(shouldIgnore) {
+          Log.info("[Ignored]: ", filePath);
+        }
+      }
+
+      if (!shouldIgnore && Conf.exclude.server && isAServerSideFile) {
+        shouldIgnore = Conf.exclude.server.some(pattern => fileMatch(pattern));
+        Log.info("[Ignoring][server]");
+        Log.info("[Verifying]: ", filePath);
+        if(shouldIgnore) {
+          Log.info("[Ignored]: ", filePath);
+        }
+      }
+
+      if (!shouldIgnore && Conf.exclude.client && !isAServerSideFile) {
+        shouldIgnore = Conf.exclude.client.some(pattern => fileMatch(pattern));
+        Log.info("[Ignoring][client]");
+        Log.info("[Verifying]: ", filePath);
+        if(shouldIgnore) {
+          Log.info("[Ignored]: ", filePath);
+        }
+      }
+
+      return shouldIgnore;
+
+      function fileMatch(pattern) {
+        let fileMatched = minimatch(filePath, pattern, { dot: true });
+        return fileMatched;
+      }
     };
 
     shallInstrumentClientScript = function (fileurl) {
         if (fileurl.indexOf('.js') > -1) {
             if (fileurl.indexOf('packages') === 1) {
-                if (checkIfAutorised(Conf.ignore.clientside.inapp, fileurl)) {
+                if (!shouldIgnore(fileurl, false)) {
                     Log.info("[ClientSide][InApp] file instrumented: " + fileurl);
                     return true;
                 } else {
@@ -62,7 +105,7 @@ if (Conf.IS_COVERAGE_ACTIVE) {
                     return false;
                 }
             } else {
-                let instrumented = checkIfAutorised(Conf.ignore.clientside.public, fileurl);
+                let instrumented = !shouldIgnore(fileurl, false);
                 if (instrumented) {
                     Log.info("[ClientSide][Public] file instrumented: " + fileurl);
                 } else {
@@ -93,7 +136,7 @@ if (Conf.IS_COVERAGE_ACTIVE) {
             return false;
         }
         if (file.indexOf('packages') === 1) {
-            if (checkIfAutorised(Conf.ignore.serverside, file)) {
+            if (!shouldIgnore(file, true)) {
                 SourceMap.registerSourceMap(root + file);
                 Log.info("[ServerSide][Package] file instrumented: " + file);
                 return true;
@@ -101,22 +144,30 @@ if (Conf.IS_COVERAGE_ACTIVE) {
                 Log.info("[ServerSide][Package] file ignored: " + file);
             }
         } else {
+
+          if (!shouldIgnore(root + file, true)) {
             SourceMap.registerSourceMap(root + file);
             Log.info("[ServerSide][App.js] file instrumented: " + file);
             return true;
+          } else {
+            Log.info("[ServerSide][App.js] file ignored: " + file);
+          }
         }
+
         return false;
     };
 }
+
 if (hookLoader === undefined) {
     hookLoader = function () {
 
     }
 }
+
 export default Instrumenter = {
     hookLoader,
     instrumentJs,
-    checkIfAutorised,
+    shouldIgnore,
     shallInstrumentClientScript,
-    shallInstrumentServerScript,
+    shallInstrumentServerScript
 };
