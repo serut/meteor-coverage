@@ -1,136 +1,67 @@
-import { assert } from 'meteor/practicalmeteor:chai';
+import { $ } from 'meteor/jquery';
+import { expect, assert } from 'meteor/practicalmeteor:chai';
+import { sinon } from 'meteor/practicalmeteor:sinon';
 import Meteor from 'meteor/lmieulet:meteor-coverage';
+
 describe('meteor-coverage', function (done) {
+
+    let sandbox;
+    beforeEach(function() {
+      sandbox = sinon.sandbox.create();
+    });
+
+    afterEach(function(){
+      sandbox.restore();
+    });
+
     it('should be defined', function () {
-        assert.isDefined(Package)
-        assert.isDefined(Package['meteor'])
-        assert.isDefined(Package['meteor']['Meteor'].sendCoverage)
-        assert.isDefined(Package['meteor']['Meteor'].exportCoverage)
-        assert.isDefined(Package['meteor']['Meteor'].importCoverage)
+        assert.isDefined(Meteor.exportCoverage);
+        assert.isDefined(Meteor.getCoverageObject);
+        assert.isDefined(Meteor.importCoverage);
+        assert.isDefined(Meteor.sendCoverage);
     });
 
-    it('send client coverage', function (done) {
-        try {
-            Meteor.sendCoverage(
-                function(stats,err) {
-                    assert.isTrue(stats.TOTAL > 0, "no client coverage");
-                    assert.isTrue(stats.SUCCESS > 0, "none of the client coverage have been saved");
-                    assert.isTrue(stats.FAILED === 0, "an export failed");
-                    done();
-                }
-            );
-        } catch (e) {
-            console.error (e, e.stack)
-            done(e);
-        }
+    it('calls the callback function if there are no coverage', function () {
+        const callback = sandbox.spy();
+        sandbox.stub(Meteor, 'getCoverageObject');
+
+        Meteor.sendCoverage(callback);
+        expect(callback).to.have.been.deep.calledWith({SUCCESS: 0, FAILED: 0, TOTAL: 0});
     });
 
-    it('export coverage', function (done) {
-        this.timeout(10000);
-        try {
-            Meteor.exportCoverage(
-                'coverage',
-                function(err) {
-                    assert.isUndefined(err);
-                    done();
-                }
-            );
-        } catch (e) {
-            console.error (e, e.stack)
-            done(e);
-        }
+    it('send client coverage', function () {
+        const callback = sandbox.spy();
+
+        sandbox.stub(Meteor, 'getCoverageObject').returns({ 'web.browser': { path: 1} });
+        sandbox.stub($, 'ajax', function(config) {
+          config.success();
+        });
+
+        Meteor.sendCoverage(callback);
+        expect(callback).to.have.been.deep.calledWith({FAILED: 0, SUCCESS: 1, TOTAL: 1});
     });
 
-    it('import coverage', function (done) {
-        this.timeout(10000);
-        try {
-            Meteor.importCoverage(
-                function(err) {
-                    assert.isUndefined(err);
-                    done();
-                }
-            );
-        } catch (e) {
-            console.error (e, e.stack)
-            done(e);
-        }
+    it('export coverage', function () {
+      const callback = sandbox.spy();
+
+      sandbox.stub(JSON, 'parse').returns({ type: 'success'});
+      sandbox.stub($, 'ajax', function(config) {
+        config.success();
+      });
+
+      Meteor.exportCoverage('test', callback);
+      expect(callback).to.have.been.called;
     });
 
-    it('export lcovonly', function (done) {
-        this.timeout(10000);
-        try {
-            Meteor.exportCoverage(
-                'lcovonly',
-                function(err) {
-                    assert.isUndefined(err);
-                    done();
-                }
-            );
-        } catch (e) {
-            console.error (e, e.stack)
-            done(e);
-        }
+    it('import coverage', function () {
+      const callback = sandbox.spy();
+
+      sandbox.stub(JSON, 'parse').returns({ type: 'success'});
+      sandbox.stub($, 'ajax', function(config) {
+        config.success();
+      });
+
+      Meteor.importCoverage(callback);
+      expect(callback).to.have.been.called;
     });
-
-    it('export json', function (done) {
-        this.timeout(10000);
-        try {
-            Meteor.exportCoverage(
-                'json',
-                function(err) {
-                    assert.isUndefined(err);
-                    done();
-                }
-            );
-        } catch (e) {
-            console.error (e, e.stack)
-            done(e);
-        }
-    });
-
-    it('export json-summary', function (done) {
-        this.timeout(10000);
-        try {
-            Meteor.exportCoverage(
-                'json-summary',
-                function(err) {
-                    assert.isUndefined(err);
-                    done();
-                }
-            );
-        } catch (e) {
-            console.error (e, e.stack)
-            done(e);
-        }
-    });
-
-    it('export html', function (done) {
-        this.timeout(20000);
-        try {
-            Meteor.exportCoverage(
-                'html',
-                function(err) {
-                    assert.isUndefined(err);
-                    done();
-                }
-            );
-
-        } catch (e) {
-            console.error (e, e.stack)
-            done(e);
-        }
-    });
-    /*
-    // not working
-    it('export teamcity', function (done) {
-        this.timeout(10000);
-
-        Meteor.exportCoverage(
-            'teamcity',
-            function(err) {
-                assert.isUndefined(err);
-                done();
-            }
-        );
-    });*/
 });

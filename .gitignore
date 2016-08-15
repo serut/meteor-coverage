@@ -1,2 +1,4 @@
 .npm
 .coverage
+packages
+local-packages.json

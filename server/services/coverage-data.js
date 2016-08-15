@@ -32,9 +32,12 @@ export default CoverageData = {
         if (filename.indexOf(Conf.COVERAGE_APP_FOLDER) < 0) {
             return false;
         }
-        if (Instrumenter.checkIfAutorised(Conf.ignore.others, filename) === false) {
-            return false;
+
+        let isAServerSideFile = filename.indexOf('client') === -1 && filename.indexOf('web.browser') === -1;
+        if (Instrumenter.shouldIgnore(filename, isAServerSideFile)) {
+          return false;
         }
+
         if (filename.indexOf('packages/') > 0) {
             Log.time("read access " + filename);
             const isExist = fs.existsSync(filename);
@@ -73,6 +76,7 @@ export default CoverageData = {
                         }
                     }
                 }
+
                 // You don't have the source of this package file in your workspace
                 return false;
             }
@@ -122,4 +126,4 @@ export default CoverageData = {
         var node = Report.summarizers.flat(coverageMap);
         return node;
     }
-};
+}

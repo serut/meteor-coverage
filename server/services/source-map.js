@@ -1,4 +1,4 @@
-import Log from './../context/log';
+import Log from './../context/log'
 import Conf from './../context/conf'
 let alterSourceMapPaths = registerSourceMap = function () {
     throw "COVERAGE_NOT_ACTIVE"
