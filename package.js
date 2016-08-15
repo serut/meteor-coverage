@@ -32,13 +32,14 @@ Package.onUse(function(api) {
 Npm.depends({
 	"istanbul-api": "1.1.0-alpha.1",
 	'body-parser': '1.15.2',
+	'minimatch': '3.0.3',
 	'mkdirp': '0.5.1'
 });
 
 Package.onTest(function(api) {
     api.use('ecmascript');
 	api.use(['lmieulet:meteor-coverage-self-instrumenter@3.0.0'], ['server']);
-	api.use(['practicalmeteor:mocha', 'practicalmeteor:chai', 'lmieulet:meteor-coverage']);
+	api.use(['practicalmeteor:mocha', 'practicalmeteor:chai', 'practicalmeteor:sinon', 'lmieulet:meteor-coverage']);
 	api.use('jquery', 'client');
 
 	api.mainModule('server/tests.js', 'server');
