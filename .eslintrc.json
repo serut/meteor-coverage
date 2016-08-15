@@ -1,6 +1,6 @@
 {
   "extends": ["eslint:recommended"],
-  "plugins": ["babel", "mocha"],
+  "plugins": ["babel", "mocha", "import"],
   "parser": "babel-eslint",
   "env":{
     "es6": true

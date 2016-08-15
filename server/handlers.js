@@ -2,11 +2,11 @@ import Instrumenter from './services/instrumenter';
 import Core from './services/core';
 import { IS_COVERAGE_ACTIVE } from './context/conf';
 import ReportService from './report/report-service';
+import fs from 'fs';
+import path from 'path';
 
 let showCoverage, getAsset, addClientCoverage, instrumentClientJs, exportFile, importCoverage;
 if (IS_COVERAGE_ACTIVE) {
-  var fs = Npm.require('fs'),
-    path = Npm.require('path');
 
   showCoverage = function (params, req, res, next) {
     let options = {

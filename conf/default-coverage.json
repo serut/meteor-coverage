@@ -4,11 +4,8 @@
     ],
     "exclude": {
         "general": [
-            "/**/packages/**/*",
             "/**/*test.js",
-            "../**/packages/**/*",
             "/**/lib/test/**/*",
-            "/**/*stream*.js",
             "/**/tests/**/*"
         ],
         "server": [

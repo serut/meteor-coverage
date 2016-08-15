@@ -1,24 +1,23 @@
 {
-    "include": [
-        "/**/meteor-coverage/client/methods.js",
-        "/**/meteor-coverage/server/context/*.js",
-        "/**/meteor-coverage/server/report/*.js",
-        "/**/meteor-coverage/server/services/*.js",
-        "/**/meteor-coverage/server/handlers.js",
-        "/**/meteor-coverage/server/main.js",
-        "/**/meteor-coverage/server/router.js",
-        "/**/lmieulet_meteor-coverage.js"
+  "include": [
+    "/**/meteor-coverage/client/methods.js",
+    "/**/meteor-coverage/server/context/*.js",
+    "/**/meteor-coverage/server/report/*.js",
+    "/**/meteor-coverage/server/services/*.js",
+    "/**/meteor-coverage/server/handlers.js",
+    "/**/meteor-coverage/server/main.js",
+    "/**/meteor-coverage/server/router.js",
+    "/**/lmieulet_meteor-coverage.js"
+  ],
+  "exclude": {
+    "general": [
+      "/**/tests/**/*",
+      "**/tests/**/*",
+      "/**/*.tests.js",
+      "/**/*.test.js"
     ],
-    "exclude": {
-        "general": [
-            "/**/packages/**/*",
-            "/**/tests/**/*",
-            "**/tests/**/*",
-            "/**/*.tests.js",
-            "/**/*.test.js"
-        ],
-        "server": [],
-        "client": []
-    },
-    "output": "./.coverage"
+    "server": [],
+    "client": []
+  },
+  "output": "./.coverage"
 }

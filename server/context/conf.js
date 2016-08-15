@@ -1,9 +1,18 @@
 import Log from './log';
-
+const ENV_NOT_DEFINED = '/SET/ENV/COVERAGE_APP_FOLDER/OR/READ/README/';
 export const IS_COVERAGE_ACTIVE = process.env['COVERAGE'] === '1';
-export const COVERAGE_APP_FOLDER = process.env['COVERAGE_APP_FOLDER'] || '/SET/ENV/COVERAGE_APP_FOLDER/OR/READ/README/';
+export const COVERAGE_APP_FOLDER = process.env['COVERAGE_APP_FOLDER'] || ENV_NOT_DEFINED;
 
-let configuration;
+const NOT_DEFINED = '/COVERAGE/NOT/ACTIVE/';
+let configuration = {
+  exclude: {
+    general: [],
+    server: [],
+    client: []
+  },
+  include: [],
+  output: NOT_DEFINED
+};
 if (IS_COVERAGE_ACTIVE) {
   const fs = Npm.require('fs'),
     path = Npm.require('path');
@@ -25,18 +34,30 @@ if (IS_COVERAGE_ACTIVE) {
     // Set up defaultConfig value if they are not provided in the .coverage.json file
   Log.info('Reading custom configuration');
   if (!configuration) {
-    Log.info('Loading defaultConfig configuration');
+    Log.info('Loading default configuration');
     configuration = defaultConfig;
   }
 
-  if (configuration && !configuration.exclude) {
-    Log.info('Loading defaultConfig configuration: exclude');
-    configuration.exclude = configuration.exclude || {};
+  // Don't force to rewrite all the key of configuration.exclude,
+  // if they are not defined, the default conf is used.
+  if (configuration.exclude.general === undefined) {
+    Log.info('Loading default configuration: exclude.general');
+    configuration.exclude.general = defautConf.exclude.general;
+  }
+
+  if (configuration.exclude.server === undefined) {
+    Log.info('Loading default configuration: exclude.server');
+    configuration.exclude.server = defautConf.exclude.server;
+  }
+
+  if (configuration.exclude.client === undefined) {
+    Log.info('Loading default configuration: exclude.client');
+    configuration.exclude.client = defautConf.exclude.client;
   }
 
   if (configuration && !configuration.include) {
     Log.info('Loading defaultConfig configuration: include');
-    configuration.include = configuration.include || [];
+    configuration.include = defaultConfig.include || [];
   }
 
   if (configuration && !configuration.output) {

@@ -1,4 +1,4 @@
-import IstanbulFile from './report-generic';
+import IstanbulGenericReporter from './report-generic';
 import JsonSummary from './report-json-summary';
 import Teamcity from './report-teamcity';
 import Html from './report-html';
@@ -14,22 +14,23 @@ export default class {
 
     options = Object.assign({}, {
       path: path.join(Conf.COVERAGE_APP_FOLDER, Conf.COVERAGE_EXPORT_FOLDER),
-      verbose: Conf.IS_COVERAGE_VERBOSE ? true : false
+      verbose: Log.COVERAGE_VERBOSE ? true : false
     }, options);
-    Log.info('export coverage using the following format:', type, options);
+
+    Log.info('export coverage using the following format [', type, '] options [', options, ']');
     try {
       switch (type) {
       case 'lcovonly':
         {
           options = this.addFileToOptions(options, 'lcov.info');
-          let istanbulFile1 = new IstanbulFile(res, type, options);
+          let istanbulFile1 = new IstanbulGenericReporter(res, type, options);
           istanbulFile1.generate();
           break;
         }
       case 'json':
         {
           options = this.addFileToOptions(options, 'summary.json');
-          let istanbulFile2 = new IstanbulFile(res, type, options);
+          let istanbulFile2 = new IstanbulGenericReporter(res, type, options);
           istanbulFile2.generate();
           break;
         }

@@ -94,7 +94,7 @@ Meteor.exportCoverage = function (type, callback) {
       }
     },
     error: function() {
-      callback(arguments);
+      callback('An server error occurred while trying to export coverage data', arguments);
     }
   });
 };

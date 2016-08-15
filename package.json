@@ -18,16 +18,18 @@
     "eslint-plugin-standard": "^2.0.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix ."
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/thiagodelgado111/meteor-coverage.git"
+    "url": "git+https://github.com/serut/meteor-coverage.git"
   },
   "author": "Léo Mieulet",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/thiagodelgado111/meteor-coverage/issues"
+    "url": "https://github.com/serut/meteor-coverage/issues"
   },
-  "homepage": "https://github.com/thiagodelgado111/meteor-coverage#readme"
+  "homepage": "https://github.com/serut/meteor-coverage#readme"
 }
