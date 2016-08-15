@@ -3,6 +3,7 @@ import Meteor from 'meteor/lmieulet:meteor-coverage';
 describe('meteor-coverage', function (done) {
   
   it('send client coverage', function (done) {
+    this.timeout(10000);
     try {
       Meteor.sendCoverage(
                 function(stats,err) {
@@ -19,7 +20,7 @@ describe('meteor-coverage', function (done) {
   });
 
   it('export coverage', function (done) {
-    this.timeout(10000);
+    this.timeout(20000);
     try {
       Meteor.exportCoverage(
                 'coverage',
@@ -98,7 +99,7 @@ describe('meteor-coverage', function (done) {
   });
 
   it('export html', function (done) {
-    this.timeout(20000);
+    this.timeout(60000);
     try {
       Meteor.exportCoverage(
                 'html',

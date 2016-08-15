@@ -10,8 +10,7 @@ var istanbulAPI = Npm.require('istanbul-api'),
 
 export default CoverageData = {
   filterCoverageReport: function (report) {
-    if (report.data) {
-      console.log("report", report)
+    if (!report.data) {
       throw 'Invalid report';
     }
     var newData = {};

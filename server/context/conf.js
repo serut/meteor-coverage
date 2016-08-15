@@ -1,8 +1,12 @@
 import Log from './log';
-const ENV_NOT_DEFINED = '/SET/ENV/COVERAGE_APP_FOLDER/OR/READ/README/';
 export const IS_COVERAGE_ACTIVE = process.env['COVERAGE'] === '1';
+
+const ENV_NOT_DEFINED = '/SET/ENV/COVERAGE_APP_FOLDER/OR/READ/README/';
 export const COVERAGE_APP_FOLDER = process.env['COVERAGE_APP_FOLDER'] || ENV_NOT_DEFINED;
 
+if (COVERAGE_APP_FOLDER === ENV_NOT_DEFINED) {
+  Log.error("Error: COVERAGE_APP_FOLDER is undefined and the coverage will fail.")
+}
 const NOT_DEFINED = '/COVERAGE/NOT/ACTIVE/';
 let configuration = {
   exclude: {

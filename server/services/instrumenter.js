@@ -42,9 +42,7 @@ if (Conf.IS_COVERAGE_ACTIVE) {
   };
 
   fileMatch = function (filePath, pattern) {
-    console.log("fileMatch", filePath)
-    let fileMatched = minimatch(filePath, pattern, {dot: true});
-    return fileMatched;
+    return minimatch(filePath, pattern, {dot: true});
   };
   shouldIgnore = function (filePath, isAServerSideFile) {
     // Force the inclusion of any file using config file

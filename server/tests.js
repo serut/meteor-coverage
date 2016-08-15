@@ -14,11 +14,11 @@ describe('meteor coverage', function() {
     assert.isFalse(Instrumenter.shouldIgnore('/home/travis/build/serut/meteor-coverage/server/local-test_lmieulet_meteor-coverage.js'));
     assert.isFalse(Instrumenter.shouldIgnore('/home/travis/build/serut/app/client/imports/lib/local-test_lmieulet_meteor-coverage.js'));
 
-        // Ignored from client
+    // Ignored from client
     assert.isTrue(Instrumenter.shouldIgnore('/home/travis/build/serut/app/client/imports/tests/methods.js'));
     assert.isTrue(Instrumenter.shouldIgnore('/home/travis/build/serut/meteor-coverage/packages/meteor-coverage/client/tests/methods.js'));
 
-        // Ignored from server
+    // Ignored from server
     assert.isTrue(Instrumenter.shouldIgnore('/home/travis/build/serut/app/server/lib/code/my.test.js'));
     assert.isTrue(Instrumenter.shouldIgnore('/home/travis/build/serut/meteor-coverage/packages/meteor-coverage/server/tests/test.js'));
   });
