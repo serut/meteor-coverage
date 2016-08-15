@@ -54,39 +54,36 @@ if (Conf.IS_COVERAGE_ACTIVE) {
       }
     }
 
-    let shouldIgnore = false;
     if (Conf.exclude.general) {
-      shouldIgnore = Conf.exclude.general.some(pattern => Instrumenter.fileMatch(filePath, pattern));
       Log.info('[Verifying][exclude.general]: ', filePath);
-      if (shouldIgnore) {
+      if (Conf.exclude.general.some(pattern => Instrumenter.fileMatch(filePath, pattern))) {
         Log.info('[Ignored][exclude.general]: ', filePath);
-        return shouldIgnore;
+        return true;
       }
     }
 
     if (Conf.exclude.server && isAServerSideFile) {
-      shouldIgnore = Conf.exclude.server.some(pattern => Instrumenter.fileMatch(filePath, pattern));
       Log.info('[Verifying][exclude.server]: ', filePath);
-      if (shouldIgnore) {
+      if (Conf.exclude.server.some(pattern => Instrumenter.fileMatch(filePath, pattern))) {
         Log.info('[Ignored][exclude.server]: ', filePath);
-        return shouldIgnore;
+        return true;
       }
     }
 
-    if (!shouldIgnore && Conf.exclude.client && !isAServerSideFile) {
-      shouldIgnore = Conf.exclude.client.some(pattern => Instrumenter.fileMatch(filePath, pattern));
+    if (Conf.exclude.client && !isAServerSideFile) {
       Log.info('[Verifying][exclude.client]: ', filePath);
-      if (shouldIgnore) {
+      if (Conf.exclude.client.some(pattern => Instrumenter.fileMatch(filePath, pattern))) {
         Log.info('[Ignored][exclude.client]: ', filePath);
-        return shouldIgnore;
+        return true;
       }
     }
+    return false;
   };
 
   shallInstrumentClientScript = function (fileurl) {
     if (fileurl.indexOf('.js') > -1) {
       if (fileurl.indexOf('packages') === 1) {
-        if (!shouldIgnore(fileurl, false)) {
+        if (!Instrumenter.shouldIgnore(fileurl, false)) {
           Log.info('[ClientSide][InApp] file instrumented: ' + fileurl);
           return true;
         } else {
@@ -94,8 +91,7 @@ if (Conf.IS_COVERAGE_ACTIVE) {
           return false;
         }
       } else {
-        let instrumented = !shouldIgnore(fileurl, false);
-        if (instrumented) {
+        if (!Instrumenter.shouldIgnore(fileurl, false)) {
           Log.info('[ClientSide][Public] file instrumented: ' + fileurl);
         } else {
           Log.info('[ClientSide][Public] file ignored: ' + fileurl);
@@ -125,7 +121,7 @@ if (Conf.IS_COVERAGE_ACTIVE) {
       return false;
     }
     if (file.indexOf('packages') === 1) {
-      if (!shouldIgnore(file, true)) {
+      if (!Instrumenter.shouldIgnore(file, true)) {
         SourceMap.registerSourceMap(root + file);
         Log.info('[ServerSide][Package] file instrumented: ' + file);
         return true;
@@ -134,7 +130,7 @@ if (Conf.IS_COVERAGE_ACTIVE) {
       }
     } else {
 
-      if (!shouldIgnore(root + file, true)) {
+      if (!Instrumenter.shouldIgnore(root + file, true)) {
         SourceMap.registerSourceMap(root + file);
         Log.info('[ServerSide][App.js] file instrumented: ' + file);
         return true;
