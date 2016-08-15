@@ -20,18 +20,21 @@ export default class {
     this.report = ReportImpl.create(type, this.options);
     this.report.file = this.options.path;
     this.context = ReportCommun.getContext(this.report.file);
-    console.log(this);
   }
 
   generate() {
     let coverage = Core.getCoverageObject();
     var childs = CoverageData.getLcovonlyReport(coverage);
+    console.log("before start");
+
     this.report.onStart(null, this.context);
     if (childs.length === 0) {
       this.res.setHeader('Content-type', 'text/plain');
       this.res.statusCode = 500;
       return this.res.end('{"type":"No coverage to export"}');
     }
+    console.log("before write");
+
     this.writeFile(childs);
     this.res.end('{"type":"success"}');
   }

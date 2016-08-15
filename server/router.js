@@ -1,6 +1,6 @@
 import Handlers from './handlers';
 import Conf from './context/conf';
-var bodyParser = Npm.require('body-parser');
+import bodyParser from 'body-parser';
 export default class {
   constructor() {
     if (Conf.IS_COVERAGE_ACTIVE) {

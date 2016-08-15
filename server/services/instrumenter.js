@@ -3,7 +3,7 @@ import Log from './../context/log';
 import Conf from './../context/conf';
 import minimatch from 'minimatch';
 
-let hookLoader, instrumentJs, shouldIgnore, shallInstrumentClientScript, shallInstrumentServerScript;
+let hookLoader, instrumentJs, shouldIgnore, shallInstrumentClientScript, shallInstrumentServerScript, fileMatch;
 
 if (Conf.IS_COVERAGE_ACTIVE) {
   //var im = Npm.require('istanbul-middleware');
@@ -41,6 +41,10 @@ if (Conf.IS_COVERAGE_ACTIVE) {
     return instrumenter.instrument(content, path, callback);
   };
 
+  fileMatch = function (pattern) {
+    let fileMatched = minimatch(filePath, pattern, {dot: true});
+    return fileMatched;
+  }
   shouldIgnore = function (filePath, isAServerSideFile) {
 
     if (!Conf) {
@@ -50,45 +54,42 @@ if (Conf.IS_COVERAGE_ACTIVE) {
 
     // Force the inclusion of any file using config file
     if (Conf.include) {
-      Log.info('[Including]');
-      Log.info('[Verifying]: ', filePath);
-      if (Conf.include.some(pattern => fileMatch(pattern))) {
-        Log.info('[Included]: ', filePath);
+      Log.info('[Verifying][force include]: ', filePath);
+      if (Conf.include.some(pattern => Instrumenter.fileMatch(pattern))) {
+        Log.info('[Included][using include config]: ', filePath);
         return false;
       }
     }
 
     let shouldIgnore = false;
     if (Conf.exclude.general) {
-      shouldIgnore = Conf.exclude.general.some(pattern => fileMatch(pattern));
+      shouldIgnore = Conf.exclude.general.some(pattern => Instrumenter.fileMatch(pattern));
       Log.info('[Verifying][exclude.general]: ', filePath);
       if (shouldIgnore) {
         Log.info('[Ignored][exclude.general]: ', filePath);
+        return shouldIgnore;
       }
     }
 
-    if (!shouldIgnore && Conf.exclude.server && isAServerSideFile) {
-      shouldIgnore = Conf.exclude.server.some(pattern => fileMatch(pattern));
+    if (Conf.exclude.server && isAServerSideFile) {
+      shouldIgnore = Conf.exclude.server.some(pattern => Instrumenter.fileMatch(pattern));
       Log.info('[Verifying][exclude.server]: ', filePath);
       if (shouldIgnore) {
         Log.info('[Ignored][exclude.server]: ', filePath);
+        return shouldIgnore;
       }
     }
 
     if (!shouldIgnore && Conf.exclude.client && !isAServerSideFile) {
-      shouldIgnore = Conf.exclude.client.some(pattern => fileMatch(pattern));
+      shouldIgnore = Conf.exclude.client.some(pattern => Instrumenter.fileMatch(pattern));
       Log.info('[Verifying][exclude.client]: ', filePath);
       if (shouldIgnore) {
         Log.info('[Ignored][exclude.client]: ', filePath);
+        return shouldIgnore;
       }
     }
 
-    return shouldIgnore;
 
-    function fileMatch(pattern) {
-      let fileMatched = minimatch(filePath, pattern, {dot: true});
-      return fileMatched;
-    }
   };
 
   shallInstrumentClientScript = function (fileurl) {
@@ -165,6 +166,7 @@ export default Instrumenter = {
   hookLoader,
   instrumentJs,
   shouldIgnore,
+  fileMatch,
   shallInstrumentClientScript,
   shallInstrumentServerScript
 };

@@ -17,7 +17,6 @@ export default CoverageData = {
     for (var property in report.data) {
       if (report.data.hasOwnProperty(property)) {
         if (this.isAccepted(property)) {
-                    //Log.info('isAccepted', property)
           newData[property] = report.data[property];
         } else {
           Log.info('isRefused', property);
@@ -98,8 +97,11 @@ export default CoverageData = {
     return true;
   },
   getReport: function (coverage) {
+    console.log(coverage);
     var coverageMap = Coverage.createCoverageMap(coverage);
     coverageMap = SourceMap.lib.transformCoverage(coverageMap).map;
+    console.log(coverageMap);
+
     coverageMap = this.filterCoverageReport(coverageMap);
     return coverageMap;
   },
