@@ -127,38 +127,32 @@ If you do not have this file, this package will use the default one (`conf/defau
 
 Copy the `conf/default-coverage.json`, rename it into `.coverage.json`, remove keys that you don't want to overwrite and pimp it.
 
-```json
-{
-    "ignore": {
-        "clientside": {
-            "inapp": [
-                "You may want to ignore here modules from client side instrumentation",
-                "to get the lightest version of your browser app",
-                "/underscore.js",
-                "/meteor.js",
-                "...",
-                "And even dependencies / internal packages:",
-                "/lmieulet_meteor-coverage.js",
-                "==> if you cloned that package into your package directory",
-                "it will ignores all files stored in packages/meteor-coverage/* from client instrumentation"
-            ],
-            "public": [
-                "if you have js in your public directory like",
-                "openlayers.min.js",  
-                "==> stored in public/openlayers.min.js",
-                "and you don't want to instrument them"
-            ]
-        },
-        "serverside": [
-        ],
-        "others": [
-            "here you can ignore any file from your project coverage report",
-            ".*/tests/.*.js"
-        ]
-    },
-    "output": "./.coverage"
+```json{
+ "include": [],
+ "exclude": {
+   "client": [
+     "You may want to exclude here modules from client side instrumentation",
+     "to get the lightest version of your browser app",
+     "/underscore.js",
+     "/meteor.js",
+     "...",
+     "And even dependencies / internal packages:",
+     "/lmieulet_meteor-coverage.js",
+     "==> if you cloned a package into your package directory",
+     "it will ignores the minified version of the package from client instrumentation"
+   ],
+   "server": [
+    "same thing than client. "
+   ],
+   "general": [
+     "here you can ignore anything from your project coverage report",
+     "**/tests/*.js"
+   ]
+ },
+ "output": "./.coverage"
 }
 ```
+This file now use minimatch syntax.
 
 To create your custom config file, run the project with `COVERAGE_VERBOSE=1` env variable and use logs to see which filenames were hooked or hidden. PR welcome.
 
