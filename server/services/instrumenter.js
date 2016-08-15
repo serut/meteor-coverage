@@ -41,7 +41,8 @@ if (Conf.IS_COVERAGE_ACTIVE) {
     return instrumenter.instrument(content, path, callback);
   };
 
-  fileMatch = function (pattern) {
+  fileMatch = function (filePath, pattern) {
+    console.log("fileMatch", filePath)
     let fileMatched = minimatch(filePath, pattern, {dot: true});
     return fileMatched;
   };
@@ -49,7 +50,7 @@ if (Conf.IS_COVERAGE_ACTIVE) {
     // Force the inclusion of any file using config file
     if (Conf.include) {
       Log.info('[Verifying][force include]: ', filePath);
-      if (Conf.include.some(pattern => Instrumenter.fileMatch(pattern))) {
+      if (Conf.include.some(pattern => Instrumenter.fileMatch(filePath, pattern))) {
         Log.info('[Included][using include config]: ', filePath);
         return false;
       }
@@ -57,7 +58,7 @@ if (Conf.IS_COVERAGE_ACTIVE) {
 
     let shouldIgnore = false;
     if (Conf.exclude.general) {
-      shouldIgnore = Conf.exclude.general.some(pattern => Instrumenter.fileMatch(pattern));
+      shouldIgnore = Conf.exclude.general.some(pattern => Instrumenter.fileMatch(filePath, pattern));
       Log.info('[Verifying][exclude.general]: ', filePath);
       if (shouldIgnore) {
         Log.info('[Ignored][exclude.general]: ', filePath);
@@ -66,7 +67,7 @@ if (Conf.IS_COVERAGE_ACTIVE) {
     }
 
     if (Conf.exclude.server && isAServerSideFile) {
-      shouldIgnore = Conf.exclude.server.some(pattern => Instrumenter.fileMatch(pattern));
+      shouldIgnore = Conf.exclude.server.some(pattern => Instrumenter.fileMatch(filePath, pattern));
       Log.info('[Verifying][exclude.server]: ', filePath);
       if (shouldIgnore) {
         Log.info('[Ignored][exclude.server]: ', filePath);
@@ -75,7 +76,7 @@ if (Conf.IS_COVERAGE_ACTIVE) {
     }
 
     if (!shouldIgnore && Conf.exclude.client && !isAServerSideFile) {
-      shouldIgnore = Conf.exclude.client.some(pattern => Instrumenter.fileMatch(pattern));
+      shouldIgnore = Conf.exclude.client.some(pattern => Instrumenter.fileMatch(filePath, pattern));
       Log.info('[Verifying][exclude.client]: ', filePath);
       if (shouldIgnore) {
         Log.info('[Ignored][exclude.client]: ', filePath);

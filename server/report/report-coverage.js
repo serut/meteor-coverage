@@ -6,7 +6,6 @@ export default class {
   constructor(res, options) {
     this.res = res;
     this.options = options;
-    console.log(this.options);
     this.options.filename = this.options.path;
   }
 

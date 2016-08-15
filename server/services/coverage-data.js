@@ -11,6 +11,7 @@ var istanbulAPI = Npm.require('istanbul-api'),
 export default CoverageData = {
   filterCoverageReport: function (report) {
     if (report.data) {
+      console.log("report", report)
       throw 'Invalid report';
     }
     var newData = {};
@@ -97,10 +98,8 @@ export default CoverageData = {
     return true;
   },
   getReport: function (coverage) {
-    console.log(coverage);
     var coverageMap = Coverage.createCoverageMap(coverage);
     coverageMap = SourceMap.lib.transformCoverage(coverageMap).map;
-    console.log(coverageMap);
     coverageMap = this.filterCoverageReport(coverageMap);
     return coverageMap;
   },
