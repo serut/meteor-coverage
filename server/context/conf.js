@@ -45,6 +45,6 @@ if (IS_COVERAGE_ACTIVE) {
     }
 }
 
-export const COVERAGE_EXPORT_FOLDER = configuration.output;
-export const exclude = configuration.exclude;
-export const include = configuration.include;
+export const COVERAGE_EXPORT_FOLDER = configuration && configuration.output;
+export const exclude = configuration && configuration.exclude;
+export const include = configuration && configuration.include;
