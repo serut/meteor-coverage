@@ -2,6 +2,7 @@ import Instrumenter from './services/instrumenter'
 import Core from './services/core'
 import { IS_COVERAGE_ACTIVE } from './context/conf'
 import ReportService from './report/report-service'
+
 let showCoverage, getAsset, addClientCoverage, instrumentClientJs, exportFile, importCoverage;
 if (IS_COVERAGE_ACTIVE) {
     var fs = Npm.require('fs'),
@@ -42,6 +43,7 @@ if (IS_COVERAGE_ACTIVE) {
             res.writeHead(400);
             res.end();
         }
+
         var clientCoverage;
         for (var property in body) {
             if (body.hasOwnProperty(property)) {

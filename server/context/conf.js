@@ -2,53 +2,49 @@ import Log from './log'
 
 export const IS_COVERAGE_ACTIVE = process.env["COVERAGE"] === "1";
 export const COVERAGE_APP_FOLDER = process.env["COVERAGE_APP_FOLDER"] || '/SET/ENV/COVERAGE_APP_FOLDER/OR/READ/README/';
-let configuration = {};
+
+let configuration;
 if (IS_COVERAGE_ACTIVE) {
     const fs = Npm.require('fs'),
         path = Npm.require('path');
+
     console.log("Coverage active")
     let coverageFile = path.join(COVERAGE_APP_FOLDER, '.coverage.json'),
-        defautConf = JSON.parse(Assets.getText('conf/default-coverage.json'));
+        defaultConfig = JSON.parse(Assets.getText('conf/default-coverage.json'));
+
+    Log.info("[Default configuration] ", defaultConfig);
+
     if (fs.existsSync(coverageFile)) {
         Log.info("Reading custom configuration");
-        const configurationString = fs.readFileSync(coverageFile);
 
+        const configurationString = fs.readFileSync(coverageFile);
         configuration = JSON.parse(configurationString);
+        Log.info("[Configuration] ", configuration);
     }
-    // Set up default value if they are not provided in the .coverage.json file
-    if (configuration) {
-        if (configuration.ignore === undefined) {
-            configuration.ignore = {};
-        }
-        if (configuration.ignore.clientside === undefined) {
-            Log.info("Loading default configuration: clientside.*");
-            configuration.ignore.clientside = defautConf.ignore.clientside;
-        } else {
-            if (configuration.ignore.clientside.inapp === undefined) {
-                Log.info("Loading default configuration: clientside.inapp");
-                configuration.ignore.clientside.inapp = defautConf.ignore.clientside.inapp;
-            }
-            if (configuration.ignore.clientside.public === undefined) {
-                Log.info("Loading default configuration: clientside.public");
-                configuration.ignore.clientside.public = defautConf.ignore.clientside.public;
-            }
-        }
-        if (configuration.ignore.serverside === undefined) {
-            Log.info("Loading default configuration: serverside");
-            configuration.ignore.serverside = defautConf.ignore.serverside;
-        }
-        if (configuration.ignore.others === undefined) {
-            Log.info("Loading default configuration: others");
-            configuration.ignore.others = defautConf.ignore.others;
-        }
-        if (configuration.output === undefined) {
-            Log.info("Loading default configuration: others");
-            configuration.output = defautConf.output;
-        }
-    } else {
-        Log.info("Loading default configuration");
-        configuration = defautConf;
+
+    // Set up defaultConfig value if they are not provided in the .coverage.json file
+    Log.info("Reading custom configuration");
+    if (!configuration) {
+        Log.info("Loading defaultConfig configuration");
+        configuration = defaultConfig;
+    }
+
+    if (configuration && !configuration.exclude) {
+        Log.info("Loading defaultConfig configuration: exclude");
+        configuration.exclude = configuration.exclude || {};
+    }
+
+    if (configuration && !configuration.include) {
+        Log.info("Loading defaultConfig configuration: include");
+        configuration.include = configuration.include || [];
+    }
+
+    if (configuration && !configuration.output) {
+        Log.info("Loading defaultConfig configuration: output");
+        configuration.output = defaultConfig.output;
     }
 }
-export const COVERAGE_EXPORT_FOLDER = configuration.output;
-export const ignore = configuration.ignore;
+
+export const COVERAGE_EXPORT_FOLDER = configuration && configuration.output;
+export const exclude = configuration && configuration.exclude;
+export const include = configuration && configuration.include;
