@@ -10,7 +10,7 @@ if (IS_COVERAGE_ACTIVE) {
 
   showCoverage = function (params, req, res, next) {
     let options = {
-      'filepath': params.query.p,
+      'filepath': params.query.p
     };
     let reportService = new ReportService();
     reportService.generateReport(res, 'http', options);
@@ -62,7 +62,7 @@ if (IS_COVERAGE_ACTIVE) {
   exportFile = function (params, req, res, next) {
     var _type = params.type,
       allowedTypes = ['cobertura', 'html', 'json', 'json-summary', 'lcov', 'none', 'teamcity', 'text', 'text-lcov', 'text-summary', 'lcovonly', 'coverage'];
-    type = (allowedTypes.indexOf(_type) > -1) ? _type : 'coverage';
+    type = allowedTypes.indexOf(_type) > -1 ? _type : 'coverage';
     try {
       let reportService = new ReportService();
       reportService.generateReport(res, type, {});

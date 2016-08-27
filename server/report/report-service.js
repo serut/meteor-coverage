@@ -57,7 +57,7 @@ export default class {
       case 'html':
         {
           options = Object.assign({}, {
-            'prefix': '/coverage/',
+            'prefix': '/coverage/'
           }, options);
           let html = new Html(res, options);
           html.generate();
@@ -99,7 +99,7 @@ export default class {
   }
   addFileToOptions(options, filename) {
     return Object.assign({}, options, {
-      path: path.join(options.path, filename),
+      path: path.join(options.path, filename)
     });
   }
 }

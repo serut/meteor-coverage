@@ -31,7 +31,7 @@ if (Conf.IS_COVERAGE_ACTIVE) {
       shallInstrumentServerScript,
       transformer,
       {
-        verbose: opts.verbose,
+        verbose: opts.verbose
       }
     );
   };
@@ -86,18 +86,16 @@ if (Conf.IS_COVERAGE_ACTIVE) {
         if (!Instrumenter.shouldIgnore(fileurl, false)) {
           Log.info('[ClientSide][InApp] file instrumented: ' + fileurl);
           return true;
-        } else {
-          Log.info('[ClientSide][InApp] file ignored: ' + fileurl);
-          return false;
         }
-      } else {
-        if (!Instrumenter.shouldIgnore(fileurl, false)) {
-          Log.info('[ClientSide][Public] file instrumented: ' + fileurl);
-        } else {
-          Log.info('[ClientSide][Public] file ignored: ' + fileurl);
-        }
-        return instrumented;
+        Log.info('[ClientSide][InApp] file ignored: ' + fileurl);
+        return false;
       }
+      if (!Instrumenter.shouldIgnore(fileurl, false)) {
+        Log.info('[ClientSide][Public] file instrumented: ' + fileurl);
+      } else {
+        Log.info('[ClientSide][Public] file ignored: ' + fileurl);
+      }
+      return instrumented;
     }
     return false;
   };
@@ -125,18 +123,16 @@ if (Conf.IS_COVERAGE_ACTIVE) {
         SourceMap.registerSourceMap(root + file);
         Log.info('[ServerSide][Package] file instrumented: ' + file);
         return true;
-      } else {
-        Log.info('[ServerSide][Package] file ignored: ' + file);
       }
+      Log.info('[ServerSide][Package] file ignored: ' + file);
     } else {
 
       if (!Instrumenter.shouldIgnore(root + file, true)) {
         SourceMap.registerSourceMap(root + file);
         Log.info('[ServerSide][App.js] file instrumented: ' + file);
         return true;
-      } else {
-        Log.info('[ServerSide][App.js] file ignored: ' + file);
-      }
+      } 
+      Log.info('[ServerSide][App.js] file ignored: ' + file);
     }
 
     return false;
