@@ -1,9 +1,8 @@
-import Conf from '../context/conf';
 import CoverageData from '../services/coverage-data';
 import Core from '../services/core';
 import fs from 'fs';
 import path from 'path';
-import ReportCommun from './report-commun';
+import ReportCommon from './report-common';
 import Log from './../context/log';
 var istanbulAPI = Npm.require('istanbul-api'),
   Report = istanbulAPI.libReport,
@@ -60,7 +59,7 @@ export default class {
     var root = CoverageData.getTreeReport(coverage);
     let filepath = path.join(folderPath, 'index.html');
 
-    this.report.onSummary(root, ReportCommun.getContext(filepath));
+    this.report.onSummary(root, ReportCommon.getContext(filepath));
 
     const childrens = root.getChildren();
     const report = this.report;
@@ -69,13 +68,13 @@ export default class {
       var filepath = path.join(folderPath, child.getRelativeName() + '.html');
       Log.info('Creating a new html report', filepath);
       let fileReport = CoverageData.getFileReport(coverage, child.getRelativeName());
-      report.onDetail(fileReport, ReportCommun.getContext(filepath));
+      report.onDetail(fileReport, ReportCommon.getContext(filepath));
     });
     this.res.end('{"type":"success"}');
   }
 
   copyStatic() {
-    ReportCommun.checkDirectory(this.options.path);
+    ReportCommon.checkDirectory(this.options.path);
     this.report.onStart(null, this.getFolderContext(this.options.path));
   }
 

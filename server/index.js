@@ -9,21 +9,25 @@ let library;
 //   - export reports
 if (Conf.IS_COVERAGE_ACTIVE) {
   const Lib = require('./main');
-  library = Lib;
+  // Provide the real library
+  library = Lib.default;
 } else {
+  // Mock the library
   library = {
     Conf,
     Router: {
 
     },
     SourceMap: {
-
+      registerSourceMap: function () {
+        throw 'COVERAGE_NOT_ACTIVE';
+      }
     },
     CoverageData: {
 
     },
     Instrumenter: {
-
+      hookLoader: function() {}
     },
     ReportService: {
 

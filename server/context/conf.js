@@ -1,8 +1,16 @@
 import Log from './log';
-export const IS_COVERAGE_ACTIVE = process.env['COVERAGE'] === '1';
+const meteor_parameters = {
+  // /:\ ES 6
+  // return the value OR UNDEFINED
+  // THIS IS NOT A BOOLEAN
+  IS_COVERAGE_ACTIVE: Meteor && Meteor.settings && Meteor.settings.coverage && Meteor.settings.coverage.IS_COVERAGE_ACTIVE,
+  COVERAGE_APP_FOLDER: Meteor && Meteor.settings && Meteor.settings.coverage && Meteor.settings.coverage.COVERAGE_APP_FOLDER
+};
 
+export const IS_COVERAGE_ACTIVE = meteor_parameters.IS_COVERAGE_ACTIVE === 1 ||  process.env['COVERAGE'] === '1';
 const ENV_NOT_DEFINED = '/SET/ENV/COVERAGE_APP_FOLDER/OR/READ/README/';
-export const COVERAGE_APP_FOLDER = process.env['COVERAGE_APP_FOLDER'] || ENV_NOT_DEFINED;
+
+export const COVERAGE_APP_FOLDER = meteor_parameters.COVERAGE_APP_FOLDER || process.env['COVERAGE_APP_FOLDER'] || ENV_NOT_DEFINED;
 
 if (COVERAGE_APP_FOLDER === ENV_NOT_DEFINED) {
   Log.error('Error: COVERAGE_APP_FOLDER is undefined and the coverage will fail.');
@@ -21,23 +29,18 @@ if (IS_COVERAGE_ACTIVE) {
   const fs = Npm.require('fs'),
     path = Npm.require('path');
 
-  console.log('Coverage active');
+  Log.info('Coverage active');
   let coverageFile = path.join(COVERAGE_APP_FOLDER, '.coverage.json'),
     defaultConfig = JSON.parse(Assets.getText('conf/default-coverage.json'));
 
-  Log.info('[Default configuration] ', defaultConfig);
-
-  if (fs.existsSync(coverageFile)) {
+  try {
+    fs.accessSync(coverageFile);
     Log.info('Reading custom configuration');
-
     const configurationString = fs.readFileSync(coverageFile);
     configuration = JSON.parse(configurationString);
     Log.info('[Configuration] ', configuration);
-  }
-
+  } catch (e) {
     // Set up defaultConfig value if they are not provided in the .coverage.json file
-  Log.info('Reading custom configuration');
-  if (!configuration) {
     Log.info('Loading default configuration');
     configuration = defaultConfig;
   }
@@ -73,3 +76,11 @@ if (IS_COVERAGE_ACTIVE) {
 export const COVERAGE_EXPORT_FOLDER = configuration.output;
 export const exclude = configuration.exclude;
 export const include = configuration.include;
+
+Log.info('Coverage configuration:');
+Log.info('- IS_COVERAGE_ACTIVE=', IS_COVERAGE_ACTIVE);
+Log.info('- COVERAGE_APP_FOLDER=', COVERAGE_APP_FOLDER);
+Log.info('.coverage.json values:');
+Log.info('- exclude=', configuration.exclude);
+Log.info('- include=', configuration.include);
+Log.info('- COVERAGE_EXPORT_FOLDER=', COVERAGE_EXPORT_FOLDER);

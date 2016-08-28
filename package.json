@@ -2,8 +2,13 @@
   "name": "meteor-coverage",
   "version": "0.9.1",
   "description": "A meteor package that allows you to get the statement, line, function and branch coverage of Meteor project and package.   This package uses the [istanbuljs/istanbul-api](https://github.com/istanbuljs/istanbul-api) package for coverage report and [meteorhacks:picker](https://github.com/meteorhacks/picker) for server side routing.   It's a debug only package, so it does not affect your production build.",
-  "main": "package.js",
-  "dependencies": {},
+  "main": "server/index.js",
+  "dependencies": {
+    "istanbul-api": "1.1.0-alpha.1",
+    "body-parser": "1.15.2",
+    "minimatch": "3.0.3",
+    "mkdirp": "0.5.1"
+  },
   "devDependencies": {
     "babel-cli": "^6.11.4",
     "babel-eslint": "^6.1.2",

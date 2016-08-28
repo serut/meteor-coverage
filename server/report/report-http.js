@@ -1,10 +1,14 @@
 import CoverageData from '../services/coverage-data';
 import Conf from '../context/conf';
 import Core from '../services/core';
-const IstanbulApi = Npm.require('istanbul-api');
-const Report = IstanbulApi.libReport;
-const ReportImpl = IstanbulApi.reportsImpl;
+// If we change Npm.require('istanbul-api') into import a from 'istanbul-api'
+// the __dirname change and the  istanbul dependency fails
+// See istanbul-reports
+// With Npm.require : /Users/Leo/Webstorm/meteor-container/packages/meteor-coverage/.npm/package/node_modules/istanbul-reports/lib/json
 
+var istanbulAPI = Npm.require('istanbul-api'),
+  Report = istanbulAPI.libReport,
+  ReportImpl = istanbulAPI.reportsImpl;
 export default class {
   constructor(res, options) {
     this.res = res;

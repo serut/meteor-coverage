@@ -1,22 +1,18 @@
 import Conf from './../context/conf';
 import CoverageData from './../services/coverage-data';
 import Core from './../services/core';
-import fs from 'fs';
-import path from 'path';
-import ReportCommun from './report-commun';
+import ReportCommon from './report-common';
 
 var istanbulAPI = Npm.require('istanbul-api'),
-  hook = istanbulAPI.libHook,
-  Report = istanbulAPI.libReport,
-  ReportImpl = istanbulAPI.reportsImpl,
-  Coverage = istanbulAPI.libCoverage;
+  ReportImpl = istanbulAPI.reportsImpl;
+
 export default class {
   constructor(res, options) {
     this.res = res;
     this.options = options;
     this.report = ReportImpl.create(type, this.options);
     this.report.file = this.options.path;
-    this.context = ReportCommun.getContext(this.report.file);
+    this.context = ReportCommon.getContext(this.report.file);
   }
 
   generate() {

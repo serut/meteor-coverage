@@ -1,38 +1,33 @@
 import CoverageData from './../services/coverage-data';
 import Core from './../services/core';
-import path from 'path';
-import ReportCommun from './report-commun';
+import ReportCommon from './report-common';
 import Conf from '../context/conf';
+
+var istanbulAPI = Npm.require('istanbul-api'),
+  ReportImpl = istanbulAPI.reportsImpl;
 /**
  * Used by type lcovonly and json
  * create the corresponding file using istanbul api
  * @type {any}
  */
-var istanbulAPI = Npm.require('istanbul-api'),
-  hook = istanbulAPI.libHook,
-  Report = istanbulAPI.libReport,
-  ReportImpl = istanbulAPI.reportsImpl,
-  Coverage = istanbulAPI.libCoverage;
 export default class {
   constructor(res, type, options) {
     this.res = res;
     this.options = options;
     this.report = ReportImpl.create(type, this.options);
     this.report.file = this.options.path;
-    this.context = ReportCommun.getContext(this.report.file);
+    this.context = ReportCommon.getContext(this.report.file);
   }
 
   generate() {
     let coverage = Core.getCoverageObject();
     var childs = CoverageData.getLcovonlyReport(coverage);
-    console.log('before start');
     this.report.onStart(null, this.context);
     if (childs.length === 0) {
       this.res.setHeader('Content-type', 'text/plain');
       this.res.statusCode = 500;
       return this.res.end('{"type":"No coverage to export"}');
     }
-    console.log('before write');
 
     this.writeFile(childs);
     this.res.end('{"type":"success"}');

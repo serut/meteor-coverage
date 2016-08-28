@@ -24,7 +24,7 @@ Package.onUse(function (api) {
     'assets/sorter.js'
   ], 'server');
 
-  api.mainModule('server/main.js', 'server');
+  api.mainModule('server/index.js', 'server');
   api.mainModule('client/methods.js', 'client');
 });
 

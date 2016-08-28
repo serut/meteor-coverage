@@ -6,7 +6,7 @@ import Log from './../context/log';
 var istanbulAPI = Npm.require('istanbul-api'),
   Report = istanbulAPI.libReport;
 
-export default ReportCommun = {
+export default ReportCommon = {
     /**
      * Alter fs to add a new method writer
      * Used by the istanbul-reports library

@@ -1,12 +1,11 @@
 import Conf from './../context/conf';
 import Instrumenter from './instrumenter';
+import path from 'path';
+import fs from 'fs';
 
-var fs = Npm.require('fs');
-
-var istanbulAPI = Npm.require('istanbul-api'),
-  Report = istanbulAPI.libReport,
-  path = Npm.require('path'),
-  Coverage = istanbulAPI.libCoverage;
+import * as IstanbulApi from 'istanbul-api';
+const Report = IstanbulApi.libReport;
+const Coverage = IstanbulApi.libCoverage;
 
 export default CoverageData = {
   filterCoverageReport: function (report) {
@@ -55,12 +54,6 @@ export default CoverageData = {
           // Remove author name in the path if there is
           let packageName = regexFilepath[1];
           const filepath = regexFilepath[2];
-          Log.info('packageName', packageName, 'filepath', filepath,
-            path.join(Conf.COVERAGE_APP_FOLDER, 'packages', packageName, filepath),
-            fs.existsSync(path.join(Conf.COVERAGE_APP_FOLDER, 'packages', packageName, filepath)),
-            path.join(Conf.COVERAGE_APP_FOLDER, filepath),
-            fs.existsSync(path.join(Conf.COVERAGE_APP_FOLDER, filepath))
-          );
           if (packageName.indexOf(':') > 0) {
             packageName = packageName.split(':')[1];
           }

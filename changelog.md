@@ -1,3 +1,11 @@
+#### 1.0.0-dev
+
+-   The configuration file `.coverage.json` is now written in minimatch syntax instead of regex
+    Thanks to @thiagodelgado111 for his pull request #13
+-   add new type of export: `text-summary`
+-   add Meteor.settings support (can replace environment variable)
+-   lint, tests, and more es6
+
 #### 0.9.1
 
 -   fix a bug that prevents an app to boot when meteor-coverage is present but not covering (COVERAGE=0)

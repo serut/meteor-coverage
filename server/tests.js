@@ -1,17 +1,41 @@
 import {assert} from 'meteor/practicalmeteor:chai';
-import MeteorCoverage from 'meteor/lmieulet:meteor-coverage';
-const {Instrumenter, CoverageData} = MeteorCoverage;
+
+import meteorCoverageApi from 'meteor/lmieulet:meteor-coverage';
+
+const Instrumenter = meteorCoverageApi.Instrumenter;
+const CoverageData = meteorCoverageApi.CoverageData;
+const Router = meteorCoverageApi.Router;
+const SourceMap = meteorCoverageApi.SourceMap;
+const ReportService = meteorCoverageApi.ReportService;
+const Conf = meteorCoverageApi.Conf;
+
 
 describe('meteor coverage', function () {
 
-  it('testing component Instrumenter shouldIgnore', function () {
-    assert.isNotNull(MeteorCoverage);
+  it('is importeable in es6', function () {
     assert.isNotNull(Instrumenter);
     assert.isNotNull(CoverageData);
+    assert.isNotNull(Router);
+    assert.isNotNull(SourceMap);
+    assert.isNotNull(ReportService);
+    assert.isNotNull(Conf);
   });
-  describe('testing Instrumenter', function () {
+  describe('check if coverage is active', function () {
+    it('for Instrumenter', function () {
+      assert.isNotNull(Instrumenter.hookLoader);
+      assert.isNotNull(Instrumenter.instrumentJs);
+      assert.isNotNull(Instrumenter.shouldIgnore);
+      assert.isNotNull(Instrumenter.fileMatch);
+      assert.isNotNull(Instrumenter.shallInstrumentClientScript);
+      assert.isNotNull(Instrumenter.shallInstrumentServerScript);
+    });
+    it ('for CoverageData', function () {
+      assert.isNotNull(CoverageData.isAccepted);
+    });
+  });
+  describe('check Instrumenter', function () {
 
-    describe('shouldIgnore', function () {
+    describe('test the filter shouldIgnore', function () {
       it('accept minified tests files', function () {
         assert.isFalse(Instrumenter.shouldIgnore('/home/travis/build/serut/meteor-coverage/server/local-test_lmieulet_meteor-coverage.js', true));
         assert.isFalse(Instrumenter.shouldIgnore('/home/travis/build/serut/app/client/imports/lib/local-test_lmieulet_meteor-coverage.js', false));
@@ -31,7 +55,7 @@ describe('meteor coverage', function () {
     });
   });
 
-  it('testing component CoverageData isAccepted', function () {
+  it('CoverageData isAccepted', function () {
     assert.isFalse(CoverageData.isAccepted('/packages/callback-hook.js'));
     assert.isFalse(CoverageData.isAccepted('../web.browser/packages/ddp-server.js'));
     assert.isFalse(CoverageData.isAccepted('/home/travis/build/serut/app/client/imports/tests/methods.js'));
