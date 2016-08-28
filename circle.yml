@@ -11,4 +11,5 @@ checkout:
 test:
   override:
     - mkdir .coverage
-    - spacejam test-packages ./ --coverage out_lcovonly  --driver-package practicalmeteor:mocha-console-runner
+    - meteor npm test
+    - meteor npm run lint || true # ignore eslint error

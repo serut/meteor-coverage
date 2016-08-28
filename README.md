@@ -1,7 +1,7 @@
 # meteor-coverage
 
 A meteor package that allows you to get the statement, line, function and branch coverage of Meteor project and package.  
-This package uses the [istanbuljs/istanbul-api](https://github.com/istanbuljs/istanbul-api) package for coverage report and [meteorhacks:picker](https://github.com/meteorhacks/picker) for server side routing.  
+This package uses the [istanbuljs/istanbul-api](https://github.com/istanbuljs/istanbul-api) package for coverage report.  
 It's a debug only package, so it does not affect your production build.
 
 ## CI Platforms supported
@@ -13,13 +13,10 @@ It's a debug only package, so it does not affect your production build.
 
 ## Installation
 
--   In a Meteor app, add these dependencies to your `.meteor/packages` file :
+-   In a Meteor app, add these dependencies :
 
 ```txt
-practicalmeteor:chai
-practicalmeteor:mocha@2.4.5_5
-practicalmeteor:mocha-console-runner
-lmieulet:meteor-coverage@0.9.1
+meteor add practicalmeteor:mocha
 ```
 
 -   If you are using flow-router, there are [an issue](https://github.com/kadirahq/flow-router/pull/615) that prevents tests to succeed.
@@ -76,6 +73,8 @@ For app, edit your `package.json` with the following
 Now, you can run your test (here is an extract of a [circle.yml](https://github.com/serut/meteor-coverage-app-exemple/blob/master/circle.yml)), merge coverage between tests, export the coverage report and sent it to a coverage platform:
 
     - meteor npm install
+    # Create output directory
+    - mkdir .coverage
     # Unit test using mocha
     - meteor npm run test-coverage-app-unit
     # Integration test using mocha
@@ -99,6 +98,7 @@ For packages, install spacejam globally and run it manually (as this package doe
 -   `out_html` creates a html report
 -   `out_json_report` creates a json report
 -   `out_json_summary` creates a json_summary report
+-   `out_text_summary` creates a text_summary report
 -   `out_teamcity` is not working yet
 
 ## Global environment variable
@@ -112,6 +112,8 @@ You need to set up these environment variables:
     -   Needs to end with a trailing slash
     -   Used when importing or exporting coverage reports
 -   `COVERAGE_VERBOSE=1` to see logs (optional)
+
+Another way to enable coverage is to use the Meteor --settings file.
 
 Using `spacejam --coverage` you do not have to set up global environment variable.
 
@@ -133,8 +135,8 @@ Copy the `conf/default-coverage.json`, rename it into `.coverage.json`, remove k
    "client": [
      "You may want to exclude here modules from client side instrumentation",
      "to get the lightest version of your browser app",
-     "/underscore.js",
-     "/meteor.js",
+     "**/underscore.js",
+     "**/meteor.js",
      "...",
      "And even dependencies / internal packages:",
      "/lmieulet_meteor-coverage.js",
@@ -152,7 +154,8 @@ Copy the `conf/default-coverage.json`, rename it into `.coverage.json`, remove k
  "output": "./.coverage"
 }
 ```
-This file now use minimatch syntax.
+
+The minimatch syntax of this file can be found [here](http://hgbook.red-bean.com/read/file-names-and-pattern-matching.html#id381184).
 
 To create your custom config file, run the project with `COVERAGE_VERBOSE=1` env variable and use logs to see which filenames were hooked or hidden. PR welcome.
 
@@ -189,21 +192,15 @@ Import a `coverage` export.
 Meteor.importCoverage(function(err) {console.log(err)})
 ```
 
-## Limitation(s) / open issues
-
--   `meteor --settings` support
--   Need to add options when exporting
--   No feedback from typescript and coffeescript users
-
 ## Contributing
 
 Anyone is welcome to contribute.  
-Fork meteor-coverage-app-exemple, make and then submit a pull request.
+Fork meteor-coverage-app-exemple (or use an empty meteor app), make and then submit a pull request.
 
 Don't forget to test :
 
 -   set environment variables `COVERAGE` and `COVERAGE_APP_FOLDER` (e.g. `set COVERAGE 1` or `COVERAGE=1`)
--   meteor test-packages
+-   meteor npm run lint:fix
 
 ## Credits
 
@@ -213,4 +210,3 @@ This package would not exist without the amazing work of:
 -   All contributors of [istanbul-api](https://github.com/istanbuljs/istanbul-api) and [istanbul-middleware](https://github.com/gotwarlost/istanbul-middleware) projects.
 
 Both were very helpful in the development of this package. It saves me so many hours so many thanks to them.
-.

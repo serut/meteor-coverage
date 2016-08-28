@@ -47,28 +47,34 @@ if (IS_COVERAGE_ACTIVE) {
 
   // Don't force to rewrite all the key of configuration.exclude,
   // if they are not defined, the default conf is used.
+
+  if (configuration.exclude === undefined) {
+    Log.info('Loading default configuration: exclude.*');
+    configuration.exclude = defaultConfig.exclude;
+  }
+
   if (configuration.exclude.general === undefined) {
     Log.info('Loading default configuration: exclude.general');
-    configuration.exclude.general = defautConf.exclude.general;
+    configuration.exclude.general = defaultConfig.exclude.general;
   }
 
   if (configuration.exclude.server === undefined) {
     Log.info('Loading default configuration: exclude.server');
-    configuration.exclude.server = defautConf.exclude.server;
+    configuration.exclude.server = defaultConfig.exclude.server;
   }
 
   if (configuration.exclude.client === undefined) {
     Log.info('Loading default configuration: exclude.client');
-    configuration.exclude.client = defautConf.exclude.client;
+    configuration.exclude.client = defaultConfig.exclude.client;
   }
 
   if (configuration && !configuration.include) {
-    Log.info('Loading defaultConfig configuration: include');
+    Log.info('Loading default configuration: include');
     configuration.include = defaultConfig.include || [];
   }
 
   if (configuration && !configuration.output) {
-    Log.info('Loading defaultConfig configuration: output');
+    Log.info('Loading default configuration: output');
     configuration.output = defaultConfig.output;
   }
 }

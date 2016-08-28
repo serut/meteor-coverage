@@ -20,11 +20,12 @@ before_install:
   # Install dependencies
   - npm install -g https://github.com/serut/spacejam/tarball/windows-suppport-rc4
   - npm install -g eslint coveralls codecov.io codacy-coverage
+  - meteor npm install
 
 script:
   - mkdir .coverage
-  - spacejam test-packages ./ --coverage out_lcovonly --driver-package practicalmeteor:mocha-console-runner
+  - meteor npm test
   - cat .coverage/lcov.info | coveralls || cat .coverage/lcov.info || true # ignore coveralls error
   - cat .coverage/lcov.info | codecov || cat .coverage/lcov.info || true # ignore codecov error
   - cat .coverage/lcov.info | codacy-coverage || true # ignore codacy error
-  - eslint . || true # ignore eslint error
+  - meteor npm run lint || true # ignore eslint error
