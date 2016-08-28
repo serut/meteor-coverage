@@ -1,8 +1,9 @@
 import Log from './../context/log';
 import Conf from './../context/conf';
 import fs from 'fs';
-import * as IstanbulApi from 'istanbul-api';
-const libSourceMaps = IstanbulApi.libSourceMaps;
+
+const istanbulAPI = Npm.require('istanbul-api');
+const libSourceMaps = istanbulAPI.libSourceMaps;
 
 const sourceMap = libSourceMaps.createSourceMapStore({verbose: Conf.IS_COVERAGE_ACTIVE});
 const meteor_dir = Conf.COVERAGE_APP_FOLDER;

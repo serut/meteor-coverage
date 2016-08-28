@@ -3,9 +3,9 @@ import Instrumenter from './instrumenter';
 import path from 'path';
 import fs from 'fs';
 
-import * as IstanbulApi from 'istanbul-api';
-const Report = IstanbulApi.libReport;
-const Coverage = IstanbulApi.libCoverage;
+const istanbulAPI = Npm.require('istanbul-api');
+const Report = istanbulAPI.libReport;
+const Coverage = istanbulAPI.libCoverage;
 
 export default CoverageData = {
   filterCoverageReport: function (report) {

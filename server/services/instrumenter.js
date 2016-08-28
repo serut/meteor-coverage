@@ -3,9 +3,9 @@ import Log from './../context/log';
 import Conf from './../context/conf';
 import minimatch from 'minimatch';
 
-import * as IstanbulApi from 'istanbul-api';
-const Instrument = IstanbulApi.libInstrument;
-const Hook = IstanbulApi.libHook;
+const istanbulAPI = Npm.require('istanbul-api');
+const Instrument = istanbulAPI.libInstrument;
+const Hook = istanbulAPI.libHook;
 
 let instrumenter = undefined;
 
