@@ -5,6 +5,7 @@ dependencies:
   override:
     - curl https://install.meteor.com | /bin/sh
     - npm install -g https://github.com/serut/spacejam/tarball/windows-suppport-rc4
+    - meteor npm install
 checkout:
   post:
     - git submodule update --init

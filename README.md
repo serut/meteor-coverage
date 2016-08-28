@@ -200,6 +200,7 @@ Fork meteor-coverage-app-exemple (or use an empty meteor app), make and then sub
 Don't forget to test :
 
 -   set environment variables `COVERAGE` and `COVERAGE_APP_FOLDER` (e.g. `set COVERAGE 1` or `COVERAGE=1`)
+-   meteor npm test
 -   meteor npm run lint:fix
 
 ## Credits
