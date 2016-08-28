@@ -1,4 +1,4 @@
-#### 1.0.0-dev
+#### 0.9.2
 
 -   The configuration file `.coverage.json` is now written in minimatch syntax instead of regex
     Thanks to @thiagodelgado111 for his pull request #13
