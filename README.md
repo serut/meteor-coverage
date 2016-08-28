@@ -20,7 +20,7 @@ meteor add practicalmeteor:mocha
 ```
 
 -   If you are using flow-router, there are [an issue](https://github.com/kadirahq/flow-router/pull/615) that prevents tests to succeed.
--   If you want to cover a package, you need to add `api.use(['lmieulet:meteor-coverage@0.9.2']);` to your `Package.onTest` function of the `package.js` file.
+-   If you want to cover a package, you need to add `api.use(['lmieulet:meteor-coverage@0.9.4']);` to your `Package.onTest` function of the `package.js` file.
 
 #### Then test if it works
 
