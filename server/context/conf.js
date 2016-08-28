@@ -1,54 +1,92 @@
-import Log from './log'
+import Log from './log';
+const meteor_parameters = {
+  // /:\ ES 6
+  // return the value OR UNDEFINED
+  // THIS IS NOT A BOOLEAN
+  IS_COVERAGE_ACTIVE: Meteor && Meteor.settings && Meteor.settings.coverage && Meteor.settings.coverage.IS_COVERAGE_ACTIVE,
+  COVERAGE_APP_FOLDER: Meteor && Meteor.settings && Meteor.settings.coverage && Meteor.settings.coverage.COVERAGE_APP_FOLDER
+};
 
-export const IS_COVERAGE_ACTIVE = process.env["COVERAGE"] === "1";
-export const COVERAGE_APP_FOLDER = process.env["COVERAGE_APP_FOLDER"] || '/SET/ENV/COVERAGE_APP_FOLDER/OR/READ/README/';
-let configuration = {};
-if (IS_COVERAGE_ACTIVE) {
-    const fs = Npm.require('fs'),
-        path = Npm.require('path');
-    console.log("Coverage active")
-    let coverageFile = path.join(COVERAGE_APP_FOLDER, '.coverage.json'),
-        defautConf = JSON.parse(Assets.getText('conf/default-coverage.json'));
-    if (fs.existsSync(coverageFile)) {
-        Log.info("Reading custom configuration");
-        const configurationString = fs.readFileSync(coverageFile);
+export const IS_COVERAGE_ACTIVE = meteor_parameters.IS_COVERAGE_ACTIVE === 1 ||  process.env['COVERAGE'] === '1';
+const ENV_NOT_DEFINED = '/SET/ENV/COVERAGE_APP_FOLDER/OR/READ/README/';
 
-        configuration = JSON.parse(configurationString);
-    }
-    // Set up default value if they are not provided in the .coverage.json file
-    if (configuration) {
-        if (configuration.ignore === undefined) {
-            configuration.ignore = {};
-        }
-        if (configuration.ignore.clientside === undefined) {
-            Log.info("Loading default configuration: clientside.*");
-            configuration.ignore.clientside = defautConf.ignore.clientside;
-        } else {
-            if (configuration.ignore.clientside.inapp === undefined) {
-                Log.info("Loading default configuration: clientside.inapp");
-                configuration.ignore.clientside.inapp = defautConf.ignore.clientside.inapp;
-            }
-            if (configuration.ignore.clientside.public === undefined) {
-                Log.info("Loading default configuration: clientside.public");
-                configuration.ignore.clientside.public = defautConf.ignore.clientside.public;
-            }
-        }
-        if (configuration.ignore.serverside === undefined) {
-            Log.info("Loading default configuration: serverside");
-            configuration.ignore.serverside = defautConf.ignore.serverside;
-        }
-        if (configuration.ignore.others === undefined) {
-            Log.info("Loading default configuration: others");
-            configuration.ignore.others = defautConf.ignore.others;
-        }
-        if (configuration.output === undefined) {
-            Log.info("Loading default configuration: others");
-            configuration.output = defautConf.output;
-        }
-    } else {
-        Log.info("Loading default configuration");
-        configuration = defautConf;
-    }
+export const COVERAGE_APP_FOLDER = meteor_parameters.COVERAGE_APP_FOLDER || process.env['COVERAGE_APP_FOLDER'] || ENV_NOT_DEFINED;
+
+if (COVERAGE_APP_FOLDER === ENV_NOT_DEFINED) {
+  Log.error('Error: COVERAGE_APP_FOLDER is undefined and the coverage will fail.');
 }
+const NOT_DEFINED = '/COVERAGE/NOT/ACTIVE/';
+let configuration = {
+  exclude: {
+    general: [],
+    server: [],
+    client: []
+  },
+  include: [],
+  output: NOT_DEFINED
+};
+if (IS_COVERAGE_ACTIVE) {
+  const fs = Npm.require('fs'),
+    path = Npm.require('path');
+
+  Log.info('Coverage active');
+  let coverageFile = path.join(COVERAGE_APP_FOLDER, '.coverage.json'),
+    defaultConfig = JSON.parse(Assets.getText('conf/default-coverage.json'));
+
+  try {
+    fs.accessSync(coverageFile);
+    Log.info('Reading custom configuration');
+    const configurationString = fs.readFileSync(coverageFile);
+    configuration = JSON.parse(configurationString);
+    Log.info('[Configuration] ', configuration);
+  } catch (e) {
+    // Set up defaultConfig value if they are not provided in the .coverage.json file
+    Log.info('Loading default configuration');
+    configuration = defaultConfig;
+  }
+
+  // Don't force to rewrite all the key of configuration.exclude,
+  // if they are not defined, the default conf is used.
+
+  if (configuration.exclude === undefined) {
+    Log.info('Loading default configuration: exclude.*');
+    configuration.exclude = defaultConfig.exclude;
+  }
+
+  if (configuration.exclude.general === undefined) {
+    Log.info('Loading default configuration: exclude.general');
+    configuration.exclude.general = defaultConfig.exclude.general;
+  }
+
+  if (configuration.exclude.server === undefined) {
+    Log.info('Loading default configuration: exclude.server');
+    configuration.exclude.server = defaultConfig.exclude.server;
+  }
+
+  if (configuration.exclude.client === undefined) {
+    Log.info('Loading default configuration: exclude.client');
+    configuration.exclude.client = defaultConfig.exclude.client;
+  }
+
+  if (configuration && !configuration.include) {
+    Log.info('Loading default configuration: include');
+    configuration.include = defaultConfig.include || [];
+  }
+
+  if (configuration && !configuration.output) {
+    Log.info('Loading default configuration: output');
+    configuration.output = defaultConfig.output;
+  }
+}
+
 export const COVERAGE_EXPORT_FOLDER = configuration.output;
-export const ignore = configuration.ignore;
+export const exclude = configuration.exclude;
+export const include = configuration.include;
+
+Log.info('Coverage configuration:');
+Log.info('- IS_COVERAGE_ACTIVE=', IS_COVERAGE_ACTIVE);
+Log.info('- COVERAGE_APP_FOLDER=', COVERAGE_APP_FOLDER);
+Log.info('.coverage.json values:');
+Log.info('- exclude=', configuration.exclude);
+Log.info('- include=', configuration.include);
+Log.info('- COVERAGE_EXPORT_FOLDER=', COVERAGE_EXPORT_FOLDER);

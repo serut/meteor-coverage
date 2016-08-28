@@ -1,16 +1,16 @@
-import { $ } from 'meteor/jquery';
-import { expect, assert } from 'meteor/practicalmeteor:chai';
-import { sinon } from 'meteor/practicalmeteor:sinon';
+import {$} from 'meteor/jquery';
+import {expect, assert} from 'meteor/practicalmeteor:chai';
+import {sinon} from 'meteor/practicalmeteor:sinon';
 import Meteor from 'meteor/lmieulet:meteor-coverage';
 
 describe('meteor-coverage', function (done) {
 
   let sandbox;
-  beforeEach(function() {
+  beforeEach(function () {
     sandbox = sinon.sandbox.create();
   });
 
-  afterEach(function(){
+  afterEach(function () {
     sandbox.restore();
   });
 
@@ -32,8 +32,8 @@ describe('meteor-coverage', function (done) {
   it('send client coverage', function () {
     const callback = sandbox.spy();
 
-    sandbox.stub(Meteor, 'getCoverageObject').returns({ 'web.browser': { path: 1} });
-    sandbox.stub($, 'ajax', function(config) {
+    sandbox.stub(Meteor, 'getCoverageObject').returns({'web.browser': {path: 1}});
+    sandbox.stub($, 'ajax', function (config) {
       config.success();
     });
 
@@ -44,8 +44,8 @@ describe('meteor-coverage', function (done) {
   it('export coverage', function () {
     const callback = sandbox.spy();
 
-    sandbox.stub(JSON, 'parse').returns({ type: 'success'});
-    sandbox.stub($, 'ajax', function(config) {
+    sandbox.stub(JSON, 'parse').returns({type: 'success'});
+    sandbox.stub($, 'ajax', function (config) {
       config.success();
     });
 
@@ -56,8 +56,8 @@ describe('meteor-coverage', function (done) {
   it('import coverage', function () {
     const callback = sandbox.spy();
 
-    sandbox.stub(JSON, 'parse').returns({ type: 'success'});
-    sandbox.stub($, 'ajax', function(config) {
+    sandbox.stub(JSON, 'parse').returns({type: 'success'});
+    sandbox.stub($, 'ajax', function (config) {
       config.success();
     });
 

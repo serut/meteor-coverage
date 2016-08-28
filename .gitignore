@@ -1,2 +1,6 @@
 .npm
 .coverage
+packages
+node_modules
+local-packages.json
+.idea

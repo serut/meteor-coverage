@@ -5,10 +5,12 @@ dependencies:
   override:
     - curl https://install.meteor.com | /bin/sh
     - npm install -g https://github.com/serut/spacejam/tarball/windows-suppport-rc4
+    - meteor npm install
 checkout:
   post:
     - git submodule update --init
 test:
   override:
     - mkdir .coverage
-    - spacejam test-packages ./ --coverage out_lcovonly  --driver-package practicalmeteor:mocha-console-runner
+    - meteor npm test
+    - meteor npm run lint || true # ignore eslint error
