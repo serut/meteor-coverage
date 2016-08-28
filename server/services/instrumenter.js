@@ -70,27 +70,19 @@ shouldIgnore = function (filePath, isAServerSideFile) {
       return true;
     }
   }
-  
+
   Log.info('[Accepted][*]: ', filePath);
   return false;
 };
 
 shallInstrumentClientScript = function (fileurl) {
   if (fileurl.indexOf('.js') > -1) {
-    if (fileurl.indexOf('packages') === 1) {
-      if (!Instrumenter.shouldIgnore(fileurl, false)) {
-        Log.info('[ClientSide][InApp] file instrumented: ' + fileurl);
-        return true;
-      }
-      Log.info('[ClientSide][InApp] file ignored: ' + fileurl);
-      return false;
-    }
     if (!Instrumenter.shouldIgnore(fileurl, false)) {
       Log.info('[ClientSide][Public] file instrumented: ' + fileurl);
-    } else {
-      Log.info('[ClientSide][Public] file ignored: ' + fileurl);
+      return true;
     }
-    return instrumented;
+    Log.info('[ClientSide][Public] file ignored: ' + fileurl);
+    return false;
   }
   return false;
 };
