@@ -4,11 +4,9 @@ import SourceMap from './services/source-map';
 import Conf from './context/conf';
 import Router from './router';
 import ReportService from './report/report-service';
+import Boot from './boot.js';
 
-// Start to collect coverage
-Instrumenter.hookLoader();
-// Connect the router to this app
-new Router();
+Boot.startup();
 
 export default {
   Conf,
