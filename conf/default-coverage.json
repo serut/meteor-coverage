@@ -78,6 +78,8 @@
       "**/practicalmeteor_mocha-core.js",
       "**/kadira_flow-router.js",
       "**/tmeasday_test-reporter-helpers.js",
+      "**/coffeescript.js",
+      "**/lmieulet_meteor-coverage.js",
       "**/practicalmeteor_chai.js"
     ]
   },
