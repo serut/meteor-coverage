@@ -1,12 +1,5 @@
 {
-  "exclude": {
-    "general": [
-      "/**/tests/**/*",
-      "**/tests/**/*",
-      "/**/*tests.js",
-      "/**/*test.js",
-      ".npm/package/node_modules/**",
-      "**/lmieulet:meteor-coverage/**"
-    ]
-  }
+  "include": [
+    "**/packages/lmieulet_meteor-coverage.js"
+  ]
 }
