@@ -40,6 +40,11 @@ if (IS_COVERAGE_ACTIVE) {
     configuration = JSON.parse(configurationString);
     Log.info('[Configuration] ', configuration);
   } catch (e) {
+    if (e instanceof SyntaxError) {
+      let errMsg = `Error: ${coverageFile} is not a valid JSON`;
+      console.error(errMsg, e);
+      Log.error(e.stack);
+    }
     // Set up defaultConfig value if they are not provided in the .coverage.json file
     Log.info('Loading default configuration');
     configuration = defaultConfig;
