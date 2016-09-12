@@ -1,19 +1,30 @@
 {
   "include": [
-    "**/lib/**/methods.js"
   ],
   "exclude": {
-    "general": [
+    "general": [],
+    "server": [
       "**/.?*/**",
-      "**/node_modules/**",
       "**/packages/!(local-test_?*.js)",
       "**/+([^:]):+([^:])/**",
       "**/@(test|tests|spec|specs)/**",
-      "**/@(test.?*|?*.test.?*|?*.tests.?*|spec.?*|?*.spec.?*|?*.specs.?*|app-test.?*|?*.app-test.?*|?*.app-tests.?*|app-spec.?*|?*.app-spec.?*|?*.app-specs.?*)"
+      "**/@(test.?*|?*.test.?*|?*.tests.?*)",
+      "**/@(spec.?*|?*.spec.?*|?*.specs.?*)",
+      "**/@(app-test.?*|?*.app-test.?*|?*.app-tests.?*)",
+      "**/@(app-spec.?*|?*.app-spec.?*|?*.app-specs.?*)"
     ],
-    "server": [],
     "client": [
-      "**/client/stylesheets/**"
+      "**/client/stylesheets/**",
+      "**/.npm/package/node_modules/**",
+      "**/web.browser/packages/**",
+      "**/.?*/**",
+      "**/packages/!(local-test_?*.js)",
+      "**/+([^:]):+([^:])/**",
+      "**/@(test|tests|spec|specs)/**",
+      "**/@(test.?*|?*.test.?*|?*.tests.?*)",
+      "**/@(spec.?*|?*.spec.?*|?*.specs.?*)",
+      "**/@(app-test.?*|?*.app-test.?*|?*.app-tests.?*)",
+      "**/@(app-spec.?*|?*.app-spec.?*|?*.app-specs.?*)"
     ]
   },
   "output": "./.coverage"

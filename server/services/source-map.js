@@ -1,6 +1,7 @@
 import Log from './../context/log';
 import Conf from './../context/conf';
 import fs from 'fs';
+import path from 'path';
 
 const istanbulAPI = Npm.require('istanbul-api');
 const libSourceMaps = istanbulAPI.libSourceMaps;
@@ -39,34 +40,30 @@ alterSourceMapPaths = function (map) {
     }
   }
 
-  const npmPkgFolder = "node_modules";
+  const npmPkgFolder = 'node_modules';
   const npmPkgDepPrefix = `${npmPkgFolder}/meteor/`;
   const splitToken = String.fromCharCode(56507) + 'app/';
   for (var i = 0; i < map.sources.length; i++) {
     // Magic character inside the path
     var paths = map.sources[i].split(splitToken);
     if (paths.length === 2) {
-      var path = paths[1];
       // if it's a package the path is wrong
-      match = regexAlterationSourceMapPath.exec(path);
-
+      match = regexAlterationSourceMapPath.exec(paths[1]);
       if (match) {
-        if (Meteor.PUT && match[2] === Meteor.PUT.author && match[3] === Meteor.PUT.name) { // PUT file
+        const matchAuthor = match[3];
+        const matchName = match[4];
+        const matchPath = match[5];
+        if (this.PUT && matchAuthor === this.PUT.author && matchName === this.PUT.name && matchPath) {
           // Imported NPM dependency (skip initial backslash)
-          if (match[1] === npmPkgDepPrefix && match[4].startsWith(npmPkgFolder, 1)) {
-            map.sources[i] = `${meteor_dir}.npm/package${match[4]}`;
-          // Custom user file imported in test file or package loaded for app or meteor framework
+          if (match[1] === npmPkgDepPrefix && matchPath.startsWith(npmPkgFolder, 1)) {
+            map.sources[i] = path.join(meteor_dir,'.npm/package', matchPath);
+            // Custom user file imported in test file or package loaded for app or meteor framework
           } else {
-            map.sources[i] = meteor_dir + match[4].substr(1);
+            map.sources[i] = path.join(meteor_dir, matchPath);
           }
         } else {
-          map.sources[i] = meteor_dir + match[1] + match[3] + match[4];
+          map.sources[i] = path.join(meteor_dir,  matchPath);
         }
-        /*if (Meteor.PUT && match[2] === Meteor.PUT.author && match[3] === Meteor.PUT.name) { // PUT file
-          map.sources[i] = meteor_dir + match[4].substr(1);
-        } else { // package loaded for app or meteor framework
-          map.sources[i] = meteor_dir + match[1] + match[3] + match[4];
-        }*/
       } else {
         map.sources[i] = meteor_dir + path;
       }
@@ -93,5 +90,6 @@ registerSourceMap = function (filepath) {
 };
 export default SourceMap = {
   lib: sourceMap,
+  PUT: {},
   registerSourceMap
 };

@@ -24,7 +24,8 @@
   },
   "scripts": {
     "test": "spacejam test-packages ./ --coverage out_lcovonly  --driver-package practicalmeteor:mocha-console-runner",
-    "start": "meteor test-packages --driver-package practicalmeteor:mocha --settings settings.coverage.json",
+    "test:watch": "meteor test-packages --driver-package practicalmeteor:mocha --settings settings.coverage.json",
+    "start": "meteor npm run lint:fix & meteor npm run test:watch",
     "lint": "eslint .",
     "lint:fix": "eslint --fix ."
   },
