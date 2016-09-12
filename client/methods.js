@@ -85,7 +85,7 @@ Meteor.exportCoverage = function (type, callback) {
       try {
         let result = JSON.parse(data);
         if (result.type !== 'success') {
-          throw new Error('An unexpected error occurred while trying to export coverage data');
+          throw new Error('Error: '+JSON.stringify(arguments)+'. An unexpected error occurred while trying to export coverage data');
         }
 
         return callback();
@@ -94,7 +94,7 @@ Meteor.exportCoverage = function (type, callback) {
       }
     },
     error: function() {
-      callback('An server error occurred while trying to export coverage data', arguments);
+      callback('Error: '+JSON.stringify(arguments)+'. An server error occurred while trying to export coverage data');
     }
   });
 };
@@ -110,7 +110,7 @@ Meteor.importCoverage = function (callback) {
       try {
         let result = JSON.parse(data);
         if (result.type !== 'success') {
-          throw new Error('An unexpected error occurred while trying to import coverage data');
+          throw new Error('Error: '+JSON.stringify(arguments)+'. An unexpected error occurred while trying to import coverage data');
         }
 
         return callback();

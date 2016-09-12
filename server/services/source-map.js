@@ -21,16 +21,15 @@ const regexPUT = new RegExp(/packages\/local-test:([a-zA-Z-_]*):([a-zA-Z-_]*)\/.
 // Alter inside the source map the path of each sources
 alterSourceMapPaths = function (map) {
   var match;
-
-  if (!Meteor.PUT && Meteor.isPackageTest && meteor_dir === `${process.env.PWD}/`) {
+  if (!this.PUT && Meteor.isPackageTest && meteor_dir === `${process.env.PWD}/`) {
     // Search for the author and name of the PUT (Package Under Test)
     // and save it in Meteor object to be accessible later on
     for (let i = 0; i < map.sources.length; i++) {
       if (regexPUT.test(map.sources[i])) {
         let pkgAuthor, pkgName;
         [, pkgAuthor, pkgName] = regexPUT.exec(map.sources[i]);
-        if (!Meteor.PUT) {
-          Meteor.PUT = {
+        if (!this.PUT) {
+          this.PUT = {
             author: pkgAuthor,
             name: pkgName
           };
@@ -47,25 +46,25 @@ alterSourceMapPaths = function (map) {
     // Magic character inside the path
     var paths = map.sources[i].split(splitToken);
     if (paths.length === 2) {
+      let matchAuthor, matchName, matchPath;
       // if it's a package the path is wrong
       match = regexAlterationSourceMapPath.exec(paths[1]);
       if (match) {
-        const matchAuthor = match[3];
-        const matchName = match[4];
-        const matchPath = match[5];
-        if (this.PUT && matchAuthor === this.PUT.author && matchName === this.PUT.name && matchPath) {
-          // Imported NPM dependency (skip initial backslash)
-          if (match[1] === npmPkgDepPrefix && matchPath.startsWith(npmPkgFolder, 1)) {
-            map.sources[i] = path.join(meteor_dir,'.npm/package', matchPath);
-            // Custom user file imported in test file or package loaded for app or meteor framework
-          } else {
-            map.sources[i] = path.join(meteor_dir, matchPath);
-          }
-        } else {
-          map.sources[i] = path.join(meteor_dir,  matchPath);
+        matchAuthor = match[3];
+        matchName = match[4];
+        matchPath = match[5];
+        // Imported NPM dependency
+        // Custom user file imported in test file or package loaded for app or meteor framework
+        if (this.PUT && matchAuthor === this.PUT.author && matchName === this.PUT.name && matchPath && match[1] === npmPkgDepPrefix && matchPath.startsWith(npmPkgFolder, 1)) {
+          map.sources[i] = path.join(meteor_dir, '.npm/package', matchPath);
+          // the continue statement breaks one iteration of the loop
+          continue;
         }
+      }
+      if (matchPath) {
+        map.sources[i] = path.join(meteor_dir,  matchPath);
       } else {
-        map.sources[i] = meteor_dir + path;
+        map.sources[i] = path.join(meteor_dir, paths[1]);
       }
     } else {
       Log.error('Failed to alter source map path', map.sources[i]);
