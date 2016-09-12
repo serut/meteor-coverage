@@ -3,11 +3,11 @@ const meteor_parameters = {
   // /:\ ES 6
   // return the value OR UNDEFINED
   // THIS IS NOT A BOOLEAN
-  IS_COVERAGE_ACTIVE: Meteor && Meteor.settings && Meteor.settings.coverage && Meteor.settings.coverage.IS_COVERAGE_ACTIVE,
-  COVERAGE_APP_FOLDER: Meteor && Meteor.settings && Meteor.settings.coverage && Meteor.settings.coverage.COVERAGE_APP_FOLDER
+  IS_COVERAGE_ACTIVE: Meteor && Meteor.settings && Meteor.settings.coverage && Meteor.settings.coverage.is_coverage_active,
+  COVERAGE_APP_FOLDER: Meteor && Meteor.settings && Meteor.settings.coverage && Meteor.settings.coverage.coverage_app_folder
 };
 
-export const IS_COVERAGE_ACTIVE = meteor_parameters.IS_COVERAGE_ACTIVE === 1 ||  process.env['COVERAGE'] === '1';
+export const IS_COVERAGE_ACTIVE = meteor_parameters.IS_COVERAGE_ACTIVE ||  process.env['COVERAGE'] === '1';
 const ENV_NOT_DEFINED = '/SET/ENV/COVERAGE_APP_FOLDER/OR/READ/README/';
 
 export const COVERAGE_APP_FOLDER = meteor_parameters.COVERAGE_APP_FOLDER || process.env['COVERAGE_APP_FOLDER'] || ENV_NOT_DEFINED;
@@ -73,12 +73,12 @@ if (IS_COVERAGE_ACTIVE) {
     configuration.exclude.client = defaultConfig.exclude.client;
   }
 
-  if (configuration && !configuration.include) {
+  if (configuration.include === undefined) {
     Log.info('Loading default configuration: include');
     configuration.include = defaultConfig.include || [];
   }
 
-  if (configuration && !configuration.output) {
+  if (configuration.output === undefined) {
     Log.info('Loading default configuration: output');
     configuration.output = defaultConfig.output;
   }

@@ -24,7 +24,7 @@
   },
   "scripts": {
     "test": "spacejam test-packages ./ --coverage out_lcovonly  --driver-package practicalmeteor:mocha-console-runner",
-    "start": "COVERAGE=1 COVERAGE_VERBOSE=1 COVERAGE_APP_FOLDER=/Users/Leo/WebstormProjects/meteor-coverage-app-exemple/packages/meteor-coverage/ meteor test-packages --driver-package practicalmeteor:mocha",
+    "start": "meteor test-packages --driver-package practicalmeteor:mocha --settings settings.coverage.json",
     "lint": "eslint .",
     "lint:fix": "eslint --fix ."
   },
