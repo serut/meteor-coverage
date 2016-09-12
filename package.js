@@ -33,7 +33,8 @@ Npm.depends({
   'istanbul-api': '1.1.0-alpha.1',
   'body-parser': '1.15.2',
   'minimatch': '3.0.3',
-  'mkdirp': '0.5.1'
+  'mkdirp': '0.5.1',
+  'remap-istanbul': '0.6.4'
 });
 
 Package.onTest(function (api) {

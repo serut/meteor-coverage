@@ -1,4 +1,5 @@
 import IstanbulGenericReporter from './report-generic';
+import ReportCommon from './report-common';
 import JsonSummary from './report-json-summary';
 import Teamcity from './report-teamcity';
 import Html from './report-html';
@@ -32,6 +33,7 @@ export default class {
           options = this.addFileToOptions(options, 'summary.json');
           let istanbulFile2 = new IstanbulGenericReporter(res, type, options);
           istanbulFile2.generate();
+          Conf.remap && this.remapSourceMaps(options);
           break;
         }
       case 'coverage':
@@ -101,5 +103,33 @@ export default class {
     return Object.assign({}, options, {
       path: path.join(options.path, filename)
     });
+  }
+  remapSourceMaps(options) {
+    const remapIstanbul = Npm.require('remap-istanbul');
+    const cwd = process.cwd();
+    process.chdir(Conf.COVERAGE_APP_FOLDER);
+
+    // Create output directory if not exists
+    let remapFolder = `${Conf.COVERAGE_EXPORT_FOLDER}-remap`;
+    let remapPath = path.join(Conf.COVERAGE_APP_FOLDER, remapFolder);
+    ReportCommon.checkDirectory(remapPath);
+
+    let addFile = (filename) => path.join(remapFolder, filename);
+    let reports = {}, allReports = {
+      'html': remapPath,
+      'clover': addFile('clover.xml'),
+      'cobertura': addFile('cobertura.xml'),
+      'teamcity': addFile('teamcity.log'),
+      'text-summary': addFile('summary.txt'),
+      'text': addFile('report.txt'),
+      'lcovonly': addFile('lcov.info'),
+      'json-summary': addFile('summary.json'),
+      'json': addFile('report.json'),
+    };
+    Conf.remap.format.forEach((type) => reports[type] = allReports[type]);
+    remapIstanbul(options.path, reports, {verbose: options.verbose}).await();
+
+    // Restore previous working directory
+    process.chdir(cwd);
   }
 }
