@@ -8,6 +8,7 @@ const meteor_parameters = {
 };
 
 export const IS_COVERAGE_ACTIVE = meteor_parameters.IS_COVERAGE_ACTIVE ||  process.env['COVERAGE'] === '1';
+export const IS_COVERAGE_VERBOSE = Log.COVERAGE_VERBOSE;
 const ENV_NOT_DEFINED = '/SET/ENV/COVERAGE_APP_FOLDER/OR/READ/README/';
 
 export const COVERAGE_APP_FOLDER = meteor_parameters.COVERAGE_APP_FOLDER || process.env['COVERAGE_APP_FOLDER'] || ENV_NOT_DEFINED;
@@ -90,6 +91,7 @@ export const include = configuration.include;
 
 Log.info('Coverage configuration:');
 Log.info('- IS_COVERAGE_ACTIVE=', IS_COVERAGE_ACTIVE);
+Log.info('- IS_COVERAGE_VERBOSE=', IS_COVERAGE_VERBOSE);
 Log.info('- COVERAGE_APP_FOLDER=', COVERAGE_APP_FOLDER);
 Log.info('.coverage.json values:');
 Log.info('- exclude=', configuration.exclude);
