@@ -36,26 +36,41 @@ Package.onTest(function (api) {
 
 ### Configuration
 
-Configure your working environment :
-
--   create your configuration file `.coverage.json` to specify what you want to cover.
--   run meteor with one of these options, because meteor-coverage is a probe disabled by default that also requires the absolute path to your source folder. 
-    -   use spacejam as a test runner (`serut/spacejam:windows-suppport-rc4`, for now it's only a fork), perfect for CI or prepublish hooks. Spacejam setup everything for you.
-    -   OR
-    -   use a meteor setting file to store the coverage configuration, like in a `settings.coverage.json`, then just need to run your app with `--settings settings.coverage.json`
-    -   OR
-    -   set these environment variables : `COVERAGE`, `COVERAGE_VERBOSE` & `COVERAGE_APP_FOLDER`.
-
--   meteor-coverage ensures the output folder exist on boot, which is by default `./.coverage` inside your app. 
+First, create your configuration file `.coverage.json` to specify what you want to cover.
 
 
-Then test with the following command
 
-    meteor [... see below] --settings settings.coverage.json
-    # Open localhost:3000/coverage in your browser
-or 
 
-    spacejam [... see below] --coverage [out_html|out_lcovonly|out_text_summary|out_json_report|out_json_summary|in_coverage|out_coverage|]
+Then setup how you want to run your app. Actually, to let meteor-coverage start processing, you need to enable it, because it's a probe disabled by default and you need to provide the absolute path to your source folder. 
+  -   [use spacejam](#setup-spacejam) as a test runner, perfect for CI or prepublish hooks. Spacejam setup everything for you throw the `--coverage` option.  
+  OR
+  -   [use a meteor setting file](#meteor---settings-file) to store the coverage configuration, then run your app with `--settings settings.coverage.json`  
+  OR
+  -   set these environment variables : `COVERAGE`, `COVERAGE_VERBOSE` & `COVERAGE_APP_FOLDER`.
+
+meteor-coverage ensures the output folder exist on boot, which is by default `./.coverage` inside your app. 
+For Typescript or any simular language users, you need to remap your code (released soon).
+
+## Usage 
+
+Run the following command : 
+
+    meteor [... see supported options below] --settings settings.coverage.json
+    
+Then open [localhost:3000/coverage](localhost:3000/coverage) in your browser. A missing feature would be to save your client coverage with a widget. Instead, you need to enter this javascript in your browser console :
+    
+    Meteor.sendCoverage(function(stats,err) {console.log(stats,err);});
+    # Reopen localhost:3000/coverage to see that client coverage have been saved on server
+    
+    # Creates an html export inside coverage_app_folder/output_folder/index.html
+    Meteor.exportCoverage("html", function(err) {console.log(err)})
+    
+or you can use spacejam-mocha
+
+    spacejam-mocha [... see supported options below] --coverage [out_html|out_lcovonly|out_text_summary|out_json_report|out_json_summary|in_coverage|out_coverage|out_remap]
+    [--settings settings.coverage.json]
+
+That's it !
 
 ### Run options 
 
@@ -69,20 +84,14 @@ However, you need to run your app with the following driver package :
 
     [spacejam|meteor] --driver-package practicalmeteor:mocha-console-runner
 
-If you want to, you can use this syntax, the following two commands are equivalent, but the second one is shorter and thus less typing error-prone
-
-    spacejam test-packages ./ --driver-package practicalmeteor:mocha-console-runner --coverage "out_lcovonly out_html"
-    spacejam-mocha test-packages ./ --coverage "out_lcovonly out_html"
-
-
-
 ## Setup spacejam
 
-If you have any trouble, refer to this example of Meteor application [meteor-coverage-app-exemple](https://github.com/serut/meteor-coverage-app-exemple) to see how a test runner can execute yours tests, save coverage and send it to coveralls. Or feel free to open an issue.
+If you have any trouble, refer to this example of Meteor application [meteor-coverage-app-exemple](https://github.com/serut/meteor-coverage-app-exemple) to see how a test runner can execute yours tests, save coverage and send it to coveralls. Or feel free to open an issue. For now `serut/spacejam:windows-suppport-rc4` is only a fork but it will be merged someday.  
 
 
 Add the following dependencies in your `package.json`:
 
+    meteor npm init # If the package.json file does not exist 
     meteor npm i --save-dev https://github.com/serut/spacejam/tarball/windows-suppport-rc4 
 
 Add what you need to run your app inside your `package.json`:
@@ -90,18 +99,28 @@ Add what you need to run your app inside your `package.json`:
     "scripts": {
         [APP]
         "test": "meteor npm run lint:fix & meteor npm run test:app-unit-coverage & ...",
-        "test:app-unit-coverage": "spacejam test                  --driver-package practicalmeteor:mocha-console-runner --coverage out_coverage",
-        "test:app-full-coverage": "spacejam test --full-app       --driver-package practicalmeteor:mocha-console-runner --coverage 'in_coverage|out_lcovonly'",
-        "test:packages-coverage": "spacejam test-packages   --driver-package practicalmeteor:mocha-console-runner --coverage out_lcovonly"
+        "test:app-unit-coverage": "spacejam-mocha test            --coverage out_coverage",
+        "test:app-full-coverage": "spacejam-mocha test --full-app --coverage 'in_coverage|out_lcovonly'",
+        "test:packages-coverage": "spacejam-mocha test-packages   --coverage out_lcovonly"
         
         [PCKGS]
-        "test": "spacejam test-packages ./ --coverage out_lcovonly  --driver-package practicalmeteor:mocha-console-runner",
+        "test": "spacejam-mocha test-packages ./ --coverage out_lcovonly ",
         "test:watch": "meteor npm run lint:fix & meteor npm run test:packages-coverage-watch",
         "test:packages-coverage-watch": "meteor test-packages --driver-package practicalmeteor:mocha --settings settings.coverage.json",
         
         "lint:fix": "eslint --fix ."
-
     }
+    
+    
+
+If you want to, you can use this syntax, the following two commands are equivalent, but the second one is shorter and thus less typing error-prone
+
+    spacejam test-packages --coverage "out_lcovonly out_html" --driver-package practicalmeteor:mocha-console-runner 
+    spacejam-mocha test-packages  --coverage "out_lcovonly out_html"
+    
+You may notice that you can't execute `spacejam-mocha` on your terminal, that's because you installed it with the flag `--save-dev`. The executable is in fact located on the folder `./node_modules/.bin/`, which [is added to the PATH before node try to run spacejam-mocha](https://docs.npmjs.com/misc/scripts#path)  
+
+
 ## Advanced setup for CI
 
 Now, you can run your test (here is an extract of a [circle.yml](https://github.com/serut/meteor-coverage-app-exemple/blob/master/circle.yml)), merge coverage between tests, export the coverage report and sent it to a coverage platform:
@@ -113,16 +132,22 @@ Now, you can run your test (here is an extract of a [circle.yml](https://github.
     - meteor npm run test-coverage-app-full
     # Package test using mocha
     - meteor npm run test-coverage-packages-mocha
-    # Send coverage report
     
 ### Coveralls
 
+Install
+
     meteor npm i --save-dev coveralls 
-    - cat .coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js || true # ignore coveralls error
+    
+Add this after tests execution: 
+    
+    # Send coverage report
+    cat .coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js || true # ignore coveralls error
     
 ### Codecov 
 
     meteor npm i --save-dev codecov.io
+    
     - cat .coverage/lcov.info | ./node_modules/codecov.io/bin/codecov.io.js || true # ignore codecov error
 
 ## spacejam --coverage possibilities
@@ -143,8 +168,10 @@ Create the `settings.coverage.json` file with the following:
 ```json
 {
     "coverage": {
-        "coverage_app_folder": "C:\\Users\\you\\dev\\meteor-app\\ on windows, or",
-        "coverage_app_folder": "/Users/you/meteor-app/packages/meteor-coverage/ on unix",
+        "On windows"
+        "coverage_app_folder": "C:\\Users\\you\\dev\\meteor-app\\",
+        "On unix"
+        "coverage_app_folder": "/Users/you/meteor-app/packages/meteor-coverage/",
         "is_coverage_active": true,
         "verbose": false
     }
@@ -254,6 +281,9 @@ https://github.com/gotwarlost/istanbul/blob/master/ignoring-code-for-coverage.md
 - all meteor packages (bundled and/or manually installed ones) like meteor/underscore, meteor/accounts-password or aldeed:simple-schema.
 - all tests file(s) containing `spec?|test?|specs?|tests?|app-specs?|app-tests?`  and all folder(s) named `specs?|tests?|app-specs?|app-tests?`
 
+## How to replace spacejam
+
+You can find [here](https://github.com/practicalmeteor/spacejam/compare/windows-suppport...serut:windows-suppport-rc4?diff=split&name=windows-suppport-rc4#diff-f388d8f4ed9765929079f40166396fdeR65) the diff between "spacejam without coverage" and "spacejam coverage", so you can build something else,  with grunt for example, that exports your test.
 
 -----------
 
