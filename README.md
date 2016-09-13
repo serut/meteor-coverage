@@ -167,7 +167,7 @@ You can provides settings by setting these environment variables:
     -   Used when importing or exporting coverage reports
 -   `COVERAGE_VERBOSE=1` to see logs (optional)
 
-Using `spacejam --coverage` you do not have to set up global environment variable.
+Using `spacejam --coverage`, `COVERAGE` and `COVERAGE_APP_FOLDER` are setup automatically for you.
 
 ## Config file
 
@@ -241,7 +241,8 @@ If you have **internal packages** inside your app and you want to get their **se
 
 ## Ignore code from coverage with annotation
 
-For example, if you code an `if` block without `else`, istanbul marks the `else` branch as not covered (although it doesn't exist), decreasing your code coverage, which is **false**.
+For example, if you code an `if` block without `else`, istanbul marks the `else` branch as not covered (although it doesn't exist), decreasing your code coverage, which is **false**.  
+Same issue with ternary operator (`expression ? value1 : value2`) or default assignments (like `let myVar = otherVar || {}`), which always get marked as uncovered branches.  
 
 The syntax can be found there:  
 https://github.com/gotwarlost/istanbul/blob/master/ignoring-code-for-coverage.md
@@ -251,7 +252,7 @@ https://github.com/gotwarlost/istanbul/blob/master/ignoring-code-for-coverage.md
 - hidden folders like .npm, .coverage or .meteor.
 - special folders like node_modules.
 - all meteor packages (bundled and/or manually installed ones) like meteor/underscore, meteor/accounts-password or aldeed:simple-schema.
-- all tests file(s) like *.(specs?|tests?|app-specs?|app-tests?).* or (specs?|tests?|app-specs?|app-tests?).*, and all folder(s) like (specs?|tests?|app-specs?|app-tests?).
+- all tests file(s) containing `spec?|test?|specs?|tests?|app-specs?|app-tests?`  and all folder(s) named `specs?|tests?|app-specs?|app-tests?`
 
 
 -----------
