@@ -36,7 +36,7 @@ isAccessible = function(path, mode = fs.R_OK, supressErrors = false) {
     !supressErrors && Log.error('Cannot access ', path);
     return false;
   }
-}
+};
 parseJSON = function(filePath, supressAccessErrors = false) {
   if (isAccessible(filePath, fs.R_OK, supressAccessErrors)) {
     try {
@@ -45,7 +45,7 @@ parseJSON = function(filePath, supressAccessErrors = false) {
       Log.Error('Invalid JSON: ', filePath, e);
     }
   }
-}
+};
 
 initialSetup = function () {
   // Get the resolved, compiled and used packages and their versions
@@ -56,8 +56,10 @@ initialSetup = function () {
   if (Meteor.isPackageTest && this.resolved) {
     // Find the package(s) under test (PUT)
     for (let pkg in this.resolved) {
-      let match = rgx.meteorPUT.exec(pkg);
-      match && (this.PUT[match[1]] = true);
+      if (this.resolved.hasOwnProperty(pkg)) {
+        let match = rgx.meteorPUT.exec(pkg);
+        match && (this.PUT[match[1]] = true);
+      }
     }
     const PUTs = Object.keys(this.PUT);
     if (PUTs.length) {
@@ -100,7 +102,7 @@ initialSetup = function () {
       Log.error('User running test-packages without tests');
     }
   }
-}
+};
 
 // Alter inside the source map the path of each sources
 _alterSourceMapPaths = function (map, isClientSide) {

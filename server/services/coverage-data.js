@@ -44,32 +44,6 @@ export default CoverageData = {
         // Internal package
         return true;
       }
-      if (Meteor.isPackageTest) {
-        // Special case when it is a package-test run
-        // check file is located in the root directory and not the in a package directory
-        // this algorithm may autorise some files because a file has the same name
-        var regexFilepath = filename.match(/.*packages\/([a-zA-Z\-\_\:]+)\/(.*)/);
-        if (regexFilepath && regexFilepath.length > 1) {
-
-          // Remove author name in the path if there is
-          let packageName = regexFilepath[1];
-          const filepath = regexFilepath[2];
-          if (packageName.indexOf(':') > 0) {
-            packageName = packageName.split(':')[1];
-          }
-          // meteor test-packages inside a meteor app
-          if (fs.existsSync(path.join(Conf.COVERAGE_APP_FOLDER, 'packages', packageName, filepath))) {
-            return true;
-          }
-          // meteor test-packages inside the package
-          if (fs.existsSync(path.join(Conf.COVERAGE_APP_FOLDER, filepath))) {
-            return true;
-          }
-        }
-
-        // You don't have the source of this package file in your workspace
-        return false;
-      }
     }
     if (filename.indexOf('client/') > 0 && filename.indexOf('template.') > 0) {
       if (fs.existsSync(filename)) {

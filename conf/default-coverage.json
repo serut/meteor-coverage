@@ -4,6 +4,7 @@
   "exclude": {
     "general": [],
     "server": [
+      "**/node_modules/**/*.json",
       "**/.?*/**",
       "**/packages/!(local-test_?*.js)",
       "**/+([^:]):+([^:])/**",

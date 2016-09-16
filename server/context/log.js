@@ -8,9 +8,7 @@ const meteor_parameters = {
 export default Log = {
   COVERAGE_VERBOSE: meteor_parameters.VERBOSE || process.env['COVERAGE_VERBOSE'] === '1' || false,
   error: function() {
-    if (this.COVERAGE_VERBOSE) {
-      console.error(...arguments);
-    }
+    console.error(...arguments);
   },
   info: function() {
     if (this.COVERAGE_VERBOSE) {

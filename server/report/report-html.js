@@ -41,7 +41,6 @@ export default class {
 
         assetPath: function (node, name) {
           return path.join(outputPath, name);
-                    //return this.relativePath(this.getPath(node), name);
         }
       }
     };
