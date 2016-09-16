@@ -32,6 +32,7 @@ Package.onUse(function (api) {
 Npm.depends({
   'istanbul-api': '1.1.0-alpha.1',
   'body-parser': '1.15.2',
+  'homedir': '0.6.0',
   'minimatch': '3.0.3',
   'mkdirp': '0.5.1'
 });
