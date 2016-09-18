@@ -16,16 +16,16 @@ const abspath = {
   currentBuild: path.join(__meteor_bootstrap__.serverDir, '..'),
   serverSide: __meteor_bootstrap__.serverDir,
   clientSide: path.join(__meteor_bootstrap__.serverDir, '..', 'web.browser'),
-  // Meteor packages folder can be overriden with the env var PACKAGE_DIRS, otherwise
-  // '$HOME/.meteor/packages'. Take a look at https://dweldon.silvrback.com/local-packages
-  // or https://github.com/meteor/meteor/blob/devel/History.md#v040-2012-aug-30
+  // Meteor packages folder can be overriden with the env var PACKAGE_DIRS, otherwise '$HOME/.meteor/packages'.
+  // Read https://guide.meteor.com/writing-atmosphere-packages.html#overriding-atmosphere-packages
   packages: process.env.PACKAGE_DIRS || path.join(homedir(), '.meteor', 'packages')
 };
 const rgx = {
+  meteorCompiledTemplate: /\/template\.[^\.\/]+\.js$/,
   meteorPackageMergedFile: /^\/packages\/(local-test_)?(?:([^\/_]+)_)?([^\/_]+).js$/,
-  meteorPackagePathTokens: /^(?:packages\/|node_modules\/meteor\/)(?:local-test[_:])?([^_:\/]+[_:])?([^_:\/]+)\/(node_modules\/)?(.*)$/,
-  meteorPUT: /^local-test:([^_:\/]+:[^_:\/]+)$/,
-  packageJson: /^(?:\.npm\/package\/node_modules\/(.*)|\.\.\/npm\/node_modules\/(.*))$/
+  meteorPackagePathTokens: /^(?:packages\/|node_modules\/meteor\/)(?:local-test[_:])?(([^_:\/]+[_:])?([^_:\/]+))\/(.*node_modules\/)?(.*)$/,
+  meteorPUT: /^local-test:((?:[^_:\/]+:)?[^_:\/]+)$/,
+  packageJson: /^(?:\.\.\/npm\/node_modules\/(.*)|\.\.\/\.\.\/(?:(?!node_modules).)*(.*)|.*node_modules\/(.*))$/
 };
 
 isAccessible = function(path, mode = fs.R_OK, supressErrors = false) {
@@ -33,16 +33,17 @@ isAccessible = function(path, mode = fs.R_OK, supressErrors = false) {
     fs.accessSync(path, mode);
     return true;
   } catch (e) {
-    !supressErrors && Log.error('Cannot access ', path);
+    !supressErrors && Log.error('Cannot access', path);
     return false;
   }
 };
+
 parseJSON = function(filePath, supressAccessErrors = false) {
   if (isAccessible(filePath, fs.R_OK, supressAccessErrors)) {
     try {
       return JSON.parse(fs.readFileSync(filePath, 'utf8'));
     } catch(e) {
-      Log.Error('Invalid JSON: ', filePath, e);
+      Log.error('Invalid JSON:', filePath, e);
     }
   }
 };
@@ -53,59 +54,74 @@ initialSetup = function () {
   let resolverResult = parseJSON(resolverResultPath);
   this.resolved = resolverResult ? resolverResult.lastOutput.answer : null;
 
-  if (Meteor.isPackageTest && this.resolved) {
-    // Find the package(s) under test (PUT)
-    for (let pkg in this.resolved) {
-      if (this.resolved.hasOwnProperty(pkg)) {
-        let match = rgx.meteorPUT.exec(pkg);
-        match && (this.PUT[match[1]] = true);
+  if (Meteor.isPackageTest) {
+    if (this.resolved) {
+      // Find the package(s) under test (PUT)
+      for (let pkg in this.resolved) {
+        if (this.resolved.hasOwnProperty(pkg)) {
+          let match = rgx.meteorPUT.exec(pkg);
+          match && (this.PUT[match[1]] = true);
+        }
+      }
+      const PUTs = Object.keys(this.PUT);
+      if (PUTs.length) {
+        Log.info(`Packages under test (${PUTs.length}):`, PUTs.join(', '));
+      } else {
+        Log.error('No packages under test in test-packages mode');
       }
     }
-    const PUTs = Object.keys(this.PUT);
-    if (PUTs.length) {
-      Log.info(`Packages under test (${PUTs.length}):`, PUTs.join(', '));
-    } else {
-      Log.error('No packages under test in test-packages mode');
-    }
 
-    // Check if testing from inside (package-dir) or outside (meteor-app-dir)
-    // We only need to check ONE test file, but we must consider that all PUTs
-    // maybe client-side or server-side, so we should check both and exit on first match
+    // Check if testing from inside (pkg/) or outside (app/). We test all the merged files of meteor package(s) tests(s)
+    // assuming that `meteor test-packages` was exec from the package folder which the merged test file belongs to:
+    //  - If none can be accessed, then command is exec from app-dir
+    //  - If one can be accessed, then command is exec from pkg-dir of that package
+    // The possibilities when testing packages are:
+    //  1. `app/packages/pkg$ meteor test-packages ...opts`     inside (COVERAGE_APP_FOLDER points to app/packages/pkg/), test N packages
+    //  2. `app/packages/pkg$ meteor test-packages ./ ...opts`  inside (COVERAGE_APP_FOLDER points to app/packages/pkg/), test 1 package
+    //  3. `app$ meteor test-packages ...opts`                  outside (COVERAGE_APP_FOLDER points to app/), test N packages
+    //  4. `app$ meteor test-packages author:pkg...opts`        outside (COVERAGE_APP_FOLDER points to app/), test 1 package
+    //  5. `app$ meteor test-packages packages/pkg...opts`      outside (COVERAGE_APP_FOLDER points to app/), test 1 package
+    // NOTE: `...opts` represents the remaining command options (`--driver-package`, etc.)
     const sidePaths = {
       load: abspath.serverSide,
       manifest: abspath.clientSide
     };
     for (let key in sidePaths) {
-      const programPath = path.join(sidePaths[key], 'program.json');
-      const program = parseJSON(programPath);
-      if (!program) continue;
+      if (sidePaths.hasOwnProperty(key)) {
+        const programPath = path.join(sidePaths[key], 'program.json');
+        const program = parseJSON(programPath);
+        if (!program) continue;
 
-      for (let file of program[key]) {
-        if (file.path.startsWith('packages/local-test_')) { // meteor package test(s) merged file
-          const sourceMapPath = path.join(sidePaths[key], file.sourceMap);
-          const sourceMap = parseJSON(sourceMapPath);
-          if (!sourceMap) continue;
+        for (let file of program[key]) {
+          let isTestFile, matchAuthor, matchName, match = rgx.meteorPackageMergedFile.exec(`/${file.path}`);
+          // If it's a meteor package test(s) merged file and the package has tests (the merged file is created whether
+          // the package has tests file(s) declared in `package.js` inside `Package.onTest()` or not). The way to know
+          // whether the package has tests or not is looking at file.sourceMap: if it's empty, it has no tests.
+          if (match && match[1] && file.sourceMap) {
+            [, isTestFile, matchAuthor, matchName] = match;
+            const sourceMapPath = path.join(sidePaths[key], file.sourceMap);
+            const sourceMap = parseJSON(sourceMapPath);
+            if (!sourceMap) continue; // jump to the next file if SourceMap non-accessible or invalid
 
-          // A compiled test file (local-test_...) has only the declared test
-          // files inside `package.js` as its sources, so check the first one
-          this.testingFromPackageDir = true;
-          let filepathToCheck = fixSourcePath.call(this, sourceMap.sources[0], null, meteorDir);
-          if (!isAccessible(filepathToCheck, fs.R_OK, true)) {
-            this.testingFromPackageDir = false;
+            // A compiled test file (local-test_...) has only the declared test
+            // files inside `package.js` as its sources, so check the first one
+            this.testingFromPackageDir = `${matchAuthor}:${matchName}`;
+            let filepathToCheck = fixSourcePath.call(this, sourceMap.sources[0], null, meteorDir);
+            if (!isAccessible(filepathToCheck, fs.R_OK, true)) {
+              this.testingFromPackageDir = false;
+            } else {
+              break;
+            }
           }
-          break;
         }
       }
-      if (this.testingFromPackageDir !== undefined) break;
-    }
-    if (this.testingFromPackageDir === undefined) {
-      Log.error('User running test-packages without tests');
+      if (this.testingFromPackageDir) break;
     }
   }
 };
 
 // Alter inside the source map the path of each sources
-_alterSourceMapPaths = function (map, isClientSide) {
+alterSourceMapPaths = function (map, isClientSide) {
   // Absolute path to sources of a Meteor package. PUTs are treated differently than normal because they
   // might not exist at abspath.packages, so PUT packages always are resolved depending on
   // COVERAGE_APP_FOLDER and whether `meteor test-packages` was executed from inside/outside the package
@@ -115,7 +131,14 @@ _alterSourceMapPaths = function (map, isClientSide) {
     [, isTestFile, matchAuthor, matchName] = rgx.meteorPackageMergedFile.exec(map.file);
     const packageID = matchAuthor ? `${matchAuthor}:${matchName}` : matchName;
     if (Meteor.isPackageTest && (!!isTestFile || this.PUT[packageID])) {
-      sourcesBase = this.testingFromPackageDir ? meteorDir : path.join(meteorDir, 'packages', matchName);
+      // If exec `meteor test-packages` from `meteor-app-dir/packages/pkg-dir/` then Meteor performs tests on ALL
+      // packages at `meteor-app-dir/packages`, just like exec `meteor test-packages` from `meteor-app-dir/`, but
+      // this affects `sourcesBase` for PUTs, because PUTs outside COVERAGE_APP_FOLDER must change their sourcesBase
+      if (this.testingFromPackageDir) {
+        sourcesBase = this.testingFromPackageDir === packageID ? meteorDir : path.join(meteorDir, '..', matchName);
+      } else {
+        sourcesBase = path.join(meteorDir, 'packages', matchName);
+      }
     } else if (this.resolved[packageID]) {
       const packageFolder = matchAuthor ? `${matchAuthor}_${matchName}` : matchName;
       sourcesBase = path.join(abspath.packages, packageFolder, this.resolved[packageID], 'web.browser');
@@ -150,6 +173,12 @@ _alterSourceMapPaths = function (map, isClientSide) {
   // you must NOT do it, because their indexes are still being used by the mappings and
   // you'll get a sound `Error('No element indexed by {index}')`.
   for (let i = 0; i < map.sources.length; i++) {
+    // Meteor templates are not saved into files, but included in sourcesContent
+    if (rgx.meteorCompiledTemplate.test(map.sources[i])) {
+      Log.info('Skipping Meteor template:', map.sources[i]);
+      continue;
+    }
+
     let fixed = fixSourcePath.call(this, map.sources[i], nodeModulesBase, sourcesBase);
 
     if (map.sources[i] === fixed) {
@@ -175,23 +204,53 @@ fixSourcePath = function(source, nodeModulesBase, sourcesBase) {
 
   // The source is the package.json of a NPM dependency. Catches all next patterns:
   //  1. meteor://💻app/.npm/package/node_modules/minimatch/package.json
-  //  2. meteor://💻app/../npm/node_modules/meteor-babel-helpers/package.json
-  match = rgx.packageJson.exec(paths[0]);
-  if (match) {
-    return match[1] ? path.join(nodeModulesBase, match[1]) : path.join(sourcesBase, paths[0]);
+  //    [1 may be @ nodeModulesBase (when non-PUT) or sourcesBase (when PUT)]
+  //  2. meteor://💻app/../npm/node_modules/meteor-babel-helpers/package.json (package NPM dep)
+  //  3. meteor://💻app/../../app-dir/node_modules/meteor-node-stubs/node_modules/string_decoder/package.json (app NPM dep)
+  //  4. meteor://💻app/node_modules/http-errors/node_modules/inherits/package.json
+  //  5. meteor://💻app/node_modules/content-type/package.json
+  if (paths[0].endsWith('/package.json')) {
+    match = rgx.packageJson.exec(paths[0]);
+    if (match) {
+      if (match[2]) { // covers 3 (app NPM dep package.json)
+        return path.join(meteorDir, match[2]);
+      } else if (match[3] && nodeModulesBase) {
+        // covers 1 (when non-PUT), 4 and 5 (meteor pkg NPM dep package.json)
+        return path.join(nodeModulesBase, match[3]);
+      }
+      return path.join(sourcesBase, paths[0]); // covers 1 (when PUT) and 2
+    }
   }
 
   // The source is a Meteor package file (NPM dep or own file). Catches all next patterns:
-  //  3. meteor://💻app/packages/lmieulet:meteor-coverage/server/index.js
-  //  4. meteor://💻app/packages/local-test:lmieulet:meteor-coverage/server/tests.js
-  //  5. meteor://💻app/node_modules/meteor/lmieulet:meteor-coverage/node_modules/minimatch/minimatch.js
-  //  6. meteor://💻app/node_modules/meteor/local-test:cgalvarez:my-package/tests/client/mocks.js
-  //  7. meteor://💻app/node_modules/meteor/local-test:cgalvarez:my-package/node_modules/chai-as-promised/lib/chai-as-promised.js
-  let matchAuthor, matchName, isNpmDep, matchPath;
+  //  6. meteor://💻app/packages/lmieulet:meteor-coverage/server/index.js
+  //  7. meteor://💻app/packages/local-test:lmieulet:meteor-coverage/server/tests.js
+  //  8. meteor://💻app/node_modules/meteor/lmieulet:meteor-coverage/node_modules/minimatch/minimatch.js
+  //  9. meteor://💻app/node_modules/meteor/local-test:cgalvarez:my-package/tests/client/mocks.js
+  //  10. meteor://💻app/node_modules/meteor/local-test:cgalvarez:my-package/node_modules/chai-as-promised/lib/chai-as-promised.js
+  //  11. meteor://💻app/node_modules/meteor/local-test:kadira:flow-router/node_modules/page/node_modules/path-to-regexp/node_modules/isarray/index.js
+  let matchPackageID, matchAuthor, matchName, matchNpmDepPath, matchPath;
   match = rgx.meteorPackagePathTokens.exec(paths[0]);
   if (match) {
-    [, matchAuthor, matchName, isNpmDep, matchPath] = match;
-    return path.join(isNpmDep ? nodeModulesBase : sourcesBase, matchPath);
+    [, matchPackageID, matchAuthor, matchName, matchNpmDepPath, matchPath] = match;
+    if (this.PUT[matchPackageID]) { // PUT
+      if (matchNpmDepPath) {
+        // There is no way to know a priori if it's a recursive dep or not
+        let recNpmDep = path.join(sourcesBase, '.npm', 'package', matchNpmDepPath, matchPath);
+        if (isAccessible(recNpmDep, fs.R_OK, true)) {
+          return recNpmDep; // check if recursive dep (11) of PUT
+        }
+        return path.join(sourcesBase, '.npm', 'package', 'node_modules', matchPath); // first level dep (10) of PUT
+      }
+      return path.join(sourcesBase, matchPath); // covers 6,7,8,9 when PUT
+    }
+
+    if (Meteor.isPackageTest) {
+      return path.join(matchNpmDepPath ? nodeModulesBase : sourcesBase, matchPath); // non PUT
+    }
+
+    // Package inside app-dir/packages on `meteor test ...`
+    return path.join(meteorDir, 'packages', matchName, matchPath);
   }
 
   // Meteor app file
@@ -200,18 +259,18 @@ fixSourcePath = function(source, nodeModulesBase, sourcesBase) {
 
 // Processes the source map (when exists) of an instrumented file to fix broken sources paths
 registerSourceMap = function(filepath) {
-  Log.time('START registerSourceMap', filepath);
   const sourceMapPath = filepath + '.map';
   let fileContent = parseJSON(sourceMapPath, true);
   if (fileContent) {
-    fileContent = _alterSourceMapPaths.call(this, fileContent,
+    Log.time('registerSourceMap', filepath);
+    fileContent = alterSourceMapPaths.call(this, fileContent,
       filepath.startsWith('../web.browser/') || filepath.startsWith(abspath.clientSide));
     Log.info('Add source map for file', sourceMapPath);
     sourceMap.registerMap(filepath, fileContent);
+    Log.timeEnd('registerSourceMap', filepath);
   } else {
     Log.info('Source map not found', sourceMapPath);
   }
-  Log.timeEnd('END registerSourceMap', filepath);
 };
 
 export default SourceMap = {
