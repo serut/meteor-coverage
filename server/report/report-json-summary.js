@@ -30,17 +30,8 @@ export default class {
 
   writeFile (childs) {
     for (var i = 0; i < childs.length; i++) {
-            // Remove the COVERAGE_APP_FOLDER from the filepath
-      if (Meteor.isPackageTest) {
-        var regex = childs[i].fileCoverage.data.path.match(/.*packages\/[a-zA-Z\-\_]+\/(.*)/);
-        if (regex && regex.length === 2) {
-          childs[i].fileCoverage.data.path = regex[1];
-        } else {
-          childs[i].fileCoverage.data.path = childs[i].fileCoverage.data.path.replace(Conf.COVERAGE_APP_FOLDER, '');
-        }
-      } else {
-        childs[i].fileCoverage.data.path = childs[i].fileCoverage.data.path.replace(Conf.COVERAGE_APP_FOLDER, '');
-      }
+      // Remove the COVERAGE_APP_FOLDER from the filepath
+      childs[i].fileCoverage.data.path = childs[i].fileCoverage.data.path.replace(Conf.COVERAGE_APP_FOLDER, '');
 
       this.report.onDetail(childs[i]);
     }

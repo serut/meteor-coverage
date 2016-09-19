@@ -62,7 +62,7 @@ export default class {
 
     const childrens = root.getChildren();
     const report = this.report;
-        // Todo : use future
+    // Todo : use future
     childrens.forEach(function (child) {
       var filepath = path.join(folderPath, child.getRelativeName() + '.html');
       Log.info('Creating a new html report', filepath);
