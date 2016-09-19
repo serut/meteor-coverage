@@ -35,8 +35,8 @@ export default class {
 
   writeFile(childs) {
     for (var i = 0; i < childs.length; i++) {
-            // Remove the COVERAGE_APP_FOLDER from the filepath
-      if (Meteor.isPackageTest) {
+      // Remove the COVERAGE_APP_FOLDER from the filepath
+      if (Meteor.isPackageTest && SourceMap.testingFromPackageDir) {
         var regex = childs[i].fileCoverage.data.path.match(/.*packages\/[a-zA-Z\-\_]+\/(.*)/);
         if (regex && regex.length === 2) {
           childs[i].fileCoverage.data.path = regex[1];
