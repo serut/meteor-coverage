@@ -9,10 +9,10 @@
       "**/packages/!(local-test_?*.js)",
       "**/+([^:]):+([^:])/**",
       "**/@(test|tests|spec|specs)/**",
-      "**/@(test.?*|?*.test.?*|?*.tests.?*)",
-      "**/@(spec.?*|?*.spec.?*|?*.specs.?*)",
-      "**/@(app-test.?*|?*.app-test.?*|?*.app-tests.?*)",
-      "**/@(app-spec.?*|?*.app-spec.?*|?*.app-specs.?*)"
+      "**/?(*.)test?(s).?*",
+      "**/?(*.)spec?(s).?*",
+      "**/?(*.)app-test?(s).?*",
+      "**/?(*.)app-spec?(s).?*"
     ],
     "client": [
       "**/client/stylesheets/**",
@@ -22,10 +22,10 @@
       "**/packages/!(local-test_?*.js)",
       "**/+([^:]):+([^:])/**",
       "**/@(test|tests|spec|specs)/**",
-      "**/@(test.?*|?*.test.?*|?*.tests.?*)",
-      "**/@(spec.?*|?*.spec.?*|?*.specs.?*)",
-      "**/@(app-test.?*|?*.app-test.?*|?*.app-tests.?*)",
-      "**/@(app-spec.?*|?*.app-spec.?*|?*.app-specs.?*)"
+      "**/?(*.)test?(s).?*",
+      "**/?(*.)spec?(s).?*",
+      "**/?(*.)app-test?(s).?*",
+      "**/?(*.)app-spec?(s).?*"
     ]
   },
   "output": "./.coverage"

@@ -48,7 +48,7 @@ Then setup how you want to run your app. Actually, to let meteor-coverage start 
   OR
   -   set these environment variables : `COVERAGE`, `COVERAGE_VERBOSE` & `COVERAGE_APP_FOLDER`.
 
-meteor-coverage ensures the output folder exist on boot, which is by default `./.coverage` inside your app. 
+meteor-coverage ensures the output folder exist on boot, which is by default `./.coverage` inside your app.  
 For Typescript or any simular language users, you need to remap your code (released soon).
 
 ## Usage 
@@ -84,6 +84,9 @@ However, you need to run your app with the following driver package :
 
     [spacejam|meteor] --driver-package practicalmeteor:mocha-console-runner
 
+If you want to test with the watch mode, use `meteor-mocha` instead of `meteor --driver-package practicalmeteor:mocha`.  
+
+
 ## Setup spacejam
 
 If you have any trouble, refer to this example of Meteor application [meteor-coverage-app-exemple](https://github.com/serut/meteor-coverage-app-exemple) to see how a test runner can execute yours tests, save coverage and send it to coveralls. Or feel free to open an issue. For now `serut/spacejam:windows-suppport-rc4` is only a fork but it will be merged someday.  
@@ -106,7 +109,7 @@ Add what you need to run your app inside your `package.json`:
         [PCKGS]
         "test": "spacejam-mocha test-packages ./ --coverage out_lcovonly ",
         "test:watch": "meteor npm run lint:fix & meteor npm run test:packages-coverage-watch",
-        "test:packages-coverage-watch": "meteor test-packages --driver-package practicalmeteor:mocha --settings settings.coverage.json",
+        "test:packages-coverage-watch": "meteor-mocha test-packages --settings settings.coverage.json",
         
         "lint:fix": "eslint --fix ."
     }
@@ -115,10 +118,18 @@ Add what you need to run your app inside your `package.json`:
 
 If you want to, you can use this syntax, the following two commands are equivalent, but the second one is shorter and thus less typing error-prone
 
-    spacejam test-packages --coverage "out_lcovonly out_html" --driver-package practicalmeteor:mocha-console-runner 
-    spacejam-mocha test-packages  --coverage "out_lcovonly out_html"
+    spacejam       [..] --driver-package practicalmeteor:mocha-console-runner 
+    spacejam-mocha [..]"
     
-You may notice that you can't execute `spacejam-mocha` on your terminal, that's because you installed it with the flag `--save-dev`. The executable is in fact located on the folder `./node_modules/.bin/`, which [is added to the PATH before node try to run spacejam-mocha](https://docs.npmjs.com/misc/scripts#path)  
+Same for meteor:
+
+
+    meteor       --driver-package practicalmeteor:mocha [...]
+    meteor-mocha
+    
+
+You may notice that you can't execute `spacejam-mocha` on your terminal, that's because you installed it with the flag `--save-dev`.  
+The executable is in fact located in the folder `./node_modules/.bin/` and that's not mentioned inside the `package.json` because the `.bin` folder [is added to the PATH before node runs smth](https://docs.npmjs.com/misc/scripts#path)  
 
 
 ## Advanced setup for CI
@@ -204,22 +215,24 @@ If you do not have this file, this package will use the default one (`conf/defau
 
 Exemple:  
 ```json{
+  "--": "Meteor app does not require any specific configuration",
+  "--": "If you want to instrument a package, you need to add the following",
   "include": [
     "**/packages/author_packageName.js"
   ],
+  "--": "If you want to, you can redefine the following:",
   "exclude": {
-    "general": [
-        "We will keep this one empty to let you easily exclude anything using the glob pattern"
-    ],
+    "general": [],
     "server": [
+      "**/node_modules/**/*.json",
       "**/.?*/**",
       "**/packages/!(local-test_?*.js)",
       "**/+([^:]):+([^:])/**",
       "**/@(test|tests|spec|specs)/**",
-      "**/@(test.?*|?*.test.?*|?*.tests.?*)",
-      "**/@(spec.?*|?*.spec.?*|?*.specs.?*)",
-      "**/@(app-test.?*|?*.app-test.?*|?*.app-tests.?*)",
-      "**/@(app-spec.?*|?*.app-spec.?*|?*.app-specs.?*)"
+      "**/?(*.)test?(s).?*",
+      "**/?(*.)spec?(s).?*",
+      "**/?(*.)app-test?(s).?*",
+      "**/?(*.)app-spec?(s).?*"
     ],
     "client": [
       "**/client/stylesheets/**",
@@ -229,10 +242,10 @@ Exemple:
       "**/packages/!(local-test_?*.js)",
       "**/+([^:]):+([^:])/**",
       "**/@(test|tests|spec|specs)/**",
-      "**/@(test.?*|?*.test.?*|?*.tests.?*)",
-      "**/@(spec.?*|?*.spec.?*|?*.specs.?*)",
-      "**/@(app-test.?*|?*.app-test.?*|?*.app-tests.?*)",
-      "**/@(app-spec.?*|?*.app-spec.?*|?*.app-specs.?*)"
+      "**/?(*.)test?(s).?*",
+      "**/?(*.)spec?(s).?*",
+      "**/?(*.)app-test?(s).?*",
+      "**/?(*.)app-spec?(s).?*"
     ]
   },
   "output": "./.coverage"
@@ -241,7 +254,7 @@ Exemple:
 Details : 
 
  - Allows / Disallow is coded with the following order `include`, `exclude.general`, `exclude.(client|server)`, it is used before both instrumentation and before coverage report creation.
- - The glob syntax can be found [here](https://github.com/isaacs/node-glob#glob-primer).
+ - The glob syntax can be found [here](http://www.linuxjournal.com/content/bash-extended-globbing).
  -  To create your custom config file, run the project with `COVERAGE_VERBOSE=1` env variable and use logs to see which filenames were hooked or hidden. PR welcome.
 - The output folder needs to starts with a dot to exclude that folder from Meteor build.
 
@@ -304,7 +317,7 @@ Why? When a browser opens the client side of your application, this package inte
 -   type: the type of report you want to create inside your `COVERAGE_APP_FOLDER`
 
     -   Default: `coverage`, used to dump the coverage object in a file because when there are several types of test, we want to merge results, and the server reloads between each one.
-    -   Allowed values: `cobertura`, `html`, `json`, `json-summary`, `lcov`, `teamcity`, `text`, `text-lcov`, `text-summary`, `lcovonly`, `coverage`
+    -   Allowed values: `cobertura`, `html`, `json`, `json-summary`, `lcov`, `teamcity`, `text`, `text-lcov`, `text-summary`, `lcovonly`, `coverage`, `remap`
     -   **Not working values:** `clover`, `cobertura`, `lcov`, `text`, `text-lcov`, PR welcome
     -   Except for `coverage`, the file generation is handled by  [istanbuljs/istanbul-reports](https://github.com/istanbuljs/istanbul-reports)
 
@@ -324,8 +337,10 @@ Meteor.importCoverage(function(err) {console.log(err)})
 
 Anyone is welcome to contribute.  
 
+    # You should fork this repo first
     git clone https://github.com/serut/meteor-coverage
-    # I have a preference for the meteor node
+    # I have a preference to always execute npm action 
+    # throw the integrated meteor npm (npm --v !== meteor npm --v) 
     meteor npm install 
     # Edit the app_folder key to match your app folder, don't forget the ending slash
     nano settings.coverage.json
@@ -340,4 +355,4 @@ This package would not exist without the amazing work of:
 -   [Xolv.io](http://xolv.io) and their work on the original [meteor-coverage](https://github.com/xolvio/meteor-coverage) package;
 -   All contributors of [istanbul-api](https://github.com/istanbuljs/istanbul-api) and [istanbul-middleware](https://github.com/gotwarlost/istanbul-middleware) projects.
 
-All of them were very helpful in the development of this package. 
+All of them were very helpful in the development of this package. Merci !  
