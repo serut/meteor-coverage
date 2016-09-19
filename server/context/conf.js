@@ -83,11 +83,25 @@ if (IS_COVERAGE_ACTIVE) {
     Log.info('Loading default configuration: output');
     configuration.output = defaultConfig.output;
   }
+
+  // Source maps remapping
+  if (configuration && configuration.remap) {
+    if (typeof configuration.remap === 'object') {
+      if (configuration.remap.format && configuration.remap.format.constructor !== Array) {
+        Log.error('Loading default configuration: remap.format is not an array', configuration.remap.format);
+        configuration['remap'] = null;
+      }
+    } else {
+      configuration['remap'] = null;
+      Log.error('Loading default configuration: remap is not an object', configuration.remap);
+    }
+  }
 }
 
 export const COVERAGE_EXPORT_FOLDER = configuration.output;
 export const exclude = configuration.exclude;
 export const include = configuration.include;
+export const remap = configuration.remap;
 
 Log.info('Coverage configuration:');
 Log.info('- IS_COVERAGE_ACTIVE=', IS_COVERAGE_ACTIVE);
@@ -96,4 +110,5 @@ Log.info('- COVERAGE_APP_FOLDER=', COVERAGE_APP_FOLDER);
 Log.info('.coverage.json values:');
 Log.info('- exclude=', configuration.exclude);
 Log.info('- include=', configuration.include);
+Log.info('- remap=', configuration.remap);
 Log.info('- COVERAGE_EXPORT_FOLDER=', COVERAGE_EXPORT_FOLDER);

@@ -57,7 +57,7 @@ addClientCoverage = function (params, req, res, next) {
 
 exportFile = function (params, req, res, next) {
   var _type = params.type,
-    allowedTypes = ['cobertura', 'html', 'json', 'json-summary', 'lcov', 'none', 'teamcity', 'text', 'text-lcov', 'text-summary', 'lcovonly', 'coverage'];
+    allowedTypes = ['cobertura', 'html', 'json', 'json-summary', 'lcov', 'none', 'teamcity', 'text', 'text-lcov', 'text-summary', 'lcovonly', 'coverage', 'remap'];
   type = allowedTypes.indexOf(_type) > -1 ? _type : 'coverage';
   try {
     let reportService = new ReportService();
