@@ -4,6 +4,7 @@ import Teamcity from './report-teamcity';
 import Html from './report-html';
 import Http from './report-http';
 import ReportCoverage from './report-coverage';
+import ReportRemap from './report-remap';
 import Log from './../context/log';
 import TextSummary from './report-text-summary';
 import Conf from './../context/conf';
@@ -20,6 +21,12 @@ export default class {
     Log.info('export coverage using the following format [', type, '] options [', options, ']');
     try {
       switch (type) {
+      case 'remap':
+        {
+          let reportRemap = new ReportRemap(res, type, options);
+          Conf.remap && reportRemap.generate();
+          break;
+        }
       case 'lcovonly':
         {
           options = this.addFileToOptions(options, 'lcov.info');

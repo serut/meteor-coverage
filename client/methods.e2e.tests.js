@@ -131,6 +131,23 @@ describe('meteor-coverage', function (done) {
       done(e);
     }
   });
+
+  it('export remap', function (done) {
+    this.timeout(0);
+    try {
+      Meteor.exportCoverage(
+        'remap',
+        function (err) {
+          assert.isUndefined(err);
+          done();
+        }
+      );
+
+    } catch (e) {
+      console.error(e, e.stack);
+      done(e);
+    }
+  });
   /*
    // not working
    it('export teamcity', function (done) {
