@@ -66,7 +66,7 @@ export default class {
     let sourceStore = new MemoryStore();
     let collector = remapIstanbul.remap(remapIstanbul.loadCoverage(sources), {
       sources: sourceStore,
-      warn: Log.info
+      warn: function() {}
     });
 
     /* istanbul ignore else */

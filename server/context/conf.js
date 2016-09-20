@@ -13,6 +13,7 @@ const ENV_NOT_DEFINED = '/SET/ENV/COVERAGE_APP_FOLDER/OR/READ/README/';
 
 export const COVERAGE_APP_FOLDER = meteor_parameters.COVERAGE_APP_FOLDER || process.env['COVERAGE_APP_FOLDER'] || ENV_NOT_DEFINED;
 
+/* istanbul ignore else */
 if (COVERAGE_APP_FOLDER === ENV_NOT_DEFINED) {
   Log.error('Error: COVERAGE_APP_FOLDER is undefined and the coverage will fail.');
 }
@@ -26,6 +27,7 @@ let configuration = {
   include: [],
   output: NOT_DEFINED
 };
+/* istanbul ignore else */
 if (IS_COVERAGE_ACTIVE) {
   const fs = Npm.require('fs'),
     path = Npm.require('path');
@@ -54,36 +56,43 @@ if (IS_COVERAGE_ACTIVE) {
   // Don't force to rewrite all the key of configuration.exclude,
   // if they are not defined, the default conf is used.
 
+  /* istanbul ignore else */
   if (configuration.exclude === undefined) {
     Log.info('Loading default configuration: exclude.*');
     configuration.exclude = defaultConfig.exclude;
   }
 
+  /* istanbul ignore else */
   if (configuration.exclude.general === undefined) {
     Log.info('Loading default configuration: exclude.general');
     configuration.exclude.general = defaultConfig.exclude.general;
   }
 
+  /* istanbul ignore else */
   if (configuration.exclude.server === undefined) {
     Log.info('Loading default configuration: exclude.server');
     configuration.exclude.server = defaultConfig.exclude.server;
   }
 
+  /* istanbul ignore else */
   if (configuration.exclude.client === undefined) {
     Log.info('Loading default configuration: exclude.client');
     configuration.exclude.client = defaultConfig.exclude.client;
   }
 
+  /* istanbul ignore else */
   if (configuration.include === undefined) {
     Log.info('Loading default configuration: include');
     configuration.include = defaultConfig.include || [];
   }
 
+  /* istanbul ignore else */
   if (configuration.output === undefined) {
     Log.info('Loading default configuration: output');
     configuration.output = defaultConfig.output;
   }
 
+  /* istanbul ignore else */
   if (configuration.remapFormat === undefined) {
     Log.info('Loading default configuration: remapFormat');
     configuration.remapFormat = defaultConfig.remapFormat;
@@ -102,5 +111,5 @@ Log.info('- COVERAGE_APP_FOLDER=', COVERAGE_APP_FOLDER);
 Log.info('.coverage.json values:');
 Log.info('- exclude=', configuration.exclude);
 Log.info('- include=', configuration.include);
-Log.info('- remapFormat=', configuration.remap);
+Log.info('- remapFormat=', configuration.remapFormat);
 Log.info('- COVERAGE_EXPORT_FOLDER=', COVERAGE_EXPORT_FOLDER);
