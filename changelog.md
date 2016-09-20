@@ -1,3 +1,12 @@
+#### 1.0.0
+
+-   add warning when `.coverage.json` is an invalid JSON
+-   move some tasks to boot class
+-   fix verbosity ignored on report generation
+-   fix source map paths mapping them to real paths
+-   improved glob patterns in `.coverage.json`
+-   add new type of export `remap` that adds support to languages that compile to JavaScript (like TypeScript)
+
 #### 0.9.4
 
 -   The configuration file `.coverage.json` is now written in minimatch syntax instead of regex

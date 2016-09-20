@@ -85,16 +85,21 @@ if (IS_COVERAGE_ACTIVE) {
   }
 
   // Source maps remapping
+  let defFormats = ['html', 'cobertura', 'clover', 'json', 'json-summary', 'lcovonly', 'teamcity', 'text', 'text-summary'];
   if (configuration && configuration.remap) {
     if (typeof configuration.remap === 'object') {
       if (configuration.remap.format && configuration.remap.format.constructor !== Array) {
         Log.error('Loading default configuration: remap.format is not an array', configuration.remap.format);
-        configuration['remap'] = null;
+        configuration.remap = null;
       }
     } else {
-      configuration['remap'] = null;
+      configuration.remap = null;
       Log.error('Loading default configuration: remap is not an object', configuration.remap);
     }
+  }
+  // Assign a default value (generate all available formats) if not provided
+  if (!configuration.remap) {
+    configuration.remap = {format: defFormats};
   }
 }
 
