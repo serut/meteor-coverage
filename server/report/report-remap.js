@@ -1,4 +1,4 @@
-import Conf from '../context/conf';
+import Conf from './../context/conf';
 import Log from './../context/log';
 import ReportCommon from './report-common';
 import IstanbulGenericReporter from './report-generic';
@@ -13,9 +13,6 @@ export default class {
 
     // Common options
     this.options = options;
-    if (!this.options.hasOwnProperty('verbose')) {
-      this.options.verbose = Conf.IS_COVERAGE_VERBOSE ? true : false;
-    }
 
     // JSON report options
     this.pathJSON = path.join(this.options.path, 'summary.json');
@@ -31,6 +28,10 @@ export default class {
     jsonReport.generate();
   }
 
+  getFilePath(filename) {
+    return path.join(this.remapFolder, filename);
+  }
+
   generate() {
     // We cannot rely on a previous coverage analysis JSON report,
     // so we force its generation here before remapping
@@ -42,19 +43,18 @@ export default class {
     // Create output directory if not exists
     ReportCommon.checkDirectory(this.remapPath);
 
-    let addFile = (filename) => path.join(this.remapFolder, filename);
     let reports = {}, allReports = {
         'html': this.remapPath,
-        'clover': addFile('clover.xml'),
-        'cobertura': addFile('cobertura.xml'),
-        'teamcity': addFile('teamcity.log'),
-        'text-summary': addFile('summary.txt'),
-        'text': addFile('report.txt'),
-        'lcovonly': addFile('lcov.info'),
-        'json-summary': addFile('summary.json'),
-        'json': addFile('report.json')
+        'clover': this.getFilePath('clover.xml'),
+        'cobertura': this.getFilePath('cobertura.xml'),
+        'teamcity': this.getFilePath('teamcity.log'),
+        'text-summary': this.getFilePath('summary.txt'),
+        'text': this.getFilePath('report.txt'),
+        'lcovonly': this.getFilePath('lcov.info'),
+        'json-summary': this.getFilePath('summary.json'),
+        'json': this.getFilePath('report.json')
       };
-    Conf.remap.format.forEach((type) => reports[type] = allReports[type]);
+    Conf.remapFormat.forEach((type) => reports[type] = allReports[type]);
     this.remapWrapper(this.pathJSON, reports, this.options).await();
     this.res.end('{"type":"success"}');
 
@@ -75,7 +75,8 @@ export default class {
     }
 
     let p = Object.keys(reports).map((reportType) => {
-      return remapIstanbul.writeReport(collector, reportType, options, reports[reportType], sourceStore);
+      let reportOptions = Object.assign({}, this.options, {verbose: reportType === 'html' ? false : true});
+      return remapIstanbul.writeReport(collector, reportType, reportOptions, reports[reportType], sourceStore);
     });
 
     return Promise.all(p);

@@ -23,7 +23,7 @@ export default class {
       switch (type) {
       case 'remap':
         {
-          let reportRemap = new ReportRemap(res, type, options, Log);
+          let reportRemap = new ReportRemap(res, type, options);
           reportRemap.generate();
           break;
         }

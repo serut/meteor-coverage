@@ -84,29 +84,16 @@ if (IS_COVERAGE_ACTIVE) {
     configuration.output = defaultConfig.output;
   }
 
-  // Source maps remapping
-  let defFormats = ['html', 'cobertura', 'clover', 'json', 'json-summary', 'lcovonly', 'teamcity', 'text', 'text-summary'];
-  if (configuration && configuration.remap) {
-    if (typeof configuration.remap === 'object') {
-      if (configuration.remap.format && configuration.remap.format.constructor !== Array) {
-        Log.error('Loading default configuration: remap.format is not an array', configuration.remap.format);
-        configuration.remap = null;
-      }
-    } else {
-      configuration.remap = null;
-      Log.error('Loading default configuration: remap is not an object', configuration.remap);
-    }
-  }
-  // Assign a default value (generate all available formats) if not provided
-  if (!configuration.remap) {
-    configuration.remap = {format: defFormats};
+  if (configuration.remapFormat === undefined) {
+    Log.info('Loading default configuration: remapFormat');
+    configuration.remapFormat = defaultConfig.remapFormat;
   }
 }
 
 export const COVERAGE_EXPORT_FOLDER = configuration.output;
 export const exclude = configuration.exclude;
 export const include = configuration.include;
-export const remap = configuration.remap;
+export const remapFormat = configuration.remapFormat;
 
 Log.info('Coverage configuration:');
 Log.info('- IS_COVERAGE_ACTIVE=', IS_COVERAGE_ACTIVE);
@@ -115,5 +102,5 @@ Log.info('- COVERAGE_APP_FOLDER=', COVERAGE_APP_FOLDER);
 Log.info('.coverage.json values:');
 Log.info('- exclude=', configuration.exclude);
 Log.info('- include=', configuration.include);
-Log.info('- remap=', configuration.remap);
+Log.info('- remapFormat=', configuration.remap);
 Log.info('- COVERAGE_EXPORT_FOLDER=', COVERAGE_EXPORT_FOLDER);
