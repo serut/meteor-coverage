@@ -1,3 +1,5 @@
+import Log from './../context/log';
+import Conf from './../context/conf';
 import IstanbulGenericReporter from './report-generic';
 import JsonSummary from './report-json-summary';
 import Teamcity from './report-teamcity';
@@ -5,9 +7,7 @@ import Html from './report-html';
 import Http from './report-http';
 import ReportCoverage from './report-coverage';
 import ReportRemap from './report-remap';
-import Log from './../context/log';
 import TextSummary from './report-text-summary';
-import Conf from './../context/conf';
 import path from 'path';
 
 export default class {
@@ -24,7 +24,7 @@ export default class {
       case 'remap':
         {
           let reportRemap = new ReportRemap(res, type, options);
-          Conf.remap && reportRemap.generate();
+          reportRemap.generate();
           break;
         }
       case 'lcovonly':

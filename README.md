@@ -1,7 +1,9 @@
 # meteor-coverage
 
-A meteor package that allows you to get the statement, line, function and branch coverage of Meteor project and package.  
-This package uses the [istanbuljs/istanbul-api](https://github.com/istanbuljs/istanbul-api) package for coverage report.  
+A meteor package that allows you to get the statement, line, function and branch coverage of Meteor project and package.
+
+This package uses the [istanbuljs/istanbul-api](https://github.com/istanbuljs/istanbul-api) package for coverage report.
+
 It's a debug only package, so it does not affect your production build.
 
 ## CI Platforms supported
@@ -119,7 +121,7 @@ Add what you need to run your app inside your `package.json`:
 If you want to, you can use this syntax, the following two commands are equivalent, but the second one is shorter and thus less typing error-prone
 
     spacejam       [..] --driver-package practicalmeteor:mocha-console-runner 
-    spacejam-mocha [..]"
+    spacejam-mocha [..]
     
 Same for meteor:
 
@@ -170,6 +172,7 @@ Add this after tests execution:
 -   `out_json_report` creates a json report
 -   `out_json_summary` creates a json_summary report
 -   `out_text_summary` creates a text_summary report
+-   `out_remap` remaps the coverage to all the available report formats
 -   `out_teamcity` & `out_clover` are not working yet
 
 ## Meteor --settings file
@@ -189,7 +192,7 @@ Create the `settings.coverage.json` file with the following:
 }
 ```
 
-Note that `coverage_app_folder : /path/to/your/meteor/app/` requires to end with a trailing slash
+Note that `coverage_app_folder : /path/to/your/meteor/app/` requires to end with a trailing slash.
 
 
 
@@ -281,11 +284,11 @@ If you have **internal packages** inside your app and you want to get their **se
 
 ## Ignore code from coverage with annotation
 
-For example, if you code an `if` block without `else`, istanbul marks the `else` branch as not covered (although it doesn't exist), decreasing your code coverage, which is **false**.  
-Same issue with ternary operator (`expression ? value1 : value2`) or default assignments (like `let myVar = otherVar || {}`), which always get marked as uncovered branches.  
+For example, if you code an `if` block without `else`, istanbul marks the `else` branch as not covered (although it doesn't exist), decreasing your code coverage, which is **false**.
 
-The syntax can be found there:  
-https://github.com/gotwarlost/istanbul/blob/master/ignoring-code-for-coverage.md
+Same issue with ternary operator (`expression ? value1 : value2`) or default assignments (like `let myVar = otherVar || {}`), which always get marked as uncovered branches.
+
+The syntax can be found at [istanbul docs - ignoring code](https://github.com/gotwarlost/istanbul/blob/master/ignoring-code-for-coverage.md).
 
 ## Meteor ignored folders and files
 
@@ -297,6 +300,47 @@ https://github.com/gotwarlost/istanbul/blob/master/ignoring-code-for-coverage.md
 ## How to replace spacejam
 
 You can find [here](https://github.com/practicalmeteor/spacejam/compare/windows-suppport...serut:windows-suppport-rc4?diff=split&name=windows-suppport-rc4#diff-f388d8f4ed9765929079f40166396fdeR65) the diff between "spacejam without coverage" and "spacejam coverage", so you can build something else,  with grunt for example, that exports your test.
+
+## I want my reports referred to my original source files
+
+If you are using a language that compiles to JavaScript (there are [lots of them](https://github.com/jashkenas/coffeescript/wiki/list-of-languages-that-compile-to-js)), you may want to see your coverage reports referred to the original source files (prior to compilation).
+
+To remap your source files, you have to provide the report type `out_remap` explicitly when using `spacejam`:
+
+```shell
+spacejam test-packages --driver-package practicalmeteor:mocha --coverage out_remap
+spacejam-mocha --coverage out_remap
+```
+
+You'll get your remapped coverage reports at `./.coverage/.remap` (or `custom_output/.remap` if you're customized the output folder through the file `.coverage.json`).
+
+The coverage is remapped to **all the available reports** (listed in the following example) by default. If you only want some of them, you need to request them explicitly through the key `remap.format` in `.coverage.json` like this:
+
+```json
+{
+  "include": [
+    "**/packages/lmieulet_meteor-coverage.js"
+  ],
+  "remap": {
+    "format": ["html", "clover", "cobertura", "json", "json-summary", "lcovonly", "teamcity", "text", "text-summary"]
+  }
+}
+```
+
+If you want to remap the coverage with `Meteor.exportCoverage()`, then you must use the report type `remap`.
+
+This feature has only been tested with TypeScript, but it should work for any language compiled to JavaScript, just **make sure you generate source maps (\*.js.map) for all the compiled files and that source maps are located next to their respective compiled JavaScript file (\*.js)**, just like this:
+
+```
+COVERAGE_APP_FOLDER
+├── tsconfig.json
+├── src
+|   ├── my-file.ts
+|   └── my-file.d.ts
+├── build
+|   ├── my-file.js
+|   └── my-file.js.map
+```
 
 -----------
 
@@ -351,8 +395,10 @@ Anyone is welcome to contribute.
 ## Credits
 
 This package would not exist without the amazing work of:
+
 -   [Contributors](https://github.com/serut/meteor-coverage/graphs/contributors) and testers for their help
 -   [Xolv.io](http://xolv.io) and their work on the original [meteor-coverage](https://github.com/xolvio/meteor-coverage) package;
 -   All contributors of [istanbul-api](https://github.com/istanbuljs/istanbul-api) and [istanbul-middleware](https://github.com/gotwarlost/istanbul-middleware) projects.
 
 All of them were very helpful in the development of this package. Merci !  
+

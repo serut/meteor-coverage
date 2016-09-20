@@ -1,6 +1,22 @@
 import {assert} from 'meteor/practicalmeteor:chai';
 import Meteor from 'meteor/lmieulet:meteor-coverage';
-describe('meteor-coverage', function (done) {
+
+var testCoverage = function(done, operation, reportType) {
+  this.timeout(0);
+  try {
+    let params = operation === 'export' ? [reportType] : [];
+    params.push(function (err) {
+      assert.isUndefined(err);
+      done();
+    });
+    Meteor[`${operation}Coverage`].apply(this, params);
+  } catch (e) {
+    console.error(e, e.stack);
+    done(e);
+  }
+};
+
+describe('meteor-coverage', function () {
 
   it('send client coverage', function (done) {
     this.timeout(10000);
@@ -19,146 +35,17 @@ describe('meteor-coverage', function (done) {
     }
   });
 
-  it('export coverage', function (done) {
-    this.timeout(0);
-    try {
-      Meteor.exportCoverage(
-        'coverage',
-        function (err) {
-          assert.isUndefined(err);
-          done();
-        }
-      );
-    } catch (e) {
-      console.error(e, e.stack);
-      done(e);
+  let coverage = {
+    export: ['coverage', 'lcovonly', 'json', 'json-summary', 'text-summary', 'html', 'remap'],
+    import: ['coverage']
+  };
+  for (let operation in coverage) {
+    if (coverage.hasOwnProperty(operation)) {
+      coverage[operation].forEach(function (reportType) {
+        it(`${operation} ${reportType}`, function (done) {
+          testCoverage.call(this, done, operation, reportType); // pass mocha context
+        });
+      });
     }
-  });
-
-  it('import coverage', function (done) {
-    this.timeout(0);
-    try {
-      Meteor.importCoverage(
-        function (err) {
-          assert.isUndefined(err);
-          done();
-        }
-      );
-    } catch (e) {
-      console.error(e, e.stack);
-      done(e);
-    }
-  });
-
-  it('export lcovonly', function (done) {
-    this.timeout(0);
-    try {
-      Meteor.exportCoverage(
-        'lcovonly',
-        function (err) {
-          assert.isUndefined(err);
-          done();
-        }
-      );
-    } catch (e) {
-      console.error(e, e.stack);
-      done(e);
-    }
-  });
-
-  it('export json', function (done) {
-    this.timeout(0);
-    try {
-      Meteor.exportCoverage(
-        'json',
-        function (err) {
-          assert.isUndefined(err);
-          done();
-        }
-      );
-    } catch (e) {
-      console.error(e, e.stack);
-      done(e);
-    }
-  });
-
-  it('export json-summary', function (done) {
-    this.timeout(0);
-    try {
-      Meteor.exportCoverage(
-        'json-summary',
-        function (err) {
-          assert.isUndefined(err);
-          done();
-        }
-      );
-    } catch (e) {
-      console.error(e, e.stack);
-      done(e);
-    }
-  });
-
-  it('export text-summary', function (done) {
-    this.timeout(0);
-    try {
-      Meteor.exportCoverage(
-        'text-summary',
-        function (err) {
-          assert.isUndefined(err);
-          done();
-        }
-      );
-
-    } catch (e) {
-      console.error(e, e.stack);
-      done(e);
-    }
-  });
-
-  it('export html', function (done) {
-    this.timeout(0);
-    try {
-      Meteor.exportCoverage(
-        'html',
-        function (err) {
-          assert.isUndefined(err);
-          done();
-        }
-      );
-
-    } catch (e) {
-      console.error(e, e.stack);
-      done(e);
-    }
-  });
-
-  it('export remap', function (done) {
-    this.timeout(0);
-    try {
-      Meteor.exportCoverage(
-        'remap',
-        function (err) {
-          assert.isUndefined(err);
-          done();
-        }
-      );
-
-    } catch (e) {
-      console.error(e, e.stack);
-      done(e);
-    }
-  });
-  /*
-   // not working
-   it('export teamcity', function (done) {
-   this.timeout(10000);
-
-   Meteor.exportCoverage(
-   'teamcity',
-   function(err) {
-   assert.isUndefined(err);
-   done();
-   }
-   );
-   });*/
+  }
 });
