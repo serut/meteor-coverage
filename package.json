@@ -1,7 +1,7 @@
 {
   "name": "meteor-coverage",
-  "version": "0.9.4",
-  "description": "A meteor package that allows you to get the statement, line, function and branch coverage of Meteor project and package.   This package uses the [istanbuljs/istanbul-api](https://github.com/istanbuljs/istanbul-api) package for coverage report and [meteorhacks:picker](https://github.com/meteorhacks/picker) for server side routing.   It's a debug only package, so it does not affect your production build.",
+  "version": "1.0.0",
+  "description": "A meteor package that allows you to get the statement, line, function and branch coverage of Meteor project and package.   This package uses the [istanbuljs/istanbul-api](https://github.com/istanbuljs/istanbul-api) package for coverage report.   It's a debug only package, so it does not affect your production build.",
   "main": "server/index.js",
   "dependencies": {
     "istanbul-api": "1.1.0-alpha.1",
@@ -20,11 +20,13 @@
     "eslint-plugin-import": "^1.13.0",
     "eslint-plugin-mocha": "^4.3.0",
     "eslint-plugin-promise": "^2.0.1",
-    "eslint-plugin-standard": "^2.0.0"
+    "eslint-plugin-standard": "^2.0.0",
+    "spacejam": "https://github.com/serut/spacejam/tarball/windows-suppport-rc4"
   },
   "scripts": {
-    "test": "spacejam test-packages ./ --coverage out_lcovonly  --driver-package practicalmeteor:mocha-console-runner",
-    "start": "COVERAGE=1 COVERAGE_VERBOSE=1 COVERAGE_APP_FOLDER=/Users/Leo/WebstormProjects/meteor-coverage-app-exemple/packages/meteor-coverage/ meteor test-packages --driver-package practicalmeteor:mocha",
+    "test": "spacejam-mocha test-packages ./ --coverage out_lcovonly",
+    "test:watch": "meteor-mocha test-packages ./ --settings settings.coverage.json",
+    "start": "meteor npm run lint:fix & meteor npm run test:watch",
     "lint": "eslint .",
     "lint:fix": "eslint --fix ."
   },

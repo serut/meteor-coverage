@@ -23,6 +23,7 @@ export default class {
       verbose: this.options.verbose,
       linkMapper: {
         getPath: function (node) {
+          /* istanbul ignore else */
           if (typeof node === 'string') {
             return node;
           }
@@ -41,7 +42,6 @@ export default class {
 
         assetPath: function (node, name) {
           return path.join(outputPath, name);
-                    //return this.relativePath(this.getPath(node), name);
         }
       }
     };
@@ -52,6 +52,7 @@ export default class {
     this.copyStatic();
     var coverage = Core.getCoverageObject();
 
+    /* istanbul ignore else */
     if (!(coverage && Object.keys(coverage).length > 0)) {
       this.res.statusCode = 500;
       return this.res.end('{"type":"failed", "message": "No coverage information have been collected"}');
@@ -63,7 +64,7 @@ export default class {
 
     const childrens = root.getChildren();
     const report = this.report;
-        // Todo : use future
+    // Todo : use future
     childrens.forEach(function (child) {
       var filepath = path.join(folderPath, child.getRelativeName() + '.html');
       Log.info('Creating a new html report', filepath);
@@ -85,9 +86,11 @@ export default class {
       value: {
         copyFile: function (sourcePath, destPath) {
           fs.readFile(sourcePath, (err, data) => {
+            /* istanbul ignore else */
             if (err) throw err;
             let p = path.join(folderpath, destPath);
             fs.writeFile(p, data, (err, data) => {
+              /* istanbul ignore else */
               if (err) throw err;
             });
           });

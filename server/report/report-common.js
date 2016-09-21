@@ -3,7 +3,7 @@ import mkdirp from 'mkdirp';
 import path from 'path';
 import Log from './../context/log';
 
-var istanbulAPI = Npm.require('istanbul-api'),
+const istanbulAPI = Npm.require('istanbul-api'),
   Report = istanbulAPI.libReport;
 
 export default ReportCommon = {
@@ -14,8 +14,8 @@ export default ReportCommon = {
      * @returns {*|Context}
      */
 
-  getContext(filepath) {
-    var context = Report.createContext();
+  getContext (filepath) {
+    let context = Report.createContext();
 
     const dirpath = path.dirname(filepath);
     this.checkDirectory(dirpath);
@@ -31,7 +31,9 @@ export default ReportCommon = {
             println: function (data) {
               fs.appendFileSync(path, data + '\r\n');
             },
-            close: function () {
+            close: function () {},
+            colorize: function(string) {
+              return string;
             }
           };
         }
@@ -39,9 +41,9 @@ export default ReportCommon = {
     });
     return context;
   },
-  checkDirectory (dirpath){
+  checkDirectory (dirpath) {
     let succeed = true;
-        // Create folder
+    // Create folder
     try {
       const stat = fs.statSync(dirpath);
     } catch (e) {
@@ -57,7 +59,7 @@ export default ReportCommon = {
   },
   checkFile (filepath) {
     let succeed = true;
-        // Reset file
+    // Reset file
     try {
       Log.info('Try to remove the content & create the file', filepath);
       fs.writeFileSync(filepath, '');
