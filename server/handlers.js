@@ -120,3 +120,12 @@ instrumentClientJs = function (params, req, res, next) {
     next();
   }
 };
+
+export default Handlers = {
+  showCoverage,
+  getAsset,
+  addClientCoverage,
+  instrumentClientJs,
+  exportFile,
+  importCoverage
+};
