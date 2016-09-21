@@ -120,13 +120,3 @@ instrumentClientJs = function (params, req, res, next) {
     next();
   }
 };
-
-let noop = function () {};
-export default Handlers = {
-  showCoverage: showCoverage || noop,
-  getAsset: getAsset || noop,
-  addClientCoverage: addClientCoverage || noop,
-  instrumentClientJs: instrumentClientJs || noop,
-  exportFile: exportFile || noop,
-  importCoverage: importCoverage || noop
-};

@@ -356,7 +356,7 @@ Why? When a browser opens the client side of your application, this package inte
 -   type: the type of report you want to create inside your `COVERAGE_APP_FOLDER`
 
     -   Default: `coverage`, used to dump the coverage object in a file because when there are several types of test, we want to merge results, and the server reloads between each one.
-    -   Allowed values: `cobertura`, `coverage`, `html`, `json`, `json-summary`, `lcov`, `lcovonly`, `remap`, `teamcity`, `text`, `text-lcov`, `text-summary`
+    -   Allowed values: `coverage`, `html`, `json`, `json-summary`, `lcovonly`, `remap`, `text-summary`
     -   **Not working values:** `clover`, `cobertura`, `lcov`, `teamcity`, `text`, `text-lcov`, PR welcome
     -   Except for `coverage`, the file generation is handled by  [istanbuljs/istanbul-reports](https://github.com/istanbuljs/istanbul-reports)
 
