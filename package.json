@@ -20,7 +20,8 @@
     "eslint-plugin-import": "^1.13.0",
     "eslint-plugin-mocha": "^4.3.0",
     "eslint-plugin-promise": "^2.0.1",
-    "eslint-plugin-standard": "^2.0.0"
+    "eslint-plugin-standard": "^2.0.0",
+    "spacejam": "https://github.com/serut/spacejam/tarball/windows-suppport-rc4"
   },
   "scripts": {
     "test": "spacejam-mocha ./ --coverage out_lcovonly",
