@@ -3,7 +3,7 @@ import Core from './../services/core';
 import ReportCommon from './report-common';
 import Conf from '../context/conf';
 
-var istanbulAPI = Npm.require('istanbul-api'),
+const istanbulAPI = Npm.require('istanbul-api'),
   ReportImpl = istanbulAPI.reportsImpl;
 /**
  * Used by type lcovonly and json
@@ -20,9 +20,10 @@ export default class {
   }
 
   generate() {
-    let coverage = Core.getCoverageObject();
-    var childs = CoverageData.getLcovonlyReport(coverage);
+    const coverage = Core.getCoverageObject();
+    let childs = CoverageData.getLcovonlyReport(coverage);
     this.report.onStart(null, this.context);
+    /* istanbul ignore else */
     if (childs.length === 0) {
       this.res.setHeader('Content-type', 'text/plain');
       this.res.statusCode = 500;
@@ -34,7 +35,7 @@ export default class {
   }
 
   writeFile(childs) {
-    for (var i = 0; i < childs.length; i++) {
+    for (let i = 0; i < childs.length; i++) {
       // Remove the COVERAGE_APP_FOLDER from the filepath
       childs[i].fileCoverage.data.path = childs[i].fileCoverage.data.path.replace(Conf.COVERAGE_APP_FOLDER, '');
 

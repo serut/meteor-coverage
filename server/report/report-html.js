@@ -23,6 +23,7 @@ export default class {
       verbose: this.options.verbose,
       linkMapper: {
         getPath: function (node) {
+          /* istanbul ignore else */
           if (typeof node === 'string') {
             return node;
           }
@@ -51,6 +52,7 @@ export default class {
     this.copyStatic();
     var coverage = Core.getCoverageObject();
 
+    /* istanbul ignore else */
     if (!(coverage && Object.keys(coverage).length > 0)) {
       this.res.statusCode = 500;
       return this.res.end('{"type":"failed", "message": "No coverage information have been collected"}');
@@ -84,9 +86,11 @@ export default class {
       value: {
         copyFile: function (sourcePath, destPath) {
           fs.readFile(sourcePath, (err, data) => {
+            /* istanbul ignore else */
             if (err) throw err;
             let p = path.join(folderpath, destPath);
             fs.writeFile(p, data, (err, data) => {
+              /* istanbul ignore else */
               if (err) throw err;
             });
           });

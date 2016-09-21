@@ -24,6 +24,7 @@ export default class {
       verbose: Conf.IS_COVERAGE_VERBOSE,
       linkMapper: {
         getPath: function (node) {
+          /* istanbul ignore else */
           if (typeof node === 'string') {
             return node;
           }
@@ -41,6 +42,7 @@ export default class {
 
   generate() {
     var coverage = Core.getCoverageObject();
+    /* istanbul ignore else */
     if (!(coverage && Object.keys(coverage).length > 0)) {
       this.res.setHeader('Content-type', 'text/plain');
       return this.res.end('No coverage information has been collected');
@@ -81,6 +83,5 @@ export default class {
       this.end();
     };
   }
-
 
 }

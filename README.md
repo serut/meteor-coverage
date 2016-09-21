@@ -43,7 +43,7 @@ First, create your configuration file `.coverage.json` to specify what you want 
 
 
 
-Then setup how you want to run your app. Actually, to let meteor-coverage start processing, you need to enable it, because it's a probe disabled by default and you need to provide the absolute path to your source folder. 
+Then setup how you want to run your app. Actually, to let meteor-coverage start processing, you need to enable it, because it's a probe disabled by default and you need to provide the absolute path to your source folder.
   -   [use spacejam](#setup-spacejam) as a test runner, perfect for CI or prepublish hooks. Spacejam setup everything for you throw the `--coverage` option.  
   OR
   -   [use a meteor setting file](#meteor---settings-file) to store the coverage configuration, then run your app with `--settings settings.coverage.json`  
@@ -53,20 +53,20 @@ Then setup how you want to run your app. Actually, to let meteor-coverage start 
 meteor-coverage ensures the output folder exist on boot, which is by default `./.coverage` inside your app.  
 For Typescript or any simular language users, you need to remap your code (released soon).
 
-## Usage 
+## Usage
 
-Run the following command : 
+Run the following command :
 
     meteor [... see supported options below] --settings settings.coverage.json
-    
+
 Then open [localhost:3000/coverage](localhost:3000/coverage) in your browser. A missing feature would be to save your client coverage with a widget. Instead, you need to enter this javascript in your browser console :
-    
+
     Meteor.sendCoverage(function(stats,err) {console.log(stats,err);});
     # Reopen localhost:3000/coverage to see that client coverage have been saved on server
-    
+
     # Creates an html export inside coverage_app_folder/output_folder/index.html
     Meteor.exportCoverage("html", function(err) {console.log(err)})
-    
+
 or you can use spacejam-mocha
 
     spacejam-mocha [... see supported options below] --coverage [out_html|out_lcovonly|out_text_summary|out_json_report|out_json_summary|in_coverage|out_coverage|out_remap]
@@ -74,7 +74,7 @@ or you can use spacejam-mocha
 
 That's it !
 
-### Run options 
+### Run options
 
 While spacejam requires mocha, meteor-coverage is agnostic on this point. If the `COVERAGE` flag is true, it instruments your app and provides an HTTP API to generate reports.
 
@@ -96,8 +96,8 @@ If you have any trouble, refer to this example of Meteor application [meteor-cov
 
 Add the following dependencies in your `package.json`:
 
-    meteor npm init # If the package.json file does not exist 
-    meteor npm i --save-dev https://github.com/serut/spacejam/tarball/windows-suppport-rc4 
+    meteor npm init # If the package.json file does not exist
+    meteor npm i --save-dev https://github.com/serut/spacejam/tarball/windows-suppport-rc4
 
 Add what you need to run your app inside your `package.json`:
 
@@ -107,28 +107,28 @@ Add what you need to run your app inside your `package.json`:
         "test:app-unit-coverage": "spacejam-mocha test            --coverage out_coverage",
         "test:app-full-coverage": "spacejam-mocha test --full-app --coverage 'in_coverage|out_lcovonly'",
         "test:packages-coverage": "spacejam-mocha test-packages   --coverage out_lcovonly"
-        
+
         [PCKGS]
         "test": "spacejam-mocha test-packages ./ --coverage out_lcovonly ",
         "test:watch": "meteor npm run lint:fix & meteor npm run test:packages-coverage-watch",
         "test:packages-coverage-watch": "meteor-mocha test-packages --settings settings.coverage.json",
-        
+
         "lint:fix": "eslint --fix ."
     }
-    
-    
+
+
 
 If you want to, you can use this syntax, the following two commands are equivalent, but the second one is shorter and thus less typing error-prone
 
-    spacejam       [..] --driver-package practicalmeteor:mocha-console-runner 
+    spacejam       [..] --driver-package practicalmeteor:mocha-console-runner
     spacejam-mocha [..]
-    
+
 Same for meteor:
 
 
     meteor       --driver-package practicalmeteor:mocha [...]
     meteor-mocha
-    
+
 
 You may notice that you can't execute `spacejam-mocha` on your terminal, that's because you installed it with the flag `--save-dev`.  
 The executable is in fact located in the folder `./node_modules/.bin/` and that's not mentioned inside the `package.json` because the `.bin` folder [is added to the PATH before node runs smth](https://docs.npmjs.com/misc/scripts#path)  
@@ -145,22 +145,22 @@ Now, you can run your test (here is an extract of a [circle.yml](https://github.
     - meteor npm run test-coverage-app-full
     # Package test using mocha
     - meteor npm run test-coverage-packages-mocha
-    
+
 ### Coveralls
 
 Install
 
-    meteor npm i --save-dev coveralls 
-    
-Add this after tests execution: 
-    
+    meteor npm i --save-dev coveralls
+
+Add this after tests execution:
+
     # Send coverage report
     cat .coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js || true # ignore coveralls error
-    
-### Codecov 
+
+### Codecov
 
     meteor npm i --save-dev codecov.io
-    
+
     - cat .coverage/lcov.info | ./node_modules/codecov.io/bin/codecov.io.js || true # ignore codecov error
 
 ## spacejam --coverage possibilities
@@ -254,7 +254,7 @@ Exemple:
   "output": "./.coverage"
 }
 ```
-Details : 
+Details :
 
  - Allows / Disallow is coded with the following order `include`, `exclude.general`, `exclude.(client|server)`, it is used before both instrumentation and before coverage report creation.
  - The glob syntax can be found [here](http://www.linuxjournal.com/content/bash-extended-globbing).
@@ -264,9 +264,9 @@ Details :
 ### Flow router issue
 
 If you are using flow-router, there are [an issue](https://github.com/kadirahq/flow-router/pull/615) that prevents tests to succeed.  
-This workaround replaces flow-router with a patched version which ignores that error: 
+This workaround replaces flow-router with a patched version which ignores that error:
 ```bash
-cd packages 
+cd packages
 git submodule add https://github.com/serut/flow-router
 ```
 
@@ -305,12 +305,7 @@ You can find [here](https://github.com/practicalmeteor/spacejam/compare/windows-
 
 If you are using a language that compiles to JavaScript (there are [lots of them](https://github.com/jashkenas/coffeescript/wiki/list-of-languages-that-compile-to-js)), you may want to see your coverage reports referred to the original source files (prior to compilation).
 
-To remap your source files, you have to provide the report type `out_remap` explicitly when using `spacejam`:
-
-```shell
-spacejam test-packages --driver-package practicalmeteor:mocha --coverage out_remap
-spacejam-mocha --coverage out_remap
-```
+To remap your source files, you have to provide the report type `out_remap` explicitly when using `spacejam`: `spacejam-mocha --coverage out_remap`
 
 You'll get your remapped coverage reports at `./.coverage/.remap` (or `custom_output/.remap` if you're customized the output folder through the file `.coverage.json`).
 
@@ -361,8 +356,8 @@ Why? When a browser opens the client side of your application, this package inte
 -   type: the type of report you want to create inside your `COVERAGE_APP_FOLDER`
 
     -   Default: `coverage`, used to dump the coverage object in a file because when there are several types of test, we want to merge results, and the server reloads between each one.
-    -   Allowed values: `cobertura`, `html`, `json`, `json-summary`, `lcov`, `teamcity`, `text`, `text-lcov`, `text-summary`, `lcovonly`, `coverage`, `remap`
-    -   **Not working values:** `clover`, `cobertura`, `lcov`, `text`, `text-lcov`, PR welcome
+    -   Allowed values: `coverage`, `html`, `json`, `json-summary`, `lcovonly`, `remap`, `text-summary`
+    -   **Not working values:** `clover`, `cobertura`, `lcov`, `teamcity`, `text`, `text-lcov`, PR welcome
     -   Except for `coverage`, the file generation is handled by  [istanbuljs/istanbul-reports](https://github.com/istanbuljs/istanbul-reports)
 
 ```js
@@ -383,9 +378,9 @@ Anyone is welcome to contribute.
 
     # You should fork this repo first
     git clone https://github.com/serut/meteor-coverage
-    # I have a preference to always execute npm action 
-    # throw the integrated meteor npm (npm --v !== meteor npm --v) 
-    meteor npm install 
+    # I have a preference to always execute npm action
+    # throw the integrated meteor npm (npm --v !== meteor npm --v)
+    meteor npm install
     # Edit the app_folder key to match your app folder, don't forget the ending slash
     nano settings.coverage.json
     # Then run mocha watch tests
@@ -401,4 +396,3 @@ This package would not exist without the amazing work of:
 -   All contributors of [istanbul-api](https://github.com/istanbuljs/istanbul-api) and [istanbul-middleware](https://github.com/gotwarlost/istanbul-middleware) projects.
 
 All of them were very helpful in the development of this package. Merci !  
-
