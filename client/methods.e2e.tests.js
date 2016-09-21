@@ -35,7 +35,7 @@ describe('meteor-coverage', function () {
       done(e);
     }
   });
-  it('handle errors on sending client coverage', function (done) {
+  /*it('handle errors on sending client coverage', function (done) {
     // Manual stub
     const _jQueryAjaxBackup = $.ajax;
     $.ajax = function(options) { options.error(); };
@@ -56,7 +56,7 @@ describe('meteor-coverage', function () {
 
     // Undo stub
     $.ajax = _jQueryAjaxBackup;
-  });
+  });*/
 
   // test implemented report types
   let coverage = {
