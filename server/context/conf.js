@@ -103,6 +103,10 @@ export const COVERAGE_EXPORT_FOLDER = configuration.output;
 export const exclude = configuration.exclude;
 export const include = configuration.include;
 export const remapFormat = configuration.remapFormat;
+export const reportTypes = {
+  allowed: ['clover', 'cobertura', 'coverage', 'html', 'json', 'json-summary', 'lcov', 'lcovonly', 'remap', 'teamcity', 'text', 'text-lcov', 'text-summary'],
+  pending: ['clover', 'cobertura', 'lcov', 'teamcity', 'text', 'text-lcov']
+};
 
 Log.info('Coverage configuration:');
 Log.info('- IS_COVERAGE_ACTIVE=', IS_COVERAGE_ACTIVE);

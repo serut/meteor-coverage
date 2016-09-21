@@ -13,6 +13,7 @@ export default class {
       reportPath = this.options.path;
     let instance = this;
     fs.writeFile(reportPath, coverageReport, function (err) {
+      /* istanbul ignore else */
       if (err) {
         throw 'failed to write report file: ' + reportPath;
       }

@@ -7,6 +7,7 @@ const Coverage = istanbulAPI.libCoverage;
 let mergeCoverageWith, importCoverage, getCoverageObject;
 
 getCoverageObject = function () {
+  /* istanbul ignore next: default assignment */
   global.__coverage__ = global.__coverage__ || {};
   return global.__coverage__;
 };
@@ -16,6 +17,7 @@ setCoverageObject = function (obj) {
 };
 
 mergeCoverageWith = function (obj) {
+  /* istanbul ignore else */
   if (!obj) {
     return;
   }
@@ -26,20 +28,25 @@ mergeCoverageWith = function (obj) {
 };
 
 
+/* istanbul ignore next: default assignment */
 importCoverage = function (res, options = {}) {
   Log.info('import coverage');
-  var filename = options.filename ? options.filename : 'report.json';
-  var reportPath = path.join(Conf.COVERAGE_APP_FOLDER, Conf.COVERAGE_EXPORT_FOLDER, filename);
+  /* istanbul ignore next: ternary operator */
+  const filename = options.filename ? options.filename : 'report.json';
+  const reportPath = path.join(Conf.COVERAGE_APP_FOLDER, Conf.COVERAGE_EXPORT_FOLDER, filename);
   fs.exists(reportPath, function (exists) {
+    /* istanbul ignore else */
     if (!exists) {
       throw 'report file not found: reportPath=' + reportPath + ' COVERAGE_APP_FOLDER=' + Conf.COVERAGE_APP_FOLDER;
     }
     fs.readFile(reportPath, 'utf8', function (err, fileContent) {
+      /* istanbul ignore else */
       if (err) {
         throw 'failed to read report file: ' + reportPath;
       }
-      var coverageObj = JSON.parse(fileContent);
-      for (var property in coverageObj) {
+      let coverageObj = JSON.parse(fileContent);
+      for (let property in coverageObj) {
+        /* istanbul ignore else */
         if (coverageObj.hasOwnProperty(property)) {
           Core.mergeCoverageWith(coverageObj[property]);
         }

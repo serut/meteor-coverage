@@ -33,16 +33,21 @@ isAccessible = function(path, mode = fs.R_OK, supressErrors = false) {
     fs.accessSync(path, mode);
     return true;
   } catch (e) {
-    !supressErrors && Log.error('Cannot access', path);
+    /* istanbul ignore else */
+    if (!supressErrors) {
+      Log.error('Cannot access', path);
+    }
     return false;
   }
 };
 
 parseJSON = function(filePath, supressAccessErrors = false) {
+  /* istanbul ignore else */
   if (isAccessible(filePath, fs.R_OK, supressAccessErrors)) {
     try {
       return JSON.parse(fs.readFileSync(filePath, 'utf8'));
     } catch(e) {
+      /* istanbul ignore next: Meteor should have saved an invalid JSON, quite improbable */
       Log.error('Invalid JSON:', filePath, e);
     }
   }
@@ -52,18 +57,23 @@ initialSetup = function () {
   // Get the resolved, compiled and used packages and their versions
   let resolverResultPath = path.join(abspath.local, 'resolver-result-cache.json');
   let resolverResult = parseJSON(resolverResultPath);
+  /* istanbul ignore next: ternary operator */
   this.resolved = resolverResult ? resolverResult.lastOutput.answer : null;
 
+  /* istanbul ignore else */
   if (Meteor.isPackageTest) {
+    /* istanbul ignore else */
     if (this.resolved) {
       // Find the package(s) under test (PUT)
       for (let pkg in this.resolved) {
+        /* istanbul ignore else */
         if (this.resolved.hasOwnProperty(pkg)) {
           let match = rgx.meteorPUT.exec(pkg);
           match && (this.PUT[match[1]] = true);
         }
       }
       const PUTs = Object.keys(this.PUT);
+      /* istanbul ignore else */
       if (PUTs.length) {
         Log.info(`Packages under test (${PUTs.length}):`, PUTs.join(', '));
       } else {
@@ -87,9 +97,11 @@ initialSetup = function () {
       manifest: abspath.clientSide
     };
     for (let key in sidePaths) {
+      /* istanbul ignore else */
       if (sidePaths.hasOwnProperty(key)) {
         const programPath = path.join(sidePaths[key], 'program.json');
         const program = parseJSON(programPath);
+        /* istanbul ignore next: file automatically created by Meteor, so really rare to enter here */
         if (!program) continue;
 
         for (let file of program[key]) {
@@ -97,10 +109,12 @@ initialSetup = function () {
           // If it's a meteor package test(s) merged file and the package has tests (the merged file is created whether
           // the package has tests file(s) declared in `package.js` inside `Package.onTest()` or not). The way to know
           // whether the package has tests or not is looking at file.sourceMap: if it's empty, it has no tests.
+          /* istanbul ignore else */
           if (match && match[1] && file.sourceMap) {
             [, isTestFile, matchAuthor, matchName] = match;
             const sourceMapPath = path.join(sidePaths[key], file.sourceMap);
             const sourceMap = parseJSON(sourceMapPath);
+            /* istanbul ignore else */
             if (!sourceMap) continue; // jump to the next file if SourceMap non-accessible or invalid
 
             // A compiled test file (local-test_...) has only the declared test
@@ -115,6 +129,7 @@ initialSetup = function () {
           }
         }
       }
+      /* istanbul ignore else */
       if (this.testingFromPackageDir) break;
     }
   }
@@ -127,8 +142,10 @@ alterSourceMapPaths = function (map, isClientSide) {
   // COVERAGE_APP_FOLDER and whether `meteor test-packages` was executed from inside/outside the package
   // folder. Sources base of any Meteor packages not under test is always resolved to abspath.packages
   let sourcesBase, isTestFile, matchAuthor, matchName;
+  /* istanbul ignore else */
   if (rgx.meteorPackageMergedFile.test(map.file)) {
     [, isTestFile, matchAuthor, matchName] = rgx.meteorPackageMergedFile.exec(map.file);
+    /* istanbul ignore next: ternary operator */
     const packageID = matchAuthor ? `${matchAuthor}:${matchName}` : matchName;
     if (Meteor.isPackageTest && (!!isTestFile || this.PUT[packageID])) {
       // If exec `meteor test-packages` from `meteor-app-dir/packages/pkg-dir/` then Meteor performs tests on ALL
@@ -139,19 +156,26 @@ alterSourceMapPaths = function (map, isClientSide) {
       } else {
         sourcesBase = path.join(meteorDir, 'packages', matchName);
       }
-    } else if (this.resolved[packageID]) {
-      const packageFolder = matchAuthor ? `${matchAuthor}_${matchName}` : matchName;
-      sourcesBase = path.join(abspath.packages, packageFolder, this.resolved[packageID], 'web.browser');
+    } else {
+      /* istanbul ignore else */
+      if (this.resolved[packageID]) {
+        /* istanbul ignore next: ternary operator */
+        const packageFolder = matchAuthor ? `${matchAuthor}_${matchName}` : matchName;
+        sourcesBase = path.join(abspath.packages, packageFolder, this.resolved[packageID], 'web.browser');
+      }
     }
   }
 
   // Get `node_modules` base path for this map.file
   let nodeModulesBase, program = parseJSON(path.join(abspath.serverSide, 'program.json'));
+  /* istanbul ignore else */
   if (!isClientSide && program) {
     // Find the item matching map.file path
     const mergedPath = map.file.substr(1);
     for (let file of program.load) {
+      /* istanbul ignore else */
       if (file.path === mergedPath) {
+        /* istanbul ignore else */
         if (file.node_modules) {
           nodeModulesBase = path.join(abspath.serverSide, file.node_modules);
           nodeModulesBase = fs.realpathSync(nodeModulesBase); // usually a symlink
@@ -160,9 +184,11 @@ alterSourceMapPaths = function (map, isClientSide) {
       }
     }
   }
+  /* istanbul ignore else */
   if (!nodeModulesBase && sourcesBase) {
     // Try locating node_modules inside sourcesBase sibling `npm`
     let sourcesSiblingFolder = path.join(sourcesBase, '..', 'npm', 'node_modules');
+    /* istanbul ignore else */
     if (isAccessible(sourcesSiblingFolder, fs.R_OK, true)) {
       nodeModulesBase = sourcesSiblingFolder;
     }
@@ -174,6 +200,7 @@ alterSourceMapPaths = function (map, isClientSide) {
   // you'll get a sound `Error('No element indexed by {index}')`.
   for (let i = 0; i < map.sources.length; i++) {
     // Meteor templates are not saved into files, but included in sourcesContent
+    /* istanbul ignore else */
     if (rgx.meteorCompiledTemplate.test(map.sources[i])) {
       Log.info('Skipping Meteor template:', map.sources[i]);
       continue;
@@ -197,6 +224,7 @@ fixSourcePath = function(source, nodeModulesBase, sourcesBase) {
   let match, paths = source.split(splitToken).slice(1);
 
   // Skip sources with unknown syntax
+  /* istanbul ignore else */
   if (!paths.length) {
     Log.error('Source with unknown format:', source);
     return source;
@@ -209,12 +237,17 @@ fixSourcePath = function(source, nodeModulesBase, sourcesBase) {
   //  3. meteor://💻app/../../app-dir/node_modules/meteor-node-stubs/node_modules/string_decoder/package.json (app NPM dep)
   //  4. meteor://💻app/node_modules/http-errors/node_modules/inherits/package.json
   //  5. meteor://💻app/node_modules/content-type/package.json
+  /* istanbul ignore else */
   if (paths[0].endsWith('/package.json')) {
     match = rgx.packageJson.exec(paths[0]);
+    /* istanbul ignore else */
     if (match) {
+      /* istanbul ignore else */
       if (match[2]) { // covers 3 (app NPM dep package.json)
         return path.join(meteorDir, match[2]);
-      } else if (match[3] && nodeModulesBase) {
+      }
+      /* istanbul ignore else */
+      if (match[3] && nodeModulesBase) {
         // covers 1 (when non-PUT), 4 and 5 (meteor pkg NPM dep package.json)
         return path.join(nodeModulesBase, match[3]);
       }
@@ -231,12 +264,16 @@ fixSourcePath = function(source, nodeModulesBase, sourcesBase) {
   //  11. meteor://💻app/node_modules/meteor/local-test:kadira:flow-router/node_modules/page/node_modules/path-to-regexp/node_modules/isarray/index.js
   let matchPackageID, matchAuthor, matchName, matchNpmDepPath, matchPath;
   match = rgx.meteorPackagePathTokens.exec(paths[0]);
+  /* istanbul ignore else */
   if (match) {
     [, matchPackageID, matchAuthor, matchName, matchNpmDepPath, matchPath] = match;
+    /* istanbul ignore else */
     if (this.PUT[matchPackageID]) { // PUT
+      /* istanbul ignore else */
       if (matchNpmDepPath) {
         // There is no way to know a priori if it's a recursive dep or not
         let recNpmDep = path.join(sourcesBase, '.npm', 'package', matchNpmDepPath, matchPath);
+        /* istanbul ignore else */
         if (isAccessible(recNpmDep, fs.R_OK, true)) {
           return recNpmDep; // check if recursive dep (11) of PUT
         }
@@ -245,6 +282,7 @@ fixSourcePath = function(source, nodeModulesBase, sourcesBase) {
       return path.join(sourcesBase, matchPath); // covers 6,7,8,9 when PUT
     }
 
+    /* istanbul ignore else */
     if (Meteor.isPackageTest) {
       return path.join(matchNpmDepPath ? nodeModulesBase : sourcesBase, matchPath); // non PUT
     }

@@ -37,6 +37,7 @@ Meteor.sendCoverage = function (callback) {
     successCallback = function () {
       Meteor.increaseSuccess();
       var stats = Meteor.getStats();
+      /* istanbul ignore else */
       if (stats.SUCCESS + stats.FAILED === stats.TOTAL) {
         callback(stats);
       }
@@ -44,6 +45,7 @@ Meteor.sendCoverage = function (callback) {
     errorCallback = function() {
       Meteor.increaseFailures();
       var stats = Meteor.getStats();
+      /* istanbul ignore else */
       if (stats.SUCCESS + stats.FAILED === stats.TOTAL) {
         callback(stats, arguments);
       }
@@ -56,7 +58,7 @@ Meteor.sendCoverage = function (callback) {
 
     // Send each property alone
   for (var property in globalCoverage) {
-
+    /* istanbul ignore else */
     if (globalCoverage.hasOwnProperty(property)) {
       Meteor.increaseTotal();
 
@@ -76,7 +78,7 @@ Meteor.sendCoverage = function (callback) {
 * Usage: Meteor.exportCoverage(null, function(err) {console.log(err)})
 */
 Meteor.exportCoverage = function (type, callback) {
-
+  /* istanbul ignore next: ternary operator */
   var url = type ? '/coverage/export/'+type : '/coverage/export';
   $.ajax({
     method: 'GET',
@@ -84,6 +86,7 @@ Meteor.exportCoverage = function (type, callback) {
     success: function(data) {
       try {
         let result = JSON.parse(data);
+        /* istanbul ignore else */
         if (result.type !== 'success') {
           throw new Error('Error: '+JSON.stringify(arguments)+'. An unexpected error occurred while trying to export coverage data');
         }
@@ -94,7 +97,7 @@ Meteor.exportCoverage = function (type, callback) {
       }
     },
     error: function() {
-      callback('Error: '+JSON.stringify(arguments)+'. An server error occurred while trying to export coverage data');
+      callback('Error: '+JSON.stringify(arguments)+'. A server error occurred while trying to export coverage data');
     }
   });
 };
@@ -109,6 +112,7 @@ Meteor.importCoverage = function (callback) {
     success: function(data) {
       try {
         let result = JSON.parse(data);
+        /* istanbul ignore else */
         if (result.type !== 'success') {
           throw new Error('Error: '+JSON.stringify(arguments)+'. An unexpected error occurred while trying to import coverage data');
         }

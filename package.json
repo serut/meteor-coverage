@@ -23,8 +23,8 @@
     "eslint-plugin-standard": "^2.0.0"
   },
   "scripts": {
-    "test": "spacejam test-packages ./ --coverage out_lcovonly  --driver-package practicalmeteor:mocha-console-runner",
-    "test:watch": "meteor-mocha test-packages --settings settings.coverage.json",
+    "test": "spacejam-mocha ./ --coverage out_lcovonly",
+    "test:watch": "meteor-mocha ./ --settings settings.coverage.json",
     "start": "meteor npm run lint:fix & meteor npm run test:watch",
     "lint": "eslint .",
     "lint:fix": "eslint --fix ."

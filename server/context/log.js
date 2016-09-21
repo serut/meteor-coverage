@@ -11,16 +11,19 @@ export default Log = {
     console.error(...arguments);
   },
   info: function() {
+    /* istanbul ignore else */
     if (this.COVERAGE_VERBOSE) {
       console.log(...arguments);
     }
   },
   time: function() {
+    /* istanbul ignore else */
     if (this.COVERAGE_VERBOSE) {
       console.log(...arguments);
     }
   },
   timeEnd: function() {
+    /* istanbul ignore else */
     if (this.COVERAGE_VERBOSE) {
       console.log(...arguments);
     }

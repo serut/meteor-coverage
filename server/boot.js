@@ -11,6 +11,7 @@ export default Boot = {
     // Create reports output folder if not exists
     let outputFolder = path.join(Conf.COVERAGE_APP_FOLDER, Conf.COVERAGE_EXPORT_FOLDER);
     fs.access(outputFolder, fs.F_OK | fs.R_OK | fs.W_OK, (err) => {
+      /* istanbul ignore else */
       if (err) {
         try {
           mkdirp(outputFolder);

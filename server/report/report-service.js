@@ -2,7 +2,7 @@ import Log from './../context/log';
 import Conf from './../context/conf';
 import IstanbulGenericReporter from './report-generic';
 import JsonSummary from './report-json-summary';
-import Teamcity from './report-teamcity';
+// import Teamcity from './report-teamcity';
 import Html from './report-html';
 import Http from './report-http';
 import ReportCoverage from './report-coverage';
@@ -15,6 +15,7 @@ export default class {
 
     options = Object.assign({}, {
       path: path.join(Conf.COVERAGE_APP_FOLDER, Conf.COVERAGE_EXPORT_FOLDER),
+      /* istanbul ignore next: ternary operator */
       verbose: Log.COVERAGE_VERBOSE ? true : false
     }, options);
 
@@ -48,12 +49,13 @@ export default class {
           reportCoverage.generate();
           break;
         }
-      case 'teamcity':
+      /*case 'teamcity':
         {
+          options = this.addFileToOptions(options, 'teamcity.log');
           let teamcity = new Teamcity(res, options);
           teamcity.generate();
           break;
-        }
+        }*/
       case 'json-summary':
         {
           options = this.addFileToOptions(options, 'json_summary.json');
@@ -83,16 +85,9 @@ export default class {
           http.generate();
           break;
         }
-      case 'clover':
-      case 'cobertura':
-      case 'lcov':
-      case 'none':
-      case '':
-      case 'text':
-      case 'text-lcov':
       default:
         {
-          Log.error('Failed to export - this type is not implemented');
+          Log.error('Failed to export - this type is not implemented yet');
           res.writeHead(400);
           res.end('{"type":"This type [' + type + '] is not supported"}');
         }

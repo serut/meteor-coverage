@@ -1,3 +1,4 @@
+import Conf from './context/conf';
 import Instrumenter from './services/instrumenter';
 import Core from './services/core';
 import ReportService from './report/report-service';
@@ -18,14 +19,17 @@ getAsset = function (params, req, res, next) {
   fs.exists(path.join(assetsDir, filename), function (exists) {
     if (!exists) {
       fs.exists(path.join(assetsDir, '/vendor/', filename), function (exists) {
+        /* istanbul ignore else */
         if (!exists) return next();
         fs.readFile(assetsDir + '/vendor/' + filename, function (err, fileContent) {
+          /* istanbul ignore else */
           if (err) throw err;
           res.end(fileContent);
         });
       });
     } else {
       fs.readFile(assetsDir + '/' + filename, function (err, fileContent) {
+        /* istanbul ignore else */
         if (err) throw err;
         res.end(fileContent);
       });
@@ -35,6 +39,7 @@ getAsset = function (params, req, res, next) {
 
 addClientCoverage = function (params, req, res, next) {
   var body = req.body;
+  /* istanbul ignore else */
   if (!body) {
     res.writeHead(400);
     res.end();
@@ -42,6 +47,7 @@ addClientCoverage = function (params, req, res, next) {
 
   var clientCoverage;
   for (var property in body) {
+    /* istanbul ignore else */
     if (body.hasOwnProperty(property)) {
       clientCoverage = body[property];
     }
@@ -56,9 +62,9 @@ addClientCoverage = function (params, req, res, next) {
 };
 
 exportFile = function (params, req, res, next) {
-  var _type = params.type,
-    allowedTypes = ['cobertura', 'html', 'json', 'json-summary', 'lcov', 'none', 'teamcity', 'text', 'text-lcov', 'text-summary', 'lcovonly', 'coverage', 'remap'];
-  type = allowedTypes.indexOf(_type) > -1 ? _type : 'coverage';
+  var _type = params.type;
+  /* istanbul ignore next: ternary operator */
+  type = Conf.reportTypes.allowed.indexOf(_type) > -1 ? _type : 'coverage';
   try {
     let reportService = new ReportService();
     reportService.generateReport(res, type, {});
@@ -98,10 +104,13 @@ instrumentClientJs = function (params, req, res, next) {
     }
     res.setHeader('Content-type', 'application/javascript');
     fs.exists(path + fileurl, function (exists) {
+      /* istanbul ignore else */
       if (!exists) return next();
       fs.readFile(path + fileurl, 'utf8', function (err, fileContent) {
+        /* istanbul ignore else */
         if (err) return next();
         Instrumenter.instrumentJs(fileContent, pathLabel, function (err, data) {
+          /* istanbul ignore else */
           if (err) throw err;
           res.end(data);
         });
@@ -112,18 +121,12 @@ instrumentClientJs = function (params, req, res, next) {
   }
 };
 
-
+let noop = function () {};
 export default Handlers = {
-  showCoverage: showCoverage ? showCoverage : function () {
-  },
-  getAsset: getAsset ? getAsset : function () {
-  },
-  addClientCoverage: addClientCoverage ? addClientCoverage : function () {
-  },
-  instrumentClientJs: instrumentClientJs ? instrumentClientJs : function () {
-  },
-  exportFile: exportFile ? exportFile : function () {
-  },
-  importCoverage: importCoverage ? importCoverage : function () {
-  }
+  showCoverage: showCoverage || noop,
+  getAsset: getAsset || noop,
+  addClientCoverage: addClientCoverage || noop,
+  instrumentClientJs: instrumentClientJs || noop,
+  exportFile: exportFile || noop,
+  importCoverage: importCoverage || noop
 };

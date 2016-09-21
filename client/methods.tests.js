@@ -21,7 +21,7 @@ describe('meteor-coverage', function (done) {
     assert.isDefined(Meteor.sendCoverage);
   });
 
-  it('calls the callback function if there are no coverage', function () {
+  it('calls the callback function if there is no coverage', function () {
     const callback = sandbox.spy();
     sandbox.stub(Meteor, 'getCoverageObject');
 
