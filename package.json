@@ -1,6 +1,6 @@
 {
   "name": "meteor-coverage",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A meteor package that allows you to get the statement, line, function and branch coverage of Meteor project and package.   This package uses the [istanbuljs/istanbul-api](https://github.com/istanbuljs/istanbul-api) package for coverage report.   It's a debug only package, so it does not affect your production build.",
   "main": "server/index.js",
   "dependencies": {
@@ -28,7 +28,8 @@
     "test:watch": "meteor-mocha test-packages ./ --settings settings.coverage.json",
     "start": "meteor npm run lint:fix & meteor npm run test:watch",
     "lint": "eslint .",
-    "lint:fix": "eslint --fix ."
+    "lint:fix": "eslint --fix .",
+    "publish": "METEOR_FORCE_PORTABLE=1 meteor publish"
   },
   "repository": {
     "type": "git",

@@ -1,11 +1,11 @@
-#### 1.0.0
-
+#### 1.0.1
+-   map a lot better the paths inside `.map` files to real paths. You can now see .npm dependencies for exemple.
+-   improved glob patterns in `.coverage.json`: previously, all files were covered. Now **a lot less** are covered. To be able to cover packages, you need to specify it on the `.coverage.json`  
 -   add warning when `.coverage.json` is an invalid JSON
--   move some tasks to boot class
+-   environment variables are now deprecated in favor of meteor `--settings`
+-   on boot, meteor-coverage creates the report folder
 -   fix verbosity ignored on report generation
--   fix source map paths mapping them to real paths
--   improved glob patterns in `.coverage.json`
--   add new type of export `remap` that adds support to languages that compile to JavaScript (like TypeScript)
+-   add new type of export: `remap`. It adds support to languages that compile to JavaScript, like TypeScript
 
 #### 0.9.4
 
