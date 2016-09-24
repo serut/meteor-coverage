@@ -1,6 +1,6 @@
 Package.describe({
   name: 'lmieulet:meteor-coverage',
-  version: '1.0.1',
+  version: '1.1.0',
   summary: 'Server and client coverage for Meteor',
   git: 'https://github.com/serut/meteor-coverage',
   documentation: 'README.md',
@@ -8,7 +8,7 @@ Package.describe({
 });
 
 Package.onUse(function (api) {
-  api.versionsFrom('METEOR@1.3.1');
+  api.versionsFrom('METEOR@1.4');
   api.use(['meteorhacks:picker@1.0.3'], 'server');
 
   api.use(['ecmascript']);
