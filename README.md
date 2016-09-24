@@ -32,7 +32,7 @@ meteor add practicalmeteor:mocha lmieulet:meteor-coverage
 ```js
 [...]
 Package.onTest(function (api) {
-    api.use(['ecmascript', 'practicalmeteor:mocha', 'practicalmeteor:chai', 'practicalmeteor:sinon', 'lmieulet:meteor-coverage@1.1.0']);
+    api.use(['ecmascript', 'practicalmeteor:mocha', 'practicalmeteor:chai', 'practicalmeteor:sinon', 'lmieulet:meteor-coverage@1.1.3']);
 [...]
 });
 ```
