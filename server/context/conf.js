@@ -49,7 +49,7 @@ if (IS_COVERAGE_ACTIVE) {
       Log.error(e.stack);
     }
     // Set up defaultConfig value if they are not provided in the .coverage.json file
-    Log.info('Loading default configuration');
+    Log.info('Loading default configuration, missing configuration file ', coverageFile);
     configuration = defaultConfig;
   }
 

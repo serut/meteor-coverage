@@ -123,18 +123,14 @@ shallInstrumentServerScript = function (file) {
     /* istanbul ignore else */
     if (!Instrumenter.shouldIgnore(file, true)) {
       SourceMap.registerSourceMap(root + file);
-      Log.info('[ServerSide][Package] file instrumented: ' + file);
       return true;
     }
-    Log.info('[ServerSide][Package] file ignored: ' + file);
   } else {
     /* istanbul ignore else */
     if (!Instrumenter.shouldIgnore(root + file, true)) {
       SourceMap.registerSourceMap(root + file);
-      Log.info('[ServerSide][App.js] file instrumented: ' + file);
       return true;
     }
-    Log.info('[ServerSide][App.js] file ignored: ' + file);
   }
 
   return false;

@@ -8,10 +8,11 @@ It's a debug only package, so it does not affect your production build.
 
 ## CI Platforms supported
 
-|                                                                                     |                                                                         Travis                                                                        |                                                                                                                                          Circle CI |                                                                                                                                                                                      Coveralls |                                                                                                                                                      Codecov |                                                                                                                                                                                                                                                                                                       Codacy |
-| ----------------------------------------------------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------: | -------------------------------------------------------------------------------------------------------------------------------------------------: | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | -----------------------------------------------------------------------------------------------------------------------------------------------------------: | -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-| lmieulet:meteor-coverage                                                            |             [![Build Status](https://travis-ci.org/serut/meteor-coverage.png?branch=master)](https://travis-ci.org/serut/meteor-coverage)             |                         [![Circle CI](https://circleci.com/gh/serut/meteor-coverage.svg?style=svg)](https://circleci.com/gh/serut/meteor-coverage) |                         [![Coverage Status](https://coveralls.io/repos/github/serut/meteor-coverage/badge.svg?branch=master)](https://coveralls.io/github/serut/meteor-coverage?branch=master) |                         [![codecov](https://codecov.io/gh/serut/meteor-coverage/branch/master/graph/badge.svg)](https://codecov.io/gh/serut/meteor-coverage) | [![Codacy Badge](https://api.codacy.com/project/badge/Grade/3679340dded44b84a44ca65862855216)](https://www.codacy.com/app/l-mieulet/meteor-coverage) [![Codacy Badge](https://api.codacy.com/project/badge/Coverage/3679340dded44b84a44ca65862855216)](https://www.codacy.com/app/l-mieulet/meteor-coverage) |
-| [meteor-coverage-app-exemple](https://github.com/serut/meteor-coverage-app-exemple) | [![Build Status](https://travis-ci.org/serut/meteor-coverage-app-exemple.svg?branch=master)](https://travis-ci.org/serut/meteor-coverage-app-exemple) | [![Circle CI](https://circleci.com/gh/serut/meteor-coverage-app-exemple.svg?style=svg)](https://circleci.com/gh/serut/meteor-coverage-app-exemple) | [![Coverage Status](https://coveralls.io/repos/github/serut/meteor-coverage-app-exemple/badge.svg?branch=master)](https://coveralls.io/github/serut/meteor-coverage-app-exemple?branch=master) | [![codecov](https://codecov.io/gh/serut/meteor-coverage-app-exemple/branch/master/graph/badge.svg)](https://codecov.io/gh/serut/meteor-coverage-app-exemple) |                                                                                                                                            [![Codacy Badge](https://api.codacy.com/project/badge/Grade/1a2997c614cf4da09452f47d70d72352)](https://www.codacy.com/app/l-mieulet/meteor-coverage-app-exemplee) |
+|                                                                                       |                                                                         Travis                                                                        |                                                                                                                                          Circle CI |                                                                                                                                                                                      Coveralls |                                                                                                                                                      Codecov |                                                                                                                                                                                                                                                                                                       Codacy |
+| ------------------------------------------------------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------: | -------------------------------------------------------------------------------------------------------------------------------------------------: | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | -----------------------------------------------------------------------------------------------------------------------------------------------------------: | -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+| lmieulet:meteor-coverage                                                              |             [![Build Status](https://travis-ci.org/serut/meteor-coverage.png?branch=master)](https://travis-ci.org/serut/meteor-coverage)             |                         [![Circle CI](https://circleci.com/gh/serut/meteor-coverage.svg?style=svg)](https://circleci.com/gh/serut/meteor-coverage) |                         [![Coverage Status](https://coveralls.io/repos/github/serut/meteor-coverage/badge.svg?branch=master)](https://coveralls.io/github/serut/meteor-coverage?branch=master) |                         [![codecov](https://codecov.io/gh/serut/meteor-coverage/branch/master/graph/badge.svg)](https://codecov.io/gh/serut/meteor-coverage) | [![Codacy Badge](https://api.codacy.com/project/badge/Grade/3679340dded44b84a44ca65862855216)](https://www.codacy.com/app/l-mieulet/meteor-coverage) [![Codacy Badge](https://api.codacy.com/project/badge/Coverage/3679340dded44b84a44ca65862855216)](https://www.codacy.com/app/l-mieulet/meteor-coverage) |
+| [meteor-coverage-app-exemple](https://github.com/serut/meteor-coverage-app-exemple)   | [![Build Status](https://travis-ci.org/serut/meteor-coverage-app-exemple.svg?branch=master)](https://travis-ci.org/serut/meteor-coverage-app-exemple) | [![Circle CI](https://circleci.com/gh/serut/meteor-coverage-app-exemple.svg?style=svg)](https://circleci.com/gh/serut/meteor-coverage-app-exemple) | [![Coverage Status](https://coveralls.io/repos/github/serut/meteor-coverage-app-exemple/badge.svg?branch=master)](https://coveralls.io/github/serut/meteor-coverage-app-exemple?branch=master) | [![codecov](https://codecov.io/gh/serut/meteor-coverage-app-exemple/branch/master/graph/badge.svg)](https://codecov.io/gh/serut/meteor-coverage-app-exemple) |                                                                                                                                            [![Codacy Badge](https://api.codacy.com/project/badge/Grade/1a2997c614cf4da09452f47d70d72352)](https://www.codacy.com/app/l-mieulet/meteor-coverage-app-exemplee) |
+| [fork of apollostack/meteor-starter-kit](https://github.com/serut/meteor-starter-kit) |                                                                                                                                                       |                   [![Circle CI](https://circleci.com/gh/serut/meteor-starter-kit.svg?style=svg)](https://circleci.com/gh/serut/meteor-starter-kit) |                                                                                                                                                                                                |                   [![codecov](https://codecov.io/gh/serut/meteor-starter-kit/branch/master/graph/badge.svg)](https://codecov.io/gh/serut/meteor-starter-kit) |                                                                                                                                                                                                                                                                                                              |
 
 ## Installation
 
@@ -22,7 +23,7 @@ Ensure you use at least Meteor version `v1.4`.
 Then, run the following  :
 
 ```txt
-meteor add practicalmeteor:mocha lmieulet:meteor-coverage
+meteor add lmieulet:meteor-coverage practicalmeteor:mocha practicalmeteor:mocha-console-runner
 ```
 
 ### Specific setup for Meteor package
@@ -106,23 +107,29 @@ Add what you need to run your app inside your `package.json`:
         "test:app-full-watch": "meteor test --full-app --driver-package practicalmeteor:mocha",
         "test:packages-watch": "meteor test-packages --driver-package practicalmeteor:mocha",
 
-        "precoverage": "meteor npm run lint:fix",
-        "coverage": "meteor npm run coverage:app-unit && meteor npm run coverage:app-full && meteor npm run coverage:packages",
-        "coverage:app-unit-watch": "meteor test --settings settings.coverage.json --driver-package practicalmeteor:mocha",
-        "coverage:app-full-watch": "meteor test --full-app --settings settings.coverage.json --driver-package practicalmeteor:mocha",
-        "coverage:app-full-watch": "meteor test-packages --settings settings.coverage.json --driver-package practicalmeteor:mocha",
+        "precoverage": "npm run lint",
+        "coverage": "meteor npm run coverage:app-unit && meteor npm run coverage:app-full",
         "coverage:app-unit": "spacejam test --coverage 'out_lcovonly out_coverage out_html' --driver-package practicalmeteor:mocha-console-runner",
-        "coverage:app-full": "spacejam test --full-app --port 4000 --coverage 'out_lcovonly out_coverage out_html in_coverage' --driver-package practicalmeteor:mocha-console-runner",
-        "coverage:packages": "spacejam test-packages --coverage 'out_lcovonly out_html out_remap in_coverage' --driver-package practicalmeteor:mocha-console-runner",
-        "coverage:app-unit-html": "spacejam test --coverage out_html --driver-package practicalmeteor:mocha-console-runner",
-        "coverage:app-full-html": "spacejam test --full-app --coverage out_html --driver-package practicalmeteor:mocha-console-runner",
-        "coverage:packages-html": "spacejam test-packages --coverage out_html --driver-package practicalmeteor:mocha-console-runner"
+        "coverage:app-full": "spacejam test --full-app --coverage 'out_lcovonly out_coverage out_html in_coverage' --driver-package practicalmeteor:mocha-console-runner",
+        "precoverage-watch": "npm run lint",
+        "coverage-watch:app-unit": "meteor test --settings settings.coverage.json --driver-package practicalmeteor:mocha",
+        "coverage-watch:app-full": "meteor test --full-app --settings settings.coverage.json --driver-package practicalmeteor:mocha",
+        "pretest": "npm run lint",
+        "test": "meteor npm run test:app-unit && meteor npm run test:app-full",
+        "test:app-unit": "spacejam test --driver-package practicalmeteor:mocha-console-runner",
+        "test:app-full": "spacejam test --full-app --driver-package practicalmeteor:mocha-console-runner",
+        "pretest-watch": "npm run lint",
+        "test-watch:app-unit": "meteor test --driver-package practicalmeteor:mocha-console-runner",
+        "test-watch:app-full": "meteor test --full-app  --driver-package practicalmeteor:mocha-console-runner",
 
         [PCKGS]
-        "test": "spacejam-mocha test-packages ./ --coverage out_lcovonly ",
-        "test:watch": "meteor npm run lint:fix & meteor npm run test:packages-coverage-watch",
-        "test:packages-coverage-watch": "meteor-mocha test-packages --settings settings.coverage.json",
+        "coverage:packages": "spacejam test-packages ./ --coverage out_lcovonly --driver-package practicalmeteor:mocha-console-runner",
+        "coverage-watch": "meteor npm run lint:fix & meteor npm run coverage-watch:packages",
+        "coverage-watch:packages": "meteor test-packages --settings settings.coverage.json  --driver-package practicalmeteor:mocha-console-runner",
+        "test": "meteor npm run test:packages",
+        "test:packages": "meteor test-packages ./ --coverage out_lcovonly --driver-package practicalmeteor:mocha-console-runner",
 
+        "lint": "eslint . || exit 0;",
         "lint:fix": "eslint --fix ."
     }
 
@@ -145,11 +152,11 @@ Now, you can run your test (here is an extract of a [circle.yml](https://github.
 
     - meteor npm install
     # Unit test using mocha
-    - meteor npm run test-coverage-app-unit
+    - meteor npm run coverage:app-unit
     # Integration test using mocha
-    - meteor npm run test-coverage-app-full
+    - meteor npm run coverage:app-full
     # Package test using mocha
-    - meteor npm run test-coverage-packages-mocha
+    - meteor npm run coverage:packages
 
 ### Coveralls
 
