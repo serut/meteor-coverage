@@ -15,7 +15,7 @@ export const COVERAGE_APP_FOLDER = meteor_parameters.COVERAGE_APP_FOLDER || proc
 
 /* istanbul ignore else */
 if (COVERAGE_APP_FOLDER === ENV_NOT_DEFINED) {
-  Log.error('Error: COVERAGE_APP_FOLDER is undefined and the coverage will fail.');
+  Log.info('Error: COVERAGE_APP_FOLDER is undefined and the coverage will fail.');
 }
 const NOT_DEFINED = '/COVERAGE/NOT/ACTIVE/';
 let configuration = {
