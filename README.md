@@ -23,7 +23,7 @@ Ensure you use at least Meteor version `v1.4`.
 Then, run the following  :
 
 ```txt
-meteor add lmieulet:meteor-coverage practicalmeteor:mocha practicalmeteor:mocha-console-runner
+meteor add lmieulet:meteor-coverage practicalmeteor:mocha@2.4.5_6 practicalmeteor:mocha-console-runner
 ```
 
 ### Specific setup for Meteor package
