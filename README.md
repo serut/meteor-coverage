@@ -14,6 +14,9 @@ It's a debug only package, so it does not affect your production build.
 | [meteor-coverage-app-exemple](https://github.com/serut/meteor-coverage-app-exemple)   | [![Build Status](https://travis-ci.org/serut/meteor-coverage-app-exemple.svg?branch=master)](https://travis-ci.org/serut/meteor-coverage-app-exemple) | [![Circle CI](https://circleci.com/gh/serut/meteor-coverage-app-exemple.svg?style=svg)](https://circleci.com/gh/serut/meteor-coverage-app-exemple) | [![Coverage Status](https://coveralls.io/repos/github/serut/meteor-coverage-app-exemple/badge.svg?branch=master)](https://coveralls.io/github/serut/meteor-coverage-app-exemple?branch=master) | [![codecov](https://codecov.io/gh/serut/meteor-coverage-app-exemple/branch/master/graph/badge.svg)](https://codecov.io/gh/serut/meteor-coverage-app-exemple) |                                                                                                                                            [![Codacy Badge](https://api.codacy.com/project/badge/Grade/1a2997c614cf4da09452f47d70d72352)](https://www.codacy.com/app/l-mieulet/meteor-coverage-app-exemplee) |
 | [fork of apollostack/meteor-starter-kit](https://github.com/serut/meteor-starter-kit) |                                                                                                                                                       |                   [![Circle CI](https://circleci.com/gh/serut/meteor-starter-kit.svg?style=svg)](https://circleci.com/gh/serut/meteor-starter-kit) |                                                                                                                                                                                                |                   [![codecov](https://codecov.io/gh/serut/meteor-starter-kit/branch/master/graph/badge.svg)](https://codecov.io/gh/serut/meteor-starter-kit) |                                                                                                                                                                                                                                                                                                              |
 
+[![Dependency Status](https://img.shields.io/david/serut/meteor-coverage.svg)](https://david-dm.org/serut/meteor-coverage)
+[![devDependency Status](https://img.shields.io/david/dev/serut/meteor-coverage.svg)](https://david-dm.org/serut/meteor-coverage#info=devDependencies)
+
 ## Installation
 
 ### Specific setup for Meteor apps
@@ -33,7 +36,7 @@ meteor add lmieulet:meteor-coverage practicalmeteor:mocha@2.4.5_6 practicalmeteo
 ```js
 [...]
 Package.onTest(function (api) {
-    api.use(['ecmascript', 'practicalmeteor:mocha', 'practicalmeteor:chai', 'practicalmeteor:sinon', 'lmieulet:meteor-coverage@1.1.3']);
+    api.use(['ecmascript', 'practicalmeteor:mocha', 'practicalmeteor:chai', 'practicalmeteor:sinon', 'lmieulet:meteor-coverage@1.1.4']);
 [...]
 });
 ```
