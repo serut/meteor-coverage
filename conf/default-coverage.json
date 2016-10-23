@@ -5,7 +5,7 @@
     "general": [],
     "server": [
       "**/node_modules/**/*.json",
-      "**/.?*/**",
+      "**/.!(meteor)*/**",
       "**/packages/!(local-test_?*.js)",
       "**/+([^:]):+([^:])/**",
       "**/@(test|tests|spec|specs)/**",

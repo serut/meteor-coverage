@@ -39,6 +39,7 @@ describe('meteor coverage', function () {
       it('accept minified tests files', function () {
         assert.isFalse(Instrumenter.shouldIgnore('/home/travis/build/serut/meteor-coverage/server/local-test_lmieulet_meteor-coverage.js', true));
         assert.isFalse(Instrumenter.shouldIgnore('/home/travis/build/serut/app/client/imports/lib/local-test_lmieulet_meteor-coverage.js', false));
+        assert.isFalse(Instrumenter.shouldIgnore('C:/Users/travis/AppData/Local/Temp/meteor-test-run12asynp/.meteor/local/build/programs/server/app/app.js', true));
       });
 
       it('ignore client tests files', function () {
