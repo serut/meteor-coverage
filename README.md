@@ -15,7 +15,7 @@ It's a debug only package, so it does not affect your production build.
 | [fork of apollostack/meteor-starter-kit](https://github.com/serut/meteor-starter-kit) |                                                                                                                                                       |                   [![Circle CI](https://circleci.com/gh/serut/meteor-starter-kit.svg?style=svg)](https://circleci.com/gh/serut/meteor-starter-kit) |                                                                                                                                                                                                |                   [![codecov](https://codecov.io/gh/serut/meteor-starter-kit/branch/master/graph/badge.svg)](https://codecov.io/gh/serut/meteor-starter-kit) |                                                                                                                                                                                                                                                                                                              |
 
 [![Dependency Status](https://img.shields.io/david/serut/meteor-coverage.svg)](https://david-dm.org/serut/meteor-coverage)
-[![devDependency Status](https://img.shields.io/david/dev/serut/meteor-coverage.svg)](https://david-dm.org/serut/meteor-coverage#info=devDependencies)
+[![devDependency Status](https://img.shields.io/david/dev/serut/meteor-coverage.svg)](https://david-dm.org/serut/meteor-coverage?type=dev)
 
 ## Installation
 
