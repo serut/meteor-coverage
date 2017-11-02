@@ -15,6 +15,7 @@
       "**/?(*.)app-spec?(s).?*"
     ],
     "client": [
+      "**/*.json",
       "**/client/stylesheets/**",
       "**/.npm/package/node_modules/**",
       "**/web.browser/packages/**",
