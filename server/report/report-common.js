@@ -2,9 +2,8 @@ import fs from 'fs';
 import mkdirp from 'mkdirp';
 import path from 'path';
 import Log from './../context/log';
+const Report = Npm.require('istanbul-lib-report');
 
-const istanbulAPI = Npm.require('istanbul-api'),
-  Report = istanbulAPI.libReport;
 
 export default ReportCommon = {
     /**

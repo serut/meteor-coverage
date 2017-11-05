@@ -2,11 +2,8 @@ import {_} from 'meteor/underscore';
 import Log from './../context/log';
 import Conf from './../context/conf';
 import minimatch from 'minimatch';
-
-const istanbulAPI = Npm.require('istanbul-api');
-const Instrument = istanbulAPI.libInstrument;
-const Hook = istanbulAPI.libHook;
-
+const Instrument  = Npm.require('istanbul-lib-instrument'),
+     Hook = Npm.require('istanbul-lib-hook');
 let instrumenter = undefined;
 
 /**

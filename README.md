@@ -17,6 +17,43 @@ It's a debug only package, so it does not affect your production build.
 [![Dependency Status](https://img.shields.io/david/serut/meteor-coverage.svg)](https://david-dm.org/serut/meteor-coverage)
 [![devDependency Status](https://img.shields.io/david/dev/serut/meteor-coverage.svg)](https://david-dm.org/serut/meteor-coverage?type=dev)
 
+
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**
+
+  - [Installation](#installation)
+    - [Specific setup for Meteor apps](#specific-setup-for-meteor-apps)
+    - [Specific setup for Meteor package](#specific-setup-for-meteor-package)
+    - [Configuration](#configuration)
+  - [Usage](#usage)
+    - [Watch mode](#watch-mode)
+    - [Using runners](#using-runners)
+    - [Run options](#run-options)
+  - [Setup spacejam](#setup-spacejam)
+  - [Advanced setup for CI](#advanced-setup-for-ci)
+    - [Coveralls](#coveralls)
+    - [Codecov](#codecov)
+  - [spacejam --coverage possibilities](#spacejam---coverage-possibilities)
+  - [Meteor --settings file](#meteor---settings-file)
+  - [Global environment variable](#global-environment-variable)
+  - [Config file](#config-file)
+  - [Flow router issue](#flow-router-issue)
+  - [My files are missing from my app coverage report](#my-files-are-missing-from-my-app-coverage-report)
+  - [Istanbul html colors legend](#istanbul-html-colors-legend)
+  - [Ignore code from coverage with annotation](#ignore-code-from-coverage-with-annotation)
+  - [Meteor ignored folders and files](#meteor-ignored-folders-and-files)
+  - [How to replace spacejam](#how-to-replace-spacejam)
+  - [I want my reports referred to my original source files](#i-want-my-reports-referred-to-my-original-source-files)
+  - [Client API](#client-api)
+      - [Meteor.sendCoverage(callback)](#meteorsendcoveragecallback)
+      - [Meteor.exportCoverage(type, callback)](#meteorexportcoveragetype-callback)
+      - [Meteor.importCoverage(callback)](#meteorimportcoveragecallback)
+  - [Contributing](#contributing)
+  - [Credits](#credits)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 ## Installation
 
 ### Specific setup for Meteor apps

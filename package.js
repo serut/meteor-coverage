@@ -8,7 +8,7 @@ Package.describe({
 });
 
 Package.onUse(function (api) {
-  api.versionsFrom('METEOR@1.4');
+  api.versionsFrom('METEOR@1.6');
   api.use(['meteorhacks:picker@1.0.3'], 'server');
 
   api.use(['ecmascript']);
@@ -29,14 +29,20 @@ Package.onUse(function (api) {
 });
 
 
-Npm.depends({
-  'istanbul-api': '1.1.0-alpha.1',
-  'body-parser': '1.15.2',
-  'homedir': '0.6.0',
-  'minimatch': '3.0.3',
-  'mkdirp': '0.5.1',
-  'remap-istanbul': '0.6.4'
-});
+Npm.depends({ 
+  "istanbul-lib-source-maps": "1.2.2",
+  "istanbul-lib-instrument": "1.9.1",
+  "istanbul-lib-hook": "1.1.0",
+  "istanbul-lib-coverage": "1.1.1",
+  "istanbul-lib-report": "1.1.2",
+  "istanbul-reports": "1.1.3",
+  "body-parser": "1.18.2",
+  "minimatch": "3.0.4",
+  "mkdirp": "0.5.1",
+  "homedir": "0.6.0",
+  "remap-istanbul": "0.6.4"
+}); 
+ 
 
 Package.onTest(function (api) {
   api.use('ecmascript');

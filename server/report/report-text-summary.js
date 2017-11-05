@@ -4,10 +4,9 @@ import Core from '../services/core';
 import ReportCommon from './report-common';
 import path from 'path';
 import fs from 'fs';
-var istanbulAPI = Npm.require('istanbul-api'),
-  Report = istanbulAPI.libReport,
-  ReportImpl = istanbulAPI.reportsImpl;
-
+var Report = Npm.require('istanbul-lib-report'),
+  ReportImpl = Npm.require('istanbul-reports');
+  
 export default class {
   constructor(res, type, options) {
     this.res = res;
