@@ -41,6 +41,8 @@ Npm.depends({
 Package.onTest(function (api) {
   api.use('ecmascript');
   api.use(['lmieulet:meteor-coverage-self-instrumenter@3.0.0'], ['server']);
+  // use the right version of coffeescript https://github.com/meteor/meteor/issues/8577#issuecomment-341354360
+  api.use(['coffeescript@1.12.7_3']);
   api.use(['practicalmeteor:mocha', 'practicalmeteor:chai', 'practicalmeteor:sinon', 'lmieulet:meteor-coverage']);
   api.use('jquery', 'client');
 
