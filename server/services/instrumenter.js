@@ -22,10 +22,12 @@ hookLoader = function (opts) {
     throw 'Instrumenter already defined ! You cannot call this method twice';
   }
   instrumenter = Instrument.createInstrumenter(opts);
-  const transformer = instrumenter.instrumentSync.bind(instrumenter);
   Hook.hookRunInThisContext(
     shallInstrumentServerScript,
-    transformer,
+    function (code, options) {
+      var filename = typeof options === 'string' ? options : options.filename;
+      return instrumenter.instrumentSync(code, filename);
+    },
     {
       verbose: opts.verbose
     }
