@@ -12,6 +12,7 @@ Package.onUse(function (api) {
   api.use(['meteorhacks:picker@1.0.3'], 'server');
 
   api.use(['ecmascript']);
+  api.use('http', 'client');
   // Add datasets
   api.addAssets('conf/default-coverage.json', 'server');
 
@@ -43,6 +44,7 @@ Package.onTest(function (api) {
   api.use(['lmieulet:meteor-coverage-self-instrumenter@3.0.0'], ['server']);
   api.use(['practicalmeteor:mocha', 'practicalmeteor:chai', 'practicalmeteor:sinon', 'lmieulet:meteor-coverage']);
   api.use('jquery', 'client');
+  api.use('http', 'client');
 
   api.mainModule('server/tests.js', 'server');
   api.mainModule('client/main.tests.js', 'client');
