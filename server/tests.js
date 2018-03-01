@@ -1,4 +1,4 @@
-import {assert} from 'meteor/practicalmeteor:chai';
+import {assert} from 'chai';
 
 import meteorCoverageApi from 'meteor/lmieulet:meteor-coverage';
 

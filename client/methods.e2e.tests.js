@@ -1,4 +1,4 @@
-import {chai, assert, expect} from 'meteor/practicalmeteor:chai';
+import {chai, assert, expect} from 'chai';
 import Meteor from 'meteor/lmieulet:meteor-coverage';
 var _should = chai.should();
 
