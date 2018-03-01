@@ -4,6 +4,7 @@ import Core from './services/core';
 import ReportService from './report/report-service';
 import fs from 'fs';
 import path from 'path';
+import zlib from 'zlib';
 
 showCoverage = function (params, req, res, next) {
   let options = {
@@ -84,41 +85,100 @@ importCoverage = function (params, req, res, next) {
   }
 };
 
+// Hooks the res-object and overwrites the write() and end() method
 instrumentClientJs = function (params, req, res, next) {
   var fileurl = req.url.split('?')[0];
   if (Instrumenter.shallInstrumentClientScript(fileurl)) {
     var path,
       pathLabel;
-          // Either a package
+
+    // Either a package
     if (req.url.indexOf('/packages') === 0) {
       path = '../web.browser';
-      pathLabel = path + fileurl;
     } else if (req.url.indexOf('/app') === 0) {
-              // Or the app/app.js
+      // Or the app/app.js
       path = '../web.browser';
-      pathLabel = path + fileurl;
     } else {
-              // Or a public file
+      // Or a public file
       path = '../web.browser/app';
-      pathLabel = path + fileurl;
     }
-    res.setHeader('Content-type', 'application/javascript');
-    fs.exists(path + fileurl, function (exists) {
-      /* istanbul ignore else */
-      if (!exists) return next();
-      fs.readFile(path + fileurl, 'utf8', function (err, fileContent) {
+    pathLabel = path + fileurl;
+
+    // Gather all write-buffers (and convert strings to buffer)
+    const allBuffers = [];
+    res.write = (...args) => {
+      let callback = () => {};
+      if (typeof args[args.length - 1] === 'function') {
+        callback = args.pop();
+      }
+
+      allBuffers.push(typeof args[0] === 'string' ? Buffer.from(...args) : args[0]);
+    };
+
+    const resEnd = res.end.bind(res);
+    const end = () => {
+      // Build one big buffer
+      let buffer = Buffer.concat(allBuffers);
+
+      // Revert the encoding of the content
+      const encoding = res.getHeader('content-encoding');
+      if (encoding) {
+        switch (encoding) {
+        case 'gzip':
+          buffer = zlib.gunzipSync(buffer);
+          break;
+        default:
+          console.warn(`Unsupported encoding ${encoding}. Please inform the author of the package meteor-coverage.`);
+          return resEnd(Buffer.concat(allBuffers));
+        }
+      }
+
+      const content = buffer.toString();
+      Instrumenter.instrumentJs(content, pathLabel, function (err, data) {
         /* istanbul ignore else */
-        if (err) return next();
-        Instrumenter.instrumentJs(fileContent, pathLabel, function (err, data) {
-          /* istanbul ignore else */
-          if (err) throw err;
-          res.end(data);
-        });
+        if (err) {
+          console.warn(err);
+          resEnd(Buffer.concat(allBuffers));
+        } else {
+          // Get a buffer
+          let instrumentedBuffer = Buffer.from(data);
+
+          // Revert the encoding back again
+          const encoding = res.getHeader('content-encoding');
+          if (encoding) {
+            switch (encoding) {
+            case 'gzip':
+              instrumentedBuffer = zlib.gzipSync(instrumentedBuffer);
+              break;
+            default:
+              // How can you end up here ..?
+            }
+          }
+
+          // Finally send the instrumented code to the client
+          resEnd(instrumentedBuffer);
+        }
       });
-    });
-  } else {
-    next();
+    };
+
+    // Make sure to write the last chunk before calling end()
+    res.end = (...args) => {
+      let finalize = end;
+      if (typeof args[args.length - 1] === 'function') {
+        const callback = args.pop();
+        finalize = () => { callback(); end(); };
+      }
+
+      if (args.length > 0) {
+        args.push(finalize);
+        res.write(...args);
+      } else {
+        finalize();
+      }
+    };
   }
+
+  next();
 };
 
 export default Handlers = {
