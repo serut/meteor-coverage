@@ -15,10 +15,10 @@ export default class {
     fs.writeFile(reportPath, coverageReport, function (err) {
       /* istanbul ignore else */
       if (err) {
-        throw 'failed to write report file: ' + reportPath;
+        instance.res.end(JSON.stringify({ type: 'failed', message: 'failed to write report file: ' + reportPath }));
+      } else {
+        instance.res.end('{"type":"success"}');
       }
-      instance.res.end('{"type":"success"}');
     });
-
   }
 }

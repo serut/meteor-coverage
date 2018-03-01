@@ -23,14 +23,20 @@ getAsset = function (params, req, res, next) {
         if (!exists) return next();
         fs.readFile(assetsDir + '/vendor/' + filename, function (err, fileContent) {
           /* istanbul ignore else */
-          if (err) throw err;
+          if (err) {
+            console.error(err);
+            return next();
+          }
           res.end(fileContent);
         });
       });
     } else {
       fs.readFile(assetsDir + '/' + filename, function (err, fileContent) {
         /* istanbul ignore else */
-        if (err) throw err;
+        if (err) {
+          console.error(err);
+          return next();
+        }
         res.end(fileContent);
       });
     }
