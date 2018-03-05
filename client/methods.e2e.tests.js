@@ -35,28 +35,6 @@ describe('meteor-coverage', function () {
       done(e);
     }
   });
-  /*it('handle errors on sending client coverage', function (done) {
-    // Manual stub
-    const _jQueryAjaxBackup = $.ajax;
-    $.ajax = function(options) { options.error(); };
-
-    try {
-      Meteor.sendCoverage(
-        function (stats, err) {
-          assert.isTrue(stats.TOTAL > 0, 'no client coverage');
-          assert.isTrue(stats.SUCCESS > 0, 'none of the client coverage have been saved');
-          assert.isTrue(stats.FAILED > 0, 'an export failed');
-          done();
-        }
-      );
-    } catch (e) {
-      console.error(e, e.stack);
-      done(e);
-    }
-
-    // Undo stub
-    $.ajax = _jQueryAjaxBackup;
-  });*/
 
   // test implemented report types
   let coverage = {
