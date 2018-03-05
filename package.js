@@ -9,9 +9,9 @@ Package.describe({
 
 Package.onUse(function (api) {
   api.versionsFrom('METEOR@1.6');
-  api.use(['meteorhacks:picker@1.0.3'], 'server');
 
   api.use(['ecmascript']);
+  api.use('webapp', 'server');
   api.use('http', 'client');
   // Add datasets
   api.addAssets('conf/default-coverage.json', 'server');
