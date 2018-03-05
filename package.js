@@ -30,12 +30,12 @@ Package.onUse(function (api) {
 
 
 Npm.depends({
-  'istanbul-lib-source-maps': '1.2.2',
-  'istanbul-lib-instrument': '1.9.1',
-  'istanbul-lib-hook': '1.1.0',
-  'istanbul-lib-coverage': '1.1.1',
-  'istanbul-lib-report': '1.1.2',
-  'istanbul-reports': '1.1.3',
+  'istanbul-lib-source-maps': '1.2.4',
+  'istanbul-lib-instrument': '1.10.0',
+  'istanbul-lib-hook': '1.2.0',
+  'istanbul-lib-coverage': '1.2.0',
+  'istanbul-lib-report': '1.1.4',
+  'istanbul-reports': '1.2.0',
   'body-parser': '1.18.2',
   'minimatch': '3.0.4',
   'mkdirp': '0.5.1',
