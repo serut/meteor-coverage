@@ -26,7 +26,6 @@ Package.onUse(function (api) {
 
   api.mainModule('server/index.js', 'server');
   api.mainModule('client/methods.js', 'client');
-});
 
 
 Npm.depends({
@@ -47,11 +46,21 @@ Npm.depends({
 Package.onTest(function (api) {
   api.use('ecmascript');
   api.use(['lmieulet:meteor-coverage-self-instrumenter@3.0.0'], ['server']);
-  // use the right version of coffeescript https://github.com/meteor/meteor/issues/8577#issuecomment-341354360
-  api.use(['coffeescript@1.12.7_3']);
-  api.use(['practicalmeteor:mocha', 'practicalmeteor:chai', 'practicalmeteor:sinon', 'lmieulet:meteor-coverage']);
-  api.use('jquery', 'client');
+  api.use(['lmieulet:meteor-coverage']);
+  api.use(['meteortesting:mocha']);
 
   api.mainModule('server/tests.js', 'server');
   api.mainModule('client/main.tests.js', 'client');
+
+  Npm.depends({
+    chai: '2.1.0',
+    sinon: '1.14.1',
+
+    'istanbul-api': '1.1.0-alpha.1',
+    'body-parser': '1.15.2',
+    'homedir': '0.6.0',
+    'minimatch': '3.0.3',
+    'mkdirp': '0.5.1',
+    'remap-istanbul': '0.6.4'
+  });
 });

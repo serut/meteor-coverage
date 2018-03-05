@@ -31,8 +31,8 @@
     "spacejam": "https://github.com/serut/spacejam/tarball/windows-suppport-rc4"
   },
   "scripts": {
-    "test": "spacejam test-packages ./ --coverage out_lcovonly  --driver-package practicalmeteor:mocha-console-runner",
-    "test:watch": "meteor test-packages ./ --settings settings.coverage.json  --driver-package practicalmeteor:mocha",
+    "test": "COVERAGE=1 COVERAGE_APP_FOLDER=$PWD/ meteor test-packages ./ --driver-package meteortesting:mocha",
+    "test:watch": "COVERAGE=1 COVERAGE_APP_FOLDER=$PWD/ meteor test-packages ./  --driver-package meteortesting:mocha --watch",
     "start": "meteor npm run lint:fix & meteor npm run test:watch",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",

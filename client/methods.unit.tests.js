@@ -1,6 +1,6 @@
 import {$} from 'meteor/jquery';
-import {expect, assert} from 'meteor/practicalmeteor:chai';
-import {sinon} from 'meteor/practicalmeteor:sinon';
+import {expect, assert} from 'chai';
+import sinon from 'sinon';
 import Meteor from 'meteor/lmieulet:meteor-coverage';
 
 describe('meteor-coverage', function (done) {
