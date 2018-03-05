@@ -36,12 +36,14 @@ importCoverage = function (res, options = {}) {
   fs.exists(reportPath, function (exists) {
     /* istanbul ignore else */
     if (!exists) {
-      throw 'report file not found: reportPath=' + reportPath + ' COVERAGE_APP_FOLDER=' + Conf.COVERAGE_APP_FOLDER;
+      res.end(JSON.stringify({ type: 'failed', message: 'report file not found: reportPath=' + reportPath + ' COVERAGE_APP_FOLDER=' + Conf.COVERAGE_APP_FOLDER }));
+      return;
     }
     fs.readFile(reportPath, 'utf8', function (err, fileContent) {
       /* istanbul ignore else */
       if (err) {
-        throw 'failed to read report file: ' + reportPath;
+        res.end(JSON.stringify({ type: 'failed', message: 'failed to read report file: ' + reportPath }));
+        return;
       }
       let coverageObj = JSON.parse(fileContent);
       for (let property in coverageObj) {

@@ -87,11 +87,11 @@ export default class {
         copyFile: function (sourcePath, destPath) {
           fs.readFile(sourcePath, (err, data) => {
             /* istanbul ignore else */
-            if (err) throw err;
+            if (err) return console.error(err);
             let p = path.join(folderpath, destPath);
             fs.writeFile(p, data, (err, data) => {
               /* istanbul ignore else */
-              if (err) throw err;
+              if (err) return console.error(err);
             });
           });
         }
