@@ -1,8 +1,7 @@
 import Conf from './../context/conf';
 import path from 'path';
 import fs from 'fs';
-const istanbulAPI = Npm.require('istanbul-api');
-const Coverage = istanbulAPI.libCoverage;
+const Coverage = Npm.require('istanbul-lib-coverage');
 
 let mergeCoverageWith, importCoverage, getCoverageObject;
 

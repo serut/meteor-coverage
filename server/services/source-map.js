@@ -4,8 +4,7 @@ import fs from 'fs';
 import path from 'path';
 
 const homedir = Npm.require('homedir');
-const istanbulAPI = Npm.require('istanbul-api');
-const libSourceMaps = istanbulAPI.libSourceMaps;
+const libSourceMaps = Npm.require('istanbul-lib-source-maps');
 
 const sourceMap = libSourceMaps.createSourceMapStore({verbose: Conf.IS_COVERAGE_ACTIVE});
 const meteorDir = Conf.COVERAGE_APP_FOLDER;

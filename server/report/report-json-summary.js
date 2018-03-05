@@ -2,8 +2,8 @@ import Conf from './../context/conf';
 import CoverageData from './../services/coverage-data';
 import Core from './../services/core';
 import ReportCommon from './report-common';
-const istanbulAPI = Npm.require('istanbul-api'),
-  ReportImpl = istanbulAPI.reportsImpl;
+const ReportImpl = Npm.require('istanbul-reports');
+
 export default class {
   constructor(res, type, options) {
     this.res = res;
