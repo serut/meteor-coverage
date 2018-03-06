@@ -2,7 +2,7 @@
 
 A meteor package that allows you to get the statement, line, function and branch coverage of Meteor project and package.
 
-This package uses the [istanbuljs/istanbul-api](https://github.com/istanbuljs/istanbul-api) package for coverage report.
+This package uses the [istanbuljs](https://github.com/istanbuljs/istanbuljs) packages for coverage report.
 
 It's a debug only package, so it does not affect your production build.
 
@@ -58,7 +58,7 @@ It's a debug only package, so it does not affect your production build.
 
 ### Specific setup for Meteor apps
 
-Ensure you use at least Meteor version `v1.4`.
+Ensure you use at least Meteor version `v1.6`.
 
 Then, run the following  :
 
@@ -73,7 +73,7 @@ meteor add lmieulet:meteor-coverage practicalmeteor:mocha@2.4.5_6 practicalmeteo
 ```js
 [...]
 Package.onTest(function (api) {
-    api.use(['ecmascript', 'practicalmeteor:mocha', 'practicalmeteor:chai', 'practicalmeteor:sinon', 'lmieulet:meteor-coverage@1.1.4']);
+    api.use(['ecmascript', 'practicalmeteor:mocha', 'practicalmeteor:chai', 'practicalmeteor:sinon', 'lmieulet:meteor-coverage@2.0.0']);
 [...]
 });
 ```
@@ -449,6 +449,6 @@ This package would not exist without the amazing work of:
 
 -   [Contributors](https://github.com/serut/meteor-coverage/graphs/contributors) and testers for their help
 -   [Xolv.io](http://xolv.io) and their work on the original [meteor-coverage](https://github.com/xolvio/meteor-coverage) package;
--   All contributors of [istanbul-api](https://github.com/istanbuljs/istanbul-api) and [istanbul-middleware](https://github.com/gotwarlost/istanbul-middleware) projects.
+-   All contributors of [istanbuljs](https://github.com/istanbuljs/istanbuljs) project.
 
 All of them were very helpful in the development of this package. Merci !  

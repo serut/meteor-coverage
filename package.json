@@ -1,7 +1,7 @@
 {
   "name": "meteor-coverage",
-  "version": "1.1.4",
-  "description": "A meteor package that allows you to get the statement, line, function and branch coverage of Meteor project and package.   This package uses the [istanbuljs/istanbul-api](https://github.com/istanbuljs/istanbul-api) package for coverage report.   It's a debug only package, so it does not affect your production build.",
+  "version": "2.0.0",
+  "description": "A meteor package that allows you to get the statement, line, function and branch coverage of Meteor project and package.   This package uses the [istanbuljs](https://github.com/istanbuljs/istanbuljs) packages for coverage report.   It's a debug only package, so it does not affect your production build.",
   "main": "server/index.js",
   "dependencies": {
     "body-parser": "1.18.2",

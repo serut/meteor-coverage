@@ -3,7 +3,7 @@ import Log from './../context/log';
 import Conf from './../context/conf';
 import minimatch from 'minimatch';
 const Instrument  = Npm.require('istanbul-lib-instrument'),
-     Hook = Npm.require('istanbul-lib-hook');
+  Hook = Npm.require('istanbul-lib-hook');
 let instrumenter = undefined;
 
 /**
