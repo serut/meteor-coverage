@@ -48,7 +48,7 @@ Package.onTest(function (api) {
   api.use('ecmascript');
   api.use(['lmieulet:meteor-coverage-self-instrumenter@3.0.0'], ['server']);
   api.use(['lmieulet:meteor-coverage']);
-  api.use(['meteortesting:mocha']);
+  api.use(['practicalmeteor:mocha']);
 
   api.mainModule('server/tests.js', 'server');
   api.mainModule('client/main.tests.js', 'client');
