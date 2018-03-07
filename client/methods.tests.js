@@ -1,6 +1,6 @@
-import { $ } from 'meteor/jquery';
-import { expect, assert } from 'meteor/practicalmeteor:chai';
-import { sinon } from 'meteor/practicalmeteor:sinon';
+import { HTTP } from 'meteor/http';
+import { expect, assert } from 'chai';
+import sinon from 'sinon';
 import Meteor from 'meteor/lmieulet:meteor-coverage';
 
 describe('meteor-coverage', function (done) {
@@ -33,8 +33,8 @@ describe('meteor-coverage', function (done) {
     const callback = sandbox.spy();
 
     sandbox.stub(Meteor, 'getCoverageObject').returns({ 'web.browser': { path: 1} });
-    sandbox.stub($, 'ajax', function(config) {
-      config.success();
+    sandbox.stub(HTTP, 'post', function(url, config, callback) {
+      callback();
     });
 
     Meteor.sendCoverage(callback);
@@ -45,8 +45,8 @@ describe('meteor-coverage', function (done) {
     const callback = sandbox.spy();
 
     sandbox.stub(JSON, 'parse').returns({ type: 'success'});
-    sandbox.stub($, 'ajax', function(config) {
-      config.success();
+    sandbox.stub(HTTP, 'get', function(url, config, callback) {
+      callback();
     });
 
     Meteor.exportCoverage('test', callback);
@@ -57,8 +57,8 @@ describe('meteor-coverage', function (done) {
     const callback = sandbox.spy();
 
     sandbox.stub(JSON, 'parse').returns({ type: 'success'});
-    sandbox.stub($, 'ajax', function(config) {
-      config.success();
+    sandbox.stub(HTTP, 'get', function(url, config, callback) {
+      callback();
     });
 
     Meteor.importCoverage(callback);

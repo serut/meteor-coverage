@@ -4,9 +4,9 @@ import fs from 'fs';
 import path from 'path';
 import ReportCommon from './report-common';
 import Log from './../context/log';
-var istanbulAPI = Npm.require('istanbul-api'),
-  Report = istanbulAPI.libReport,
-  ReportImpl = istanbulAPI.reportsImpl;
+const Report = Npm.require('istanbul-lib-report'),
+  ReportImpl = Npm.require('istanbul-reports');
+
 export default class {
   constructor(res, options) {
     this.res = res;
@@ -87,11 +87,11 @@ export default class {
         copyFile: function (sourcePath, destPath) {
           fs.readFile(sourcePath, (err, data) => {
             /* istanbul ignore else */
-            if (err) throw err;
+            if (err) return console.error(err);
             let p = path.join(folderpath, destPath);
             fs.writeFile(p, data, (err, data) => {
               /* istanbul ignore else */
-              if (err) throw err;
+              if (err) return console.error(err);
             });
           });
         }

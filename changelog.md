@@ -1,3 +1,13 @@
+#### 2.0.0
+-   Migrates to Meteor 1.6.
+    For Meteor 1.4 apps please use meteor-coverage@1.1.4.
+-   remove some outdated libraries in favor to new ones:
+      - meteorhacks:picker -> webapp (directly from meteor)
+      - Jquery -> http (directly from meteor)
+      - istanbul-api -> istanbuljs/istanbuljs
+
+#### 1.1.4
+
 #### 1.0.1
 -   map a lot better the paths inside `.map` files to real paths. You can now see .npm dependencies for exemple.
 -   improved glob patterns in `.coverage.json`: previously, all files were covered. Now **a lot less** are covered. To be able to cover packages, you need to specify it on the `.coverage.json`  

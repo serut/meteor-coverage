@@ -1,14 +1,13 @@
 import CoverageData from '../services/coverage-data';
 import Conf from '../context/conf';
 import Core from '../services/core';
-// If we change Npm.require('istanbul-api') into import a from 'istanbul-api'
+// If we change Npm.require('istanbul-reports') into import a from 'istanbul-reports'
 // the __dirname change and the  istanbul dependency fails
 // See istanbul-reports
 // With Npm.require : /Users/Leo/Webstorm/meteor-container/packages/meteor-coverage/.npm/package/node_modules/istanbul-reports/lib/json
 
-var istanbulAPI = Npm.require('istanbul-api'),
-  Report = istanbulAPI.libReport,
-  ReportImpl = istanbulAPI.reportsImpl;
+const Report = Npm.require('istanbul-lib-report'),
+  ReportImpl = Npm.require('istanbul-reports');
 export default class {
   constructor(res, options) {
     this.res = res;
@@ -77,7 +76,7 @@ export default class {
     return context;
   }
 
-    // Istanbul-api expect to save HTML report to the file system and not over network
+    // istanbul-reports expect to save HTML report to the file system and not over network
   alterFS(res) {
     res.close = function () {
       this.end();

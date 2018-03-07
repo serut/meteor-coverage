@@ -2,9 +2,8 @@ import CoverageData from './../services/coverage-data';
 import Core from './../services/core';
 import ReportCommon from './report-common';
 import Conf from '../context/conf';
-
-const istanbulAPI = Npm.require('istanbul-api'),
-  ReportImpl = istanbulAPI.reportsImpl;
+const ReportImpl = Npm.require('istanbul-reports');
+  
 /**
  * Used by type lcovonly and json
  * create the corresponding file using istanbul api

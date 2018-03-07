@@ -4,8 +4,7 @@ import fs from 'fs';
 import path from 'path';
 
 const homedir = Npm.require('homedir');
-const istanbulAPI = Npm.require('istanbul-api');
-const libSourceMaps = istanbulAPI.libSourceMaps;
+const libSourceMaps = Npm.require('istanbul-lib-source-maps');
 
 const sourceMap = libSourceMaps.createSourceMapStore({verbose: Conf.IS_COVERAGE_ACTIVE});
 const meteorDir = Conf.COVERAGE_APP_FOLDER;
@@ -177,14 +176,14 @@ alterSourceMapPaths = function (map, isClientSide) {
       if (file.path === mergedPath) {
         /* istanbul ignore else */
         if (file.node_modules) {
-           try {
-             nodeModulesBase = path.join(abspath.serverSide, file.node_modules);
-             nodeModulesBase = fs.realpathSync(nodeModulesBase); // usually a symlink
+          try {
+            nodeModulesBase = path.join(abspath.serverSide, file.node_modules);
+            nodeModulesBase = fs.realpathSync(nodeModulesBase); // usually a symlink
           } catch (e) {
-             if (e.code === 'ENOENT') {
-               Log.info('File not found!', nodeModulesBase);
+            if (e.code === 'ENOENT') {
+              Log.info('File not found!', nodeModulesBase);
             } else {
-               throw e;
+              throw e;
             }
           }
         }

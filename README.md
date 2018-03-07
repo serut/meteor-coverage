@@ -2,7 +2,7 @@
 
 A meteor package that allows you to get the statement, line, function and branch coverage of Meteor project and package.
 
-This package uses the [istanbuljs/istanbul-api](https://github.com/istanbuljs/istanbul-api) package for coverage report.
+This package uses the [istanbuljs](https://github.com/istanbuljs/istanbuljs) packages for coverage report.
 
 It's a debug only package, so it does not affect your production build.
 
@@ -17,11 +17,48 @@ It's a debug only package, so it does not affect your production build.
 [![Dependency Status](https://img.shields.io/david/serut/meteor-coverage.svg)](https://david-dm.org/serut/meteor-coverage)
 [![devDependency Status](https://img.shields.io/david/dev/serut/meteor-coverage.svg)](https://david-dm.org/serut/meteor-coverage?type=dev)
 
+
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**
+
+  - [Installation](#installation)
+    - [Specific setup for Meteor apps](#specific-setup-for-meteor-apps)
+    - [Specific setup for Meteor package](#specific-setup-for-meteor-package)
+    - [Configuration](#configuration)
+  - [Usage](#usage)
+    - [Watch mode](#watch-mode)
+    - [Using runners](#using-runners)
+    - [Run options](#run-options)
+  - [Setup spacejam](#setup-spacejam)
+  - [Advanced setup for CI](#advanced-setup-for-ci)
+    - [Coveralls](#coveralls)
+    - [Codecov](#codecov)
+  - [spacejam --coverage possibilities](#spacejam---coverage-possibilities)
+  - [Meteor --settings file](#meteor---settings-file)
+  - [Global environment variable](#global-environment-variable)
+  - [Config file](#config-file)
+  - [Flow router issue](#flow-router-issue)
+  - [My files are missing from my app coverage report](#my-files-are-missing-from-my-app-coverage-report)
+  - [Istanbul html colors legend](#istanbul-html-colors-legend)
+  - [Ignore code from coverage with annotation](#ignore-code-from-coverage-with-annotation)
+  - [Meteor ignored folders and files](#meteor-ignored-folders-and-files)
+  - [How to replace spacejam](#how-to-replace-spacejam)
+  - [I want my reports referred to my original source files](#i-want-my-reports-referred-to-my-original-source-files)
+  - [Client API](#client-api)
+      - [Meteor.sendCoverage(callback)](#meteorsendcoveragecallback)
+      - [Meteor.exportCoverage(type, callback)](#meteorexportcoveragetype-callback)
+      - [Meteor.importCoverage(callback)](#meteorimportcoveragecallback)
+  - [Contributing](#contributing)
+  - [Credits](#credits)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 ## Installation
 
 ### Specific setup for Meteor apps
 
-Ensure you use at least Meteor version `v1.4`.
+Ensure you use at least Meteor version `v1.6`.
 
 Then, run the following  :
 
@@ -36,7 +73,7 @@ meteor add lmieulet:meteor-coverage practicalmeteor:mocha@2.4.5_6 practicalmeteo
 ```js
 [...]
 Package.onTest(function (api) {
-    api.use(['ecmascript', 'practicalmeteor:mocha', 'practicalmeteor:chai', 'practicalmeteor:sinon', 'lmieulet:meteor-coverage@1.1.4']);
+    api.use(['ecmascript', 'practicalmeteor:mocha', 'practicalmeteor:chai', 'practicalmeteor:sinon', 'lmieulet:meteor-coverage@2.0.0']);
 [...]
 });
 ```
@@ -412,6 +449,6 @@ This package would not exist without the amazing work of:
 
 -   [Contributors](https://github.com/serut/meteor-coverage/graphs/contributors) and testers for their help
 -   [Xolv.io](http://xolv.io) and their work on the original [meteor-coverage](https://github.com/xolvio/meteor-coverage) package;
--   All contributors of [istanbul-api](https://github.com/istanbuljs/istanbul-api) and [istanbul-middleware](https://github.com/gotwarlost/istanbul-middleware) projects.
+-   All contributors of [istanbuljs](https://github.com/istanbuljs/istanbuljs) project.
 
 All of them were very helpful in the development of this package. Merci !  
