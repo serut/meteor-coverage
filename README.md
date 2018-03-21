@@ -63,7 +63,7 @@ Ensure you use at least Meteor version `v1.6`.
 Then, run the following  :
 
 ```txt
-meteor add lmieulet:meteor-coverage practicalmeteor:mocha@2.4.5_6 practicalmeteor:mocha-console-runner
+meteor add lmieulet:meteor-coverage cultofcoders:mocha cultofcoders:mocha-console-runner
 ```
 
 ### Specific setup for Meteor package
@@ -73,7 +73,7 @@ meteor add lmieulet:meteor-coverage practicalmeteor:mocha@2.4.5_6 practicalmeteo
 ```js
 [...]
 Package.onTest(function (api) {
-    api.use(['ecmascript', 'practicalmeteor:mocha', 'practicalmeteor:chai', 'practicalmeteor:sinon', 'lmieulet:meteor-coverage@2.0.0']);
+    api.use(['ecmascript', 'cultofcoders:mocha', 'practicalmeteor:chai', 'practicalmeteor:sinon', 'lmieulet:meteor-coverage@2.0.0']);
 [...]
 });
 ```
@@ -116,7 +116,7 @@ You can use spacejam to execute automatically all the actions that you needs to 
 
     spacejam [... see supported options below] \
     --coverage [out_html|out_lcovonly|out_text_summary|out_json_report|out_json_summary|in_coverage|out_coverage|out_remap] \
-    --driver-package practicalmeteor:mocha-console-runner
+    --driver-package cultofcoders:mocha-console-runner
 
 That's it !
 
@@ -142,32 +142,32 @@ Add what you need to run your app inside your `package.json`:
     "scripts": {
         [APP]
         "test": "meteor npm run lint:fix & meteor npm run test:app-unit & ...",
-        "test:app-unit": "meteor test --driver-package practicalmeteor:mocha-console-runner",
-        "test:app-unit-watch": "meteor test --driver-package practicalmeteor:mocha",
-        "test:app-full-watch": "meteor test --full-app --driver-package practicalmeteor:mocha",
-        "test:packages-watch": "meteor test-packages --driver-package practicalmeteor:mocha",
+        "test:app-unit": "meteor test --driver-package cultofcoders:mocha-console-runner",
+        "test:app-unit-watch": "meteor test --driver-package cultofcoders:mocha",
+        "test:app-full-watch": "meteor test --full-app --driver-package cultofcoders:mocha",
+        "test:packages-watch": "meteor test-packages --driver-package cultofcoders:mocha",
 
         "precoverage": "npm run lint",
         "coverage": "meteor npm run coverage:app-unit && meteor npm run coverage:app-full",
-        "coverage:app-unit": "spacejam test --coverage 'out_lcovonly out_coverage out_html' --driver-package practicalmeteor:mocha-console-runner",
-        "coverage:app-full": "spacejam test --full-app --coverage 'out_lcovonly out_coverage out_html in_coverage' --driver-package practicalmeteor:mocha-console-runner",
+        "coverage:app-unit": "spacejam test --coverage 'out_lcovonly out_coverage out_html' --driver-package cultofcoders:mocha-console-runner",
+        "coverage:app-full": "spacejam test --full-app --coverage 'out_lcovonly out_coverage out_html in_coverage' --driver-package cultofcoders:mocha-console-runner",
         "precoverage-watch": "npm run lint",
-        "coverage-watch:app-unit": "meteor test --settings settings.coverage.json --driver-package practicalmeteor:mocha",
-        "coverage-watch:app-full": "meteor test --full-app --settings settings.coverage.json --driver-package practicalmeteor:mocha",
+        "coverage-watch:app-unit": "meteor test --settings settings.coverage.json --driver-package cultofcoders:mocha",
+        "coverage-watch:app-full": "meteor test --full-app --settings settings.coverage.json --driver-package cultofcoders:mocha",
         "pretest": "npm run lint",
         "test": "meteor npm run test:app-unit && meteor npm run test:app-full",
-        "test:app-unit": "spacejam test --driver-package practicalmeteor:mocha-console-runner",
-        "test:app-full": "spacejam test --full-app --driver-package practicalmeteor:mocha-console-runner",
+        "test:app-unit": "spacejam test --driver-package cultofcoders:mocha-console-runner",
+        "test:app-full": "spacejam test --full-app --driver-package cultofcoders:mocha-console-runner",
         "pretest-watch": "npm run lint",
-        "test-watch:app-unit": "meteor test --driver-package practicalmeteor:mocha-console-runner",
-        "test-watch:app-full": "meteor test --full-app  --driver-package practicalmeteor:mocha-console-runner",
+        "test-watch:app-unit": "meteor test --driver-package cultofcoders:mocha-console-runner",
+        "test-watch:app-full": "meteor test --full-app  --driver-package cultofcoders:mocha-console-runner",
 
         [PCKGS]
-        "coverage:packages": "spacejam test-packages ./ --coverage out_lcovonly --driver-package practicalmeteor:mocha-console-runner",
+        "coverage:packages": "spacejam test-packages ./ --coverage out_lcovonly --driver-package cultofcoders:mocha-console-runner",
         "coverage-watch": "meteor npm run lint:fix & meteor npm run coverage-watch:packages",
-        "coverage-watch:packages": "meteor test-packages --settings settings.coverage.json  --driver-package practicalmeteor:mocha-console-runner",
+        "coverage-watch:packages": "meteor test-packages --settings settings.coverage.json  --driver-package cultofcoders:mocha-console-runner",
         "test": "meteor npm run test:packages",
-        "test:packages": "meteor test-packages ./ --coverage out_lcovonly --driver-package practicalmeteor:mocha-console-runner",
+        "test:packages": "meteor test-packages ./ --coverage out_lcovonly --driver-package cultofcoders:mocha-console-runner",
 
         "lint": "eslint . || exit 0;",
         "lint:fix": "eslint --fix ."
@@ -175,12 +175,12 @@ Add what you need to run your app inside your `package.json`:
 
 If you want to, you can use this syntax, the following two commands are equivalent, but the second one is shorter and thus less typing error-prone
 
-    spacejam       [..] --driver-package practicalmeteor:mocha-console-runner
+    spacejam       [..] --driver-package cultofcoders:mocha-console-runner
     spacejam-mocha [..]
 
 Same for meteor:
 
-    meteor       --driver-package practicalmeteor:mocha [...]
+    meteor       --driver-package cultofcoders:mocha [...]
     meteor-mocha
 
 You may notice that you can't execute `spacejam-mocha` on your terminal, that's because you installed it with the flag `--save-dev`.  

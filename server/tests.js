@@ -1,5 +1,4 @@
-import {assert} from 'chai';
-
+import {assert} from 'meteor/practicalmeteor:chai';
 import meteorCoverageApi from 'meteor/lmieulet:meteor-coverage';
 
 const Instrumenter = meteorCoverageApi.Instrumenter;

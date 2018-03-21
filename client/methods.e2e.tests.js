@@ -1,5 +1,5 @@
-import {chai, assert, expect} from 'chai';
 import Meteor from 'meteor/lmieulet:meteor-coverage';
+import {chai, assert, expect} from 'meteor/practicalmeteor:chai';
 var _should = chai.should();
 
 var testCoverage = function(done, operation, reportType) {

@@ -1,3 +1,6 @@
+#### 2.0.1
+Republishing...
+
 #### 2.0.0
 -   Migrates to Meteor 1.6.
     For Meteor 1.4 apps please use meteor-coverage@1.1.4.

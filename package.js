@@ -1,6 +1,6 @@
 Package.describe({
   name: 'lmieulet:meteor-coverage',
-  version: '2.0.0',
+  version: '2.0.1',
   summary: 'Server and client coverage for Meteor',
   git: 'https://github.com/serut/meteor-coverage',
   documentation: 'README.md',
@@ -51,7 +51,7 @@ Package.onTest(function (api) {
   api.use('http', 'client');
   api.use('webapp', 'server');
   api.use(['lmieulet:meteor-coverage']);
-  api.use(['practicalmeteor:mocha']);
+  api.use(['cultofcoders:mocha']);
 
   api.mainModule('server/tests.js', 'server');
   api.mainModule('client/main.tests.js', 'client');
