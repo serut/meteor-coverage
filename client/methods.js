@@ -61,7 +61,12 @@ Meteor.sendCoverage = function (callback) {
         var stats = Meteor.getStats();
         /* istanbul ignore else */
         if (stats.SUCCESS + stats.FAILED === stats.TOTAL) {
-          callback(stats, arguments);
+          if (stats.FAILED > 0) {
+            // This is bullshit. Should not be done like that
+            // Test runners test if the second params is a truth value, so let's use a number
+            return callback(stats, stats.FAILED);
+          }
+          return callback(stats);
         }
       });
     }

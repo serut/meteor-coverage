@@ -1,3 +1,6 @@
+#### 2.0.2
+Fix Meteor.sendCoverage function, otherwise test runner thinks they failed to import client coverage.  
+
 #### 2.0.1
 Republishing...
 
