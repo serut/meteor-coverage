@@ -12,7 +12,6 @@ It's a debug only package, so it does not affect your production build.
 | ------------------------------------------------------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------: | -------------------------------------------------------------------------------------------------------------------------------------------------: | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | -----------------------------------------------------------------------------------------------------------------------------------------------------------: | -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
 | lmieulet:meteor-coverage                                                              |             [![Build Status](https://travis-ci.org/serut/meteor-coverage.png?branch=master)](https://travis-ci.org/serut/meteor-coverage)             |                         [![Circle CI](https://circleci.com/gh/serut/meteor-coverage.svg?style=svg)](https://circleci.com/gh/serut/meteor-coverage) |                         [![Coverage Status](https://coveralls.io/repos/github/serut/meteor-coverage/badge.svg?branch=master)](https://coveralls.io/github/serut/meteor-coverage?branch=master) |                         [![codecov](https://codecov.io/gh/serut/meteor-coverage/branch/master/graph/badge.svg)](https://codecov.io/gh/serut/meteor-coverage) | [![Codacy Badge](https://api.codacy.com/project/badge/Grade/3679340dded44b84a44ca65862855216)](https://www.codacy.com/app/l-mieulet/meteor-coverage) [![Codacy Badge](https://api.codacy.com/project/badge/Coverage/3679340dded44b84a44ca65862855216)](https://www.codacy.com/app/l-mieulet/meteor-coverage) |
 | [meteor-coverage-app-exemple](https://github.com/serut/meteor-coverage-app-exemple)   | [![Build Status](https://travis-ci.org/serut/meteor-coverage-app-exemple.svg?branch=master)](https://travis-ci.org/serut/meteor-coverage-app-exemple) | [![Circle CI](https://circleci.com/gh/serut/meteor-coverage-app-exemple.svg?style=svg)](https://circleci.com/gh/serut/meteor-coverage-app-exemple) | [![Coverage Status](https://coveralls.io/repos/github/serut/meteor-coverage-app-exemple/badge.svg?branch=master)](https://coveralls.io/github/serut/meteor-coverage-app-exemple?branch=master) | [![codecov](https://codecov.io/gh/serut/meteor-coverage-app-exemple/branch/master/graph/badge.svg)](https://codecov.io/gh/serut/meteor-coverage-app-exemple) |                                                                                                                                            [![Codacy Badge](https://api.codacy.com/project/badge/Grade/1a2997c614cf4da09452f47d70d72352)](https://www.codacy.com/app/l-mieulet/meteor-coverage-app-exemplee) |
-| [fork of apollostack/meteor-starter-kit](https://github.com/serut/meteor-starter-kit) |                                                                                                                                                       |                   [![Circle CI](https://circleci.com/gh/serut/meteor-starter-kit.svg?style=svg)](https://circleci.com/gh/serut/meteor-starter-kit) |                                                                                                                                                                                                |                   [![codecov](https://codecov.io/gh/serut/meteor-starter-kit/branch/master/graph/badge.svg)](https://codecov.io/gh/serut/meteor-starter-kit) |                                                                                                                                                                                                                                                                                                              |
 
 
 [![Dependency Status](https://img.shields.io/david/serut/meteor-coverage.svg)](https://david-dm.org/serut/meteor-coverage)
@@ -25,7 +24,7 @@ It's a debug only package, so it does not affect your production build.
 | ------------- |:----------:|:----------:|:----------:|
 | 1.x  | <1.6.0 | ✔ | ✘ |
 | [not supported](https://github.com/meteor/meteor/issues/9281)  | 1.6.0 <1.6.1 | ✘  | ✘  |
-| 2.x      | >=1.6.1| ✘ (maybe with cultofcoders) | ✔ ([beta](https://github.com/meteortesting/meteor-mocha#run-with-code-coverage))|
+| 2.x      | >=1.6.1| ✘ (maybe with cultofcoders) | ✔ |
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -47,7 +46,6 @@ It's a debug only package, so it does not affect your production build.
   - [Meteor --settings file](#meteor---settings-file)
   - [Global environment variable](#global-environment-variable)
   - [Config file](#config-file)
-  - [Flow router issue](#flow-router-issue)
   - [My files are missing from my app coverage report](#my-files-are-missing-from-my-app-coverage-report)
   - [Istanbul html colors legend](#istanbul-html-colors-legend)
   - [Ignore code from coverage with annotation](#ignore-code-from-coverage-with-annotation)
@@ -75,7 +73,7 @@ Then, run the following  :
 meteor add lmieulet:meteor-coverage meteortesting:mocha
 ```
 
-We do not have any easy tutorial to help you to setup coverage with meteortesting. For now, [use their readme](https://github.com/meteortesting/meteor-mocha#run-with-code-coverage) and the here under legacy tutorial that worked with spacejam to try by yourself. There is not so many difference between spacejam and meteortesting. And don't try to use that solution on Windows.   
+We do not have any easy tutorial to help you to setup coverage with meteortesting. For now, [use their readme](https://github.com/meteortesting/meteor-mocha#run-with-code-coverage), the [meteor-coverage-app-exemple repository](https://github.com/serut/meteor-coverage-app-exemple/tree/master/bare-exemple) and the here under legacy tutorial that worked with spacejam to try by yourself. There is not so many difference between spacejam and meteortesting. And don't try to use that solution on Windows.   
 
 ### Specific setup for Meteor package
 
@@ -115,7 +113,7 @@ Run the following command :
 
 Then open [localhost:3000/coverage](http://localhost:3000/coverage) in your browser. A missing feature would be to save your client coverage with a widget. Instead, you need to enter this javascript in your browser console :
 
-    Meteor.sendCoverage(function(stats,err) {console.log(stats,err);});
+    Meteor.sendCoverage(function(stats,nbErr) {console.log(stats,nbErr);});
     # Reopen localhost:3000/coverage to see that client coverage have been saved on server
 
     # Creates an html export inside coverage_app_folder/output_folder/index.html
@@ -330,16 +328,6 @@ Details :
 -   To create your custom config file, run the project with `COVERAGE_VERBOSE=1` env variable and use logs to see which filenames were hooked or hidden. PR welcome.
 -   The output folder needs to starts with a dot to exclude that folder from Meteor build.
 
-## Flow router issue
-
-If you are using flow-router, there are [an issue](https://github.com/kadirahq/flow-router/pull/615) that prevents tests to succeed.  
-This workaround replaces flow-router with a patched version which ignores that error:
-
-```bash
-cd packages
-git submodule add https://github.com/serut/flow-router
-```
-
 ## My files are missing from my app coverage report
 
 If you have **internal packages** inside your app and you want to get their **server side** coverage. Open the file `.meteor/packages` and move the line `lmieulet:meteor-coverage` to be above these packages.
@@ -414,7 +402,7 @@ This feature has only been tested with TypeScript, but it should work for any la
 Run the following command in your browser and the client coverage will be saved into the server coverage report.  
 
 ```js
-Meteor.sendCoverage(function(stats,err) {console.log(stats,err);});
+Meteor.sendCoverage(function(stats,nbErr) {console.log(stats,nbErr);});
 ```
 
 Why? When a browser opens the client side of your application, this package intercepts all queries matching `*.js` to respond the instrumented version of the original script, if they are not ignored by the configuration file. All these instrumented scripts are autonomous and they save the coverage in a global variable when you execute a line of a file. This global variable needs to be sent back to the server to create a full coverage report.
