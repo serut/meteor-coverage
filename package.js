@@ -51,7 +51,7 @@ Package.onTest(function (api) {
   api.use('http', 'client');
   api.use('webapp', 'server');
   api.use(['lmieulet:meteor-coverage']);
-  api.use(['cultofcoders:mocha']);
+  api.use(['meteortesting:mocha']);
 
   api.mainModule('server/tests.js', 'server');
   api.mainModule('client/main.tests.js', 'client');
@@ -59,6 +59,7 @@ Package.onTest(function (api) {
   Npm.depends({
     ...dependencies,
     'chai': '2.1.0',
-    'sinon': '1.14.1'
+    'selenium-webdriver': '3.0.0-beta-2',
+    'chromedriver': '2.38.2'
   });
 });

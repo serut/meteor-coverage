@@ -1,5 +1,5 @@
 import { HTTP } from 'meteor/http';
-import { expect, assert } from 'meteor/practicalmeteor:chai';
+import { expect, assert } from 'chai';
 import sinon from 'sinon';
 import Meteor from 'meteor/lmieulet:meteor-coverage';
 
