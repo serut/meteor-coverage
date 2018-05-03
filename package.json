@@ -32,7 +32,8 @@
     "selenium-webdriver": "3.0.0-beta-2"
   },
   "scripts": {
-    "test": "TEST_BROWSER_DRIVER=chrome COVERAGE=1 COVERAGE_OUT_LCOVONLY=1 COVERAGE_APP_FOLDER=$PWD/ meteor test-packages --once --settings .coverage.json --driver-package meteortesting:mocha",
+    "setup-test": "rm -rf ./test && meteor create --bare test && cd test && meteor npm i --save selenium-webdriver@3 chromedriver",
+    "test": "meteor npm run setup-test && cd test && METEOR_PACKAGE_DIRS=../ TEST_BROWSER_DRIVER=chrome COVERAGE=1 COVERAGE_OUT_LCOVONLY=1 COVERAGE_APP_FOLDER=$PWD/ meteor test-packages --once --settings .coverage.json --driver-package meteortesting:mocha",
     "test:watch": "TEST_WATCH=1 COVERAGE=1 meteor test-packages --settings .coverage.json  --driver-package meteortesting:mocha",
     "start": "meteor npm run lint:fix & meteor npm run test:watch",
     "lint": "eslint .",
