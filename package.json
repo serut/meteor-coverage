@@ -30,7 +30,7 @@
     "eslint-plugin-standard": "^2.0.0"
   },
   "scripts": {
-    "setup-test": "rm -rf ./test && meteor create --bare test && cd test && meteor npm i --save selenium-webdriver@3 chromedriver && ln -s ../../../ ./packages/meteor-coverage",
+    "setup-test": "rm -rf ./test && meteor create --bare test && cd test && meteor npm i --save selenium-webdriver@3 chromedriver && mkdir packages && ln -s ../../ ./packages/meteor-coverage",
     "test": "meteor npm run setup-test && cd test && TEST_BROWSER_DRIVER=chrome COVERAGE=1 COVERAGE_OUT_LCOVONLY=1 COVERAGE_APP_FOLDER=$(pwd)/ meteor test-packages --once --settings ./packages/meteor-coverage/.coverage.json --driver-package meteortesting:mocha ./packages/meteor-coverage",
     "test:watch": "TEST_WATCH=1 COVERAGE=1 COVERAGE_APP_FOLDER=$(pwd)/ meteor test-packages --settings .coverage.json  --driver-package meteortesting:mocha ./",
     "start": "meteor npm run lint:fix & meteor npm run test:watch",
