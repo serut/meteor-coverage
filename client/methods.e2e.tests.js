@@ -1,6 +1,8 @@
 import Meteor from 'meteor/lmieulet:meteor-coverage';
-import {chai, assert, expect} from 'chai';
-var _should = chai.should();
+import chai from 'chai';
+console.error("hey", chai)
+const {assert, expect, should} = chai;
+var _should = should();
 
 var testCoverage = function(done, operation, reportType) {
   this.timeout(0);

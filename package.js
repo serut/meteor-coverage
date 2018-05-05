@@ -58,8 +58,8 @@ Package.onTest(function (api) {
 
   Npm.depends({
     ...dependencies,
-    'chai': '2.1.0',
-    'selenium-webdriver': '3.0.0-beta-2',
-    'chromedriver': '2.38.2'
+    'chai': '4.1.2',
+    'sinon': '5.0.3',
+    'sinon-chai': '3.0.0',
   });
 });

@@ -1,13 +1,16 @@
 import { HTTP } from 'meteor/http';
-import {expect, assert} from 'chai';
+import chai from 'chai';
 import sinon from 'sinon';
+import sinonChai from 'sinon-chai';
 import Meteor from 'meteor/lmieulet:meteor-coverage';
+const {expect, assert} = chai;
+chai.use(sinonChai);
 
 describe('meteor-coverage', function (done) {
 
   let sandbox;
   beforeEach(function () {
-    sandbox = sinon.sandbox.create();
+    sandbox = sinon.createSandbox();
   });
 
   afterEach(function () {
@@ -26,27 +29,26 @@ describe('meteor-coverage', function (done) {
     sandbox.stub(Meteor, 'getCoverageObject');
 
     Meteor.sendCoverage(callback);
-    expect(callback).to.have.been.deep.calledWith({SUCCESS: 0, FAILED: 0, TOTAL: 0});
+    expect(callback).to.have.been.calledWith({SUCCESS: 0, FAILED: 0, TOTAL: 0});
   });
 
   it('send client coverage', function () {
     const callback = sandbox.spy();
 
     sandbox.stub(Meteor, 'getCoverageObject').returns({'web.browser': {path: 1}});
-    sandbox.stub(HTTP, 'post', function(url, config, callback) {
-      callback();
+    sandbox.stub(HTTP, 'call').callsFake(function(verb, url, config, c) {
+      c();
     });
-
     Meteor.sendCoverage(callback);
-    expect(callback).to.have.been.deep.calledWith({FAILED: 0, SUCCESS: 1, TOTAL: 1});
+    expect(callback).to.have.been.calledWith({FAILED: 0, SUCCESS: 1, TOTAL: 1});
   });
 
   it('export coverage', function () {
     const callback = sandbox.spy();
 
     sandbox.stub(JSON, 'parse').returns({type: 'success'});
-    sandbox.stub(HTTP, 'get', function(url, config, callback) {
-      callback();
+    sandbox.stub(HTTP, 'call').callsFake(function(verb, url, config, c) {
+      c();
     });
 
     Meteor.exportCoverage('test', callback);
@@ -57,8 +59,8 @@ describe('meteor-coverage', function (done) {
     const callback = sandbox.spy();
 
     sandbox.stub(JSON, 'parse').returns({type: 'success'});
-    sandbox.stub(HTTP, 'get', function(url, config, callback) {
-      callback();
+    sandbox.stub(HTTP, 'call').callsFake(function(verb, url, config, c) {
+      c();
     });
 
     Meteor.importCoverage(callback);
