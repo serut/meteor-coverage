@@ -4,3 +4,4 @@ packages
 node_modules
 local-packages.json
 .idea
+test

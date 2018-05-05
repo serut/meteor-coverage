@@ -2,7 +2,7 @@ import { HTTP } from 'meteor/http';
 
 describe('meteor-coverage', function (done) {
 
-  it('download a lot of times the same a client js script, ensure they are not corrumpted', function (done) {
+  it('download a lot of times a covered js file, ensure it"s not corrumpted', function (done) {
     this.timeout(0);
 
     let i = 0;
@@ -10,7 +10,7 @@ describe('meteor-coverage', function (done) {
       // meteor-coverage package is a ES6 package
       HTTP.get('/packages/lmieulet_meteor-coverage.js', {}, (error, response) => {
         if (response.content.length > 14000) {
-          if (i < 5000) {
+          if (i < 10) {
             return downloadPageAndCheckLength(i+1);
           }
           return done();

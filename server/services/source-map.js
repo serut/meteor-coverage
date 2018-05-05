@@ -177,7 +177,18 @@ alterSourceMapPaths = function (map, isClientSide) {
         /* istanbul ignore else */
         if (file.node_modules) {
           try {
-            nodeModulesBase = path.join(abspath.serverSide, file.node_modules);
+            // For the current package it appears it can be an object, with two slightly different paths.
+            if (typeof file.node_modules === 'object') {
+              for (var nModulePath in file.node_modules) {
+                // there is several files, just need to find the local{bool} having true
+                if (file.node_modules[nModulePath].local) {
+                  nodeModulesBase = path.join(abspath.serverSide, nModulePath);
+                  break; // cut the loop
+                }
+              }
+            } else {
+              nodeModulesBase = path.join(abspath.serverSide, file.node_modules);
+            } 
             nodeModulesBase = fs.realpathSync(nodeModulesBase); // usually a symlink
           } catch (e) {
             if (e.code === 'ENOENT') {
