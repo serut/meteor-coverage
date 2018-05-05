@@ -1,7 +1,9 @@
 language: node_js
 
 addons:
-  chrome: stable
+  apt:
+    packages:
+      - google-chrome-stable
 
 node_js:
   - "8.9.1"
@@ -29,7 +31,6 @@ before_script:
   - "sh -e /etc/init.d/xvfb start"
 
 script:
-  - mkdir .coverage
   - meteor npm test
   - cat .coverage/lcov.info | coveralls || cat .coverage/lcov.info || true # ignore coveralls error
   - cat .coverage/lcov.info | codecov || cat .coverage/lcov.info || true # ignore codecov error
