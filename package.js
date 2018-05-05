@@ -60,6 +60,6 @@ Package.onTest(function (api) {
     ...dependencies,
     'chai': '4.1.2',
     'sinon': '5.0.3',
-    'sinon-chai': '3.0.0',
+    'sinon-chai': '3.0.0'
   });
 });

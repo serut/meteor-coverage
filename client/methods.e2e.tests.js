@@ -1,6 +1,5 @@
 import Meteor from 'meteor/lmieulet:meteor-coverage';
 import chai from 'chai';
-console.error("hey", chai)
 const {assert, expect, should} = chai;
 var _should = should();
 
