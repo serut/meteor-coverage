@@ -1,5 +1,4 @@
 import CoverageData from './services/coverage-data';
-import SourceMap from './services/source-map';
 import Conf from './context/conf';
 import Router from './router';
 import ReportService from './report/report-service';
@@ -10,7 +9,6 @@ Boot.startup();
 export default {
   Conf,
   Router,
-  SourceMap,
   CoverageData,
   ReportService
 };

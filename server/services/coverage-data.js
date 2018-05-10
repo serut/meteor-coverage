@@ -7,9 +7,7 @@ const Report = Npm.require('istanbul-lib-report');
 
 export default CoverageData = {
   getReport: function (coverage) {
-    let coverageMap = Coverage.createCoverageMap(coverage);
-    coverageMap = SourceMap.lib.transformCoverage(coverageMap).map;
-    return coverageMap;
+    return Coverage.createCoverageMap(coverage);
   },
   getFileReport: function (coverage, filePath) {
     const coverageMap = this.getReport(coverage);

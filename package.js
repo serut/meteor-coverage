@@ -8,13 +8,11 @@ Package.describe({
 });
 
 const dependencies = {
-  'istanbul-lib-source-maps': '1.2.4',
   'istanbul-lib-coverage': '1.2.0',
   'istanbul-lib-report': '1.1.4',
   'istanbul-reports': '1.2.0',
   'body-parser': '1.18.2',
   'mkdirp': '0.5.1',
-  'homedir': '0.6.0',
   'remap-istanbul': '0.6.4'
 };
 

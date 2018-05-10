@@ -18,11 +18,6 @@ if (Conf.IS_COVERAGE_ACTIVE) {
     Router: {
 
     },
-    SourceMap: {
-      registerSourceMap: function () {
-        throw 'COVERAGE_NOT_ACTIVE';
-      }
-    },
     CoverageData: {
 
     },
