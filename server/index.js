@@ -26,9 +26,6 @@ if (Conf.IS_COVERAGE_ACTIVE) {
     CoverageData: {
 
     },
-    Instrumenter: {
-      hookLoader: function() {}
-    },
     ReportService: {
 
     }

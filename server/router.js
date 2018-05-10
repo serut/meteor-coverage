@@ -59,8 +59,5 @@ export default class {
     handleRequest('POST')('/coverage/client', Handlers.addClientCoverage);
 
     handleRequest('GET')('/coverage', Handlers.showCoverage);
-
-    // inject istanbul-instruments into js files loaded by the client
-    handleRequest('GET')('/', Handlers.instrumentClientJs);
   }
 }

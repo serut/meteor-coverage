@@ -1,4 +1,3 @@
-import Instrumenter from './services/instrumenter';
 import CoverageData from './services/coverage-data';
 import SourceMap from './services/source-map';
 import Conf from './context/conf';
@@ -13,6 +12,5 @@ export default {
   Router,
   SourceMap,
   CoverageData,
-  Instrumenter,
   ReportService
 };

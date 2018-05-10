@@ -87,8 +87,6 @@ Package.onTest(function (api) {
 });
 ```
 
-Then, [create your configuration](#config-file) file `.coverage.json` to specify that you want to cover your package, using the `include` key.
-
 ### Configuration
 
 Setup how you want to run your app. Actually, to let meteor-coverage start processing, you need to enable it, because it's a probe disabled by default and you need to provide the absolute path to your source folder.
@@ -285,37 +283,6 @@ Exemple:
 ```json{
   "--": "Meteor app does not require any specific configuration",
   "--": "If you want to instrument a package, you need to add the following",
-  "include": [
-    "**/packages/author_packageName.js"
-  ],
-  "--": "If you want to, you can redefine the following:",
-  "exclude": {
-    "general": [],
-    "server": [
-      "**/node_modules/**/*.json",
-      "**/.?*/**",
-      "**/packages/!(local-test_?*.js)",
-      "**/+([^:]):+([^:])/**",
-      "**/@(test|tests|spec|specs)/**",
-      "**/?(*.)test?(s).?*",
-      "**/?(*.)spec?(s).?*",
-      "**/?(*.)app-test?(s).?*",
-      "**/?(*.)app-spec?(s).?*"
-    ],
-    "client": [
-      "**/client/stylesheets/**",
-      "**/.npm/package/node_modules/**",
-      "**/web.browser/packages/**",
-      "**/.?*/**",
-      "**/packages/!(local-test_?*.js)",
-      "**/+([^:]):+([^:])/**",
-      "**/@(test|tests|spec|specs)/**",
-      "**/?(*.)test?(s).?*",
-      "**/?(*.)spec?(s).?*",
-      "**/?(*.)app-test?(s).?*",
-      "**/?(*.)app-spec?(s).?*"
-    ]
-  },
   "remapFormat": ["html", "cobertura", "clover", "json", "json-summary", "lcovonly", "teamcity", "text", "text-summary"],
   "output": "./.coverage"
 }
@@ -323,7 +290,6 @@ Exemple:
 
 Details :
 
--   Allows / Disallow is coded with the following order `include`, `exclude.general`, `exclude.(client|server)`, it is used before both instrumentation and before coverage report creation.
 -   The glob syntax can be found [here](http://www.linuxjournal.com/content/bash-extended-globbing).
 -   To create your custom config file, run the project with `COVERAGE_VERBOSE=1` env variable and use logs to see which filenames were hooked or hidden. PR welcome.
 -   The output folder needs to starts with a dot to exclude that folder from Meteor build.
@@ -371,9 +337,6 @@ The coverage is remapped to **all the available reports** (listed in the followi
 
 ```json
 {
-  "include": [
-    "**/packages/lmieulet_meteor-coverage.js"
-  ],
   "remap": {
     "format": ["html", "clover", "cobertura", "json", "json-summary", "lcovonly", "teamcity", "text", "text-summary"]
   }
