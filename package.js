@@ -42,7 +42,6 @@ Package.onUse(function (api) {
 
 Package.onTest(function (api) {
   api.use('ecmascript');
-  api.use(['lmieulet:meteor-coverage-self-instrumenter@4.0.0'], ['server']);
   api.use('http', 'client');
   api.use('webapp', 'server');
   api.use(['lmieulet:meteor-coverage']);
