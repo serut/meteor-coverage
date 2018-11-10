@@ -2,7 +2,7 @@
 
 A meteor package that allows you to get the statement, line, function and branch coverage of Meteor project and package.
 
-This package uses the [istanbuljs](https://github.com/istanbuljs/istanbuljs) packages for coverage report.
+This package uses the [istanbuljs](https://github.com/istanbuljs/istanbuljs) packages and the babel plugin [babel-plugin-istanbul](https://github.com/istanbuljs/babel-plugin-istanbul) for coverage report.
 
 It's a debug only package, so it does not affect your production build.
 
@@ -71,7 +71,22 @@ Then, run the following  :
 
 ```txt
 meteor add lmieulet:meteor-coverage meteortesting:mocha
+npm install --save-dev babel-plugin-istanbul
 ```
+
+And add the [`babel-plugin-istanbul`](https://github.com/istanbuljs/babel-plugin-istanbul) to your package.json file.
+
+```js
+{
+  "name": "my-package",
+  "version": "1.0.0",
+  "babel": {
+    "plugins": [ "istanbul" ]
+  }
+}
+```
+
+We highly recommend to wrap it in an [env option](https://babeljs.io/docs/usage/babelrc/#env-option) so you can en- and disable the file-instrumentation using an env-variable. The instrumentation is the gathering of data for code-coverage which should only be gathered when you also have this plugin enabled, which only collects it and passes it on to a reporter.
 
 We do not have any easy tutorial to help you to setup coverage with meteortesting. For now, [use their readme](https://github.com/meteortesting/meteor-mocha#run-with-code-coverage), the [meteor-coverage-app-exemple repository](https://github.com/serut/meteor-coverage-app-exemple/tree/master/bare-exemple) and the here under legacy tutorial that worked with spacejam to try by yourself. There is not so many difference between spacejam and meteortesting. And don't try to use that solution on Windows.   
 
@@ -86,8 +101,6 @@ Package.onTest(function (api) {
 [...]
 });
 ```
-
-Then, [create your configuration](#config-file) file `.coverage.json` to specify that you want to cover your package, using the `include` key.
 
 ### Configuration
 
@@ -285,37 +298,6 @@ Exemple:
 ```json{
   "--": "Meteor app does not require any specific configuration",
   "--": "If you want to instrument a package, you need to add the following",
-  "include": [
-    "**/packages/author_packageName.js"
-  ],
-  "--": "If you want to, you can redefine the following:",
-  "exclude": {
-    "general": [],
-    "server": [
-      "**/node_modules/**/*.json",
-      "**/.?*/**",
-      "**/packages/!(local-test_?*.js)",
-      "**/+([^:]):+([^:])/**",
-      "**/@(test|tests|spec|specs)/**",
-      "**/?(*.)test?(s).?*",
-      "**/?(*.)spec?(s).?*",
-      "**/?(*.)app-test?(s).?*",
-      "**/?(*.)app-spec?(s).?*"
-    ],
-    "client": [
-      "**/client/stylesheets/**",
-      "**/.npm/package/node_modules/**",
-      "**/web.browser/packages/**",
-      "**/.?*/**",
-      "**/packages/!(local-test_?*.js)",
-      "**/+([^:]):+([^:])/**",
-      "**/@(test|tests|spec|specs)/**",
-      "**/?(*.)test?(s).?*",
-      "**/?(*.)spec?(s).?*",
-      "**/?(*.)app-test?(s).?*",
-      "**/?(*.)app-spec?(s).?*"
-    ]
-  },
   "remapFormat": ["html", "cobertura", "clover", "json", "json-summary", "lcovonly", "teamcity", "text", "text-summary"],
   "output": "./.coverage"
 }
@@ -323,7 +305,6 @@ Exemple:
 
 Details :
 
--   Allows / Disallow is coded with the following order `include`, `exclude.general`, `exclude.(client|server)`, it is used before both instrumentation and before coverage report creation.
 -   The glob syntax can be found [here](http://www.linuxjournal.com/content/bash-extended-globbing).
 -   To create your custom config file, run the project with `COVERAGE_VERBOSE=1` env variable and use logs to see which filenames were hooked or hidden. PR welcome.
 -   The output folder needs to starts with a dot to exclude that folder from Meteor build.
@@ -371,9 +352,6 @@ The coverage is remapped to **all the available reports** (listed in the followi
 
 ```json
 {
-  "include": [
-    "**/packages/lmieulet_meteor-coverage.js"
-  ],
   "remap": {
     "format": ["html", "clover", "cobertura", "json", "json-summary", "lcovonly", "teamcity", "text", "text-summary"]
   }

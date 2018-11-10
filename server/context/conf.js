@@ -19,12 +19,6 @@ if (COVERAGE_APP_FOLDER === ENV_NOT_DEFINED) {
 }
 const NOT_DEFINED = '/COVERAGE/NOT/ACTIVE/';
 let configuration = {
-  exclude: {
-    general: [],
-    server: [],
-    client: []
-  },
-  include: [],
   output: NOT_DEFINED
 };
 /* istanbul ignore else */
@@ -53,38 +47,7 @@ if (IS_COVERAGE_ACTIVE) {
     configuration = defaultConfig;
   }
 
-  // Don't force to rewrite all the key of configuration.exclude,
-  // if they are not defined, the default conf is used.
-
-  /* istanbul ignore else */
-  if (configuration.exclude === undefined) {
-    Log.info('Loading default configuration: exclude.*');
-    configuration.exclude = defaultConfig.exclude;
-  }
-
-  /* istanbul ignore else */
-  if (configuration.exclude.general === undefined) {
-    Log.info('Loading default configuration: exclude.general');
-    configuration.exclude.general = defaultConfig.exclude.general;
-  }
-
-  /* istanbul ignore else */
-  if (configuration.exclude.server === undefined) {
-    Log.info('Loading default configuration: exclude.server');
-    configuration.exclude.server = defaultConfig.exclude.server;
-  }
-
-  /* istanbul ignore else */
-  if (configuration.exclude.client === undefined) {
-    Log.info('Loading default configuration: exclude.client');
-    configuration.exclude.client = defaultConfig.exclude.client;
-  }
-
-  /* istanbul ignore else */
-  if (configuration.include === undefined) {
-    Log.info('Loading default configuration: include');
-    configuration.include = defaultConfig.include || [];
-  }
+  // Don't force to rewrite all the key of configuration.
 
   /* istanbul ignore else */
   if (configuration.output === undefined) {
@@ -100,8 +63,6 @@ if (IS_COVERAGE_ACTIVE) {
 }
 
 export const COVERAGE_EXPORT_FOLDER = configuration.output;
-export const exclude = configuration.exclude;
-export const include = configuration.include;
 export const remapFormat = configuration.remapFormat;
 export const reportTypes = {
   allowed: ['clover', 'cobertura', 'coverage', 'html', 'json', 'json-summary', 'lcov', 'lcovonly', 'remap', 'teamcity', 'text', 'text-lcov', 'text-summary'],
@@ -113,7 +74,5 @@ Log.info('- IS_COVERAGE_ACTIVE=', IS_COVERAGE_ACTIVE);
 Log.info('- IS_COVERAGE_VERBOSE=', IS_COVERAGE_VERBOSE);
 Log.info('- COVERAGE_APP_FOLDER=', COVERAGE_APP_FOLDER);
 Log.info('.coverage.json values:');
-Log.info('- exclude=', configuration.exclude);
-Log.info('- include=', configuration.include);
 Log.info('- remapFormat=', configuration.remapFormat);
 Log.info('- COVERAGE_EXPORT_FOLDER=', COVERAGE_EXPORT_FOLDER);

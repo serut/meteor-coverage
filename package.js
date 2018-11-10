@@ -8,16 +8,11 @@ Package.describe({
 });
 
 const dependencies = {
-  'istanbul-lib-source-maps': '1.2.4',
-  'istanbul-lib-instrument': '1.10.0',
-  'istanbul-lib-hook': '1.2.0',
   'istanbul-lib-coverage': '1.2.0',
   'istanbul-lib-report': '1.1.4',
   'istanbul-reports': '1.2.0',
   'body-parser': '1.18.2',
-  'minimatch': '3.0.4',
   'mkdirp': '0.5.1',
-  'homedir': '0.6.0',
   'remap-istanbul': '0.6.4'
 };
 
@@ -47,7 +42,6 @@ Package.onUse(function (api) {
 
 Package.onTest(function (api) {
   api.use('ecmascript');
-  api.use(['lmieulet:meteor-coverage-self-instrumenter@4.0.0'], ['server']);
   api.use('http', 'client');
   api.use('webapp', 'server');
   api.use(['lmieulet:meteor-coverage']);
