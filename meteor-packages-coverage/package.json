@@ -1,0 +1,51 @@
+{
+  "name": "meteor-coverage",
+  "version": "2.0.2",
+  "description": "A meteor package that allows you to get the statement, line, function and branch coverage of Meteor project and package.   This package uses the [istanbuljs](https://github.com/istanbuljs/istanbuljs) packages for coverage report.   It's a debug only package, so it does not affect your production build.",
+  "main": "server/index.js",
+  "dependencies": {
+    "body-parser": "1.18.2",
+    "homedir": "0.6.0",
+    "istanbul-lib-coverage": "^1.2.0",
+    "istanbul-lib-hook": "^1.2.0",
+    "istanbul-lib-instrument": "^1.10.0",
+    "istanbul-lib-report": "^1.1.4",
+    "istanbul-lib-source-maps": "^1.2.4",
+    "istanbul-reports": "^1.2.0",
+    "minimatch": "3.0.4",
+    "mkdirp": "0.5.1",
+    "remap-istanbul": "0.6.4"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.11.4",
+    "babel-eslint": "^6.1.2",
+    "babel-preset-es2015": "^6.13.2",
+    "babel-preset-stage-0": "^6.5.0",
+    "babel-register": "^6.11.6",
+    "eslint": "^3.3.0",
+    "eslint-plugin-babel": "^3.3.0",
+    "eslint-plugin-import": "^1.13.0",
+    "eslint-plugin-mocha": "^4.3.0",
+    "eslint-plugin-promise": "^2.0.1",
+    "eslint-plugin-standard": "^2.0.0"
+  },
+  "scripts": {
+    "setup-test": "rm -rf ./someapp && meteor create --bare someapp && cd someapp && cp ../.coverage.json . && meteor npm i --save selenium-webdriver@3 chromedriver && mkdir packages && ln -s ../../ ./packages/meteor-coverage",
+    "test": "meteor npm run setup-test && cd someapp && TEST_BROWSER_DRIVER=chrome COVERAGE_VERBOSE=1 COVERAGE=1 COVERAGE_OUT_LCOVONLY=1 COVERAGE_APP_FOLDER=$(pwd)/ meteor test-packages --once --driver-package meteortesting:mocha ./packages/meteor-coverage",
+    "test:watch": "TEST_WATCH=1 COVERAGE=1 COVERAGE_APP_FOLDER=$(pwd)/ meteor test-packages  --driver-package meteortesting:mocha ./",
+    "start": "meteor npm run lint:fix & meteor npm run test:watch",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
+    "publish": "METEOR_FORCE_PORTABLE=1 meteor publish"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/serut/meteor-coverage.git"
+  },
+  "author": "Léo Mieulet",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/serut/meteor-coverage/issues"
+  },
+  "homepage": "https://github.com/serut/meteor-coverage#readme"
+}

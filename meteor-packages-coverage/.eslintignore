@@ -1,0 +1,6 @@
+assets
+.npm
+.github
+conf
+test
+node_modules

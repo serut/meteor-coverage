@@ -1,0 +1,37 @@
+sudo: required
+language: node_js
+
+addons:
+  chrome: stable
+
+node_js:
+  - "8.9.1"
+
+cache:
+  directories:
+    - $HOME/.meteor
+    - $HOME/.npm
+
+before_cache:
+  - rm -f $HOME/.meteor/log/*.log
+
+before_install:
+  # Download Meteor - Keep in mind that you need
+  # to remove your travis cache to get meteor updates
+  - export PATH="$HOME/.meteor:$PATH"
+  - curl https://install.meteor.com/?release=1.6.1.1 | /bin/sh
+
+  # Install dependencies
+  - npm install -g eslint coveralls codecov.io codacy-coverage
+  - meteor npm install
+
+before_script:
+  - "export DISPLAY=:99.0"
+  - "sh -e /etc/init.d/xvfb start"
+
+script:
+  - meteor npm test
+  - cat someapp/.coverage/lcov.info | coveralls || cat .coverage/lcov.info || true # ignore coveralls error
+  - cat someapp/.coverage/lcov.info | codecov || cat .coverage/lcov.info || true # ignore codecov error
+  - cat someapp/.coverage/lcov.info | codacy-coverage || true # ignore codacy error
+  - meteor npm run lint || true # ignore eslint error
