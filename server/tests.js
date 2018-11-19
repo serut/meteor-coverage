@@ -10,6 +10,8 @@ const Conf = meteorCoverageApi.Conf;
 describe('meteor coverage', function () {
 
   it('is importeable in es6', function () {
+    console.error("wtf", meteorCoverageApi)
+    console.error(JSON.stringify(meteorCoverageApi))
     assert.isNotNull(CoverageData);
     assert.isNotNull(Router);
     assert.isNotNull(ReportService);
