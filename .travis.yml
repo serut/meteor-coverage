@@ -19,7 +19,7 @@ before_install:
   # Download Meteor - Keep in mind that you need
   # to remove your travis cache to get meteor updates
   - export PATH="$HOME/.meteor:$PATH"
-  - curl https://install.meteor.com/ | /bin/sh
+  - curl https://install.meteor.com/?release=1.8 | /bin/sh
 
   # Install dependencies
   - npm install -g eslint coveralls codecov.io codacy-coverage
