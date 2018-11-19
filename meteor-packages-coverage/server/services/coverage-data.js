@@ -1,5 +1,6 @@
 import Conf from './../context/conf';
 import Instrumenter from './instrumenter';
+import SourceMap from './source-map';
 import path from 'path';
 import fs from 'fs';
 
@@ -14,13 +15,10 @@ export default CoverageData = {
     }
     let newData = {};
     for (let property in report.data) {
-      /* istanbul ignore else */
-      if (report.data.hasOwnProperty(property)) {
-        if (this.isAccepted(property)) {
-          newData[property] = report.data[property];
-        } else {
-          Log.info('isRefused', property);
-        }
+      if (this.isAccepted(property)) {
+        newData[property] = report.data[property];
+      } else {
+        Log.info('isRefused', property);
       }
     }
     report.data = newData;

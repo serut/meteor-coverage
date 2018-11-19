@@ -41,25 +41,6 @@ export default class {
   }
 
   bindRoutes() {
-    // Show static assets
-    handleRequest('GET')('/coverage/asset', (params, req, res, next) => {
-      params.filename = url.parse(req.url).path.match(/(\/([^\/]+))?/)[2];
-      Handlers.getAsset(params, req, res, next);
-    });
-
-    // export coverage to file
-    handleRequest('GET')('/coverage/export', (params, req, res, next) => {
-      params.type = url.parse(req.url).path.match(/(\/([^\/]+))?/)[2];
-      Handlers.exportFile(params, req, res, next);
-    });
-
-    handleRequest('GET')('/coverage/import', Handlers.importCoverage);
-
-    // merge client coverage posted from browser
-    handleRequest('POST')('/coverage/client', Handlers.addClientCoverage);
-
-    handleRequest('GET')('/coverage', Handlers.showCoverage);
-
     // inject istanbul-instruments into js files loaded by the client
     handleRequest('GET')('/', Handlers.instrumentClientJs);
   }
