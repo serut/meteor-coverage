@@ -1,3 +1,12 @@
+#### 3.0.0
+Move to babel instrumenter for meteor apps. 
+
+Breaking changes:
+This package does not make file coverage anymore, you need to add a third plugin to do that.
+
+For meteor apps, use the babel module named istanbul. 
+For packages, you need to add lmieulet:meteor-packages-coverage. That's a copy of meteor-coverage some commits ago. So it handles the instrumentation like before. 
+
 #### 2.0.2
 Fix Meteor.sendCoverage function, otherwise test runner thinks they failed to import client coverage.  
 

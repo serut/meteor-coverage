@@ -1,6 +1,6 @@
 Package.describe({
   name: 'lmieulet:meteor-coverage',
-  version: '2.0.2',
+  version: '3.0.0',
   summary: 'Server and client coverage for Meteor',
   git: 'https://github.com/serut/meteor-coverage',
   documentation: 'README.md',
@@ -8,9 +8,9 @@ Package.describe({
 });
 
 const dependencies = {
-  'istanbul-lib-coverage': '1.2.0',
-  'istanbul-lib-report': '1.1.4',
-  'istanbul-reports': '1.2.0',
+  'istanbul-lib-coverage': '2.0.1',
+  'istanbul-lib-report': '2.0.2',
+  'istanbul-reports': '2.0.1',
   'body-parser': '1.18.2',
   'mkdirp': '0.5.1',
   'remap-istanbul': '0.6.4'
@@ -44,6 +44,7 @@ Package.onTest(function (api) {
   api.use('ecmascript');
   api.use('http', 'client');
   api.use('webapp', 'server');
+  api.use('lmieulet:meteor-packages-coverage@0.2.0', 'server')
   api.use(['lmieulet:meteor-coverage']);
   api.use(['meteortesting:mocha']);
 
