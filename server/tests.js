@@ -1,4 +1,4 @@
-import {assert} from 'chai';
+import chai, {assert} from 'chai';
 import meteorCoverageApi from 'meteor/lmieulet:meteor-coverage';
 
 const CoverageData = meteorCoverageApi.CoverageData;
@@ -10,8 +10,8 @@ const Conf = meteorCoverageApi.Conf;
 describe('meteor coverage', function () {
 
   it('is importeable in es6', function () {
-    console.log("wtf", meteorCoverageApi)
-    console.log(JSON.stringify(meteorCoverageApi))
+    console.log("wtf", chai)
+    console.log("wtf", assert)
     assert.isNotNull(CoverageData);
     assert.isNotNull(Router);
     assert.isNotNull(ReportService);
