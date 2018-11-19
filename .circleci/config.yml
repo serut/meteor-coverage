@@ -1,0 +1,13 @@
+version: 2
+jobs:
+  build:
+    machine:
+      - image: circleci/node:latest-browsers
+    working_directory: ~/meteor-coverage
+    steps:
+      - checkout
+      - run: curl https://install.meteor.com | /bin/sh
+      - run: meteor npm install
+      - run: mkdir .coverage
+      - run: meteor npm test
+      - run: meteor npm run lint || true # ignore eslint error
