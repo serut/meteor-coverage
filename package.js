@@ -11,7 +11,7 @@ const dependencies = {
   'istanbul-lib-coverage': '2.0.1',
   'istanbul-lib-report': '2.0.2',
   'istanbul-reports': '2.0.1',
-  'body-parser': '1.18.2',
+  'body-parser': '1.18.3',
   'mkdirp': '0.5.1',
   'remap-istanbul': '0.6.4'
 };
@@ -53,8 +53,8 @@ Package.onTest(function (api) {
 
   Npm.depends({
     ...dependencies,
-    'chai': '4.1.2',
-    'sinon': '5.0.3',
-    'sinon-chai': '3.0.0'
+    'chai': '4.2.0',
+    'sinon': '7.1.1',
+    'sinon-chai': '3.2.0'
   });
 });
