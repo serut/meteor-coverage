@@ -12,17 +12,12 @@
     "remap-istanbul": "0.12.0"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-eslint": "^6.1.2",
-    "babel-preset-es2015": "^6.24.1",
-    "babel-preset-stage-0": "^6.24.1",
-    "babel-register": "^6.26.0",
-    "eslint": "^5.9.0",
+    "babel-eslint": "^8.2.6",
+    "eslint": "^4.19.1",
     "eslint-plugin-babel": "^5.2.1",
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-mocha": "^5.2.0",
-    "eslint-plugin-promise": "^4.0.1",
-    "eslint-plugin-standard": "^4.0.0"
+    "eslint-plugin-promise": "^4.0.1"
   },
   "scripts": {
     "setup-test": "rm -rf ./someapp && meteor create --bare someapp && cd someapp && cp ../.coverage.json . && meteor npm i --save puppeteer && mkdir packages && ln -s ../../ ./packages/meteor-coverage",
