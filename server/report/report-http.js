@@ -76,7 +76,7 @@ export default class {
     return context;
   }
 
-    // istanbul-reports expect to save HTML report to the file system and not over network
+  // istanbul-reports expect to save HTML report to the file system and not over network
   alterFS(res) {
     res.close = function () {
       this.end();

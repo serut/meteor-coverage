@@ -44,16 +44,16 @@ export default class {
     ReportCommon.checkDirectory(this.remapPath);
 
     let reports = {}, allReports = {
-        'html': this.remapPath,
-        'clover': this.getFilePath('clover.xml'),
-        'cobertura': this.getFilePath('cobertura.xml'),
-        'teamcity': this.getFilePath('teamcity.log'),
-        'text-summary': this.getFilePath('summary.txt'),
-        'text': this.getFilePath('report.txt'),
-        'lcovonly': this.getFilePath('lcov.info'),
-        'json-summary': this.getFilePath('summary.json'),
-        'json': this.getFilePath('report.json')
-      };
+      'html': this.remapPath,
+      'clover': this.getFilePath('clover.xml'),
+      'cobertura': this.getFilePath('cobertura.xml'),
+      'teamcity': this.getFilePath('teamcity.log'),
+      'text-summary': this.getFilePath('summary.txt'),
+      'text': this.getFilePath('report.txt'),
+      'lcovonly': this.getFilePath('lcov.info'),
+      'json-summary': this.getFilePath('summary.json'),
+      'json': this.getFilePath('report.json')
+    };
     Conf.remapFormat.forEach((type) => reports[type] = allReports[type]);
     this.remapWrapper(this.pathJSON, reports, this.options).await();
     this.res.end('{"type":"success"}');

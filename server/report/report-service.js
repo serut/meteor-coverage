@@ -23,32 +23,32 @@ export default class {
     try {
       switch (type) {
       case 'remap':
-        {
-          let reportRemap = new ReportRemap(res, type, options);
-          reportRemap.generate();
-          break;
-        }
+      {
+        let reportRemap = new ReportRemap(res, type, options);
+        reportRemap.generate();
+        break;
+      }
       case 'lcovonly':
-        {
-          options = this.addFileToOptions(options, 'lcov.info');
-          let istanbulFile1 = new IstanbulGenericReporter(res, type, options);
-          istanbulFile1.generate();
-          break;
-        }
+      {
+        options = this.addFileToOptions(options, 'lcov.info');
+        let istanbulFile1 = new IstanbulGenericReporter(res, type, options);
+        istanbulFile1.generate();
+        break;
+      }
       case 'json':
-        {
-          options = this.addFileToOptions(options, 'summary.json');
-          let istanbulFile2 = new IstanbulGenericReporter(res, type, options);
-          istanbulFile2.generate();
-          break;
-        }
+      {
+        options = this.addFileToOptions(options, 'summary.json');
+        let istanbulFile2 = new IstanbulGenericReporter(res, type, options);
+        istanbulFile2.generate();
+        break;
+      }
       case 'coverage':
-        {
-          options = this.addFileToOptions(options, 'report.json');
-          let reportCoverage = new ReportCoverage(res, options);
-          reportCoverage.generate();
-          break;
-        }
+      {
+        options = this.addFileToOptions(options, 'report.json');
+        let reportCoverage = new ReportCoverage(res, options);
+        reportCoverage.generate();
+        break;
+      }
       /*case 'teamcity':
         {
           options = this.addFileToOptions(options, 'teamcity.log');
@@ -57,40 +57,40 @@ export default class {
           break;
         }*/
       case 'json-summary':
-        {
-          options = this.addFileToOptions(options, 'json_summary.json');
-          let jsonSummary = new JsonSummary(res, type, options);
-          jsonSummary.generate();
-          break;
-        }
+      {
+        options = this.addFileToOptions(options, 'json_summary.json');
+        let jsonSummary = new JsonSummary(res, type, options);
+        jsonSummary.generate();
+        break;
+      }
       case 'html':
-        {
-          options = Object.assign({}, {
-            'prefix': '/coverage/'
-          }, options);
-          let html = new Html(res, options);
-          html.generate();
-          break;
-        }
+      {
+        options = Object.assign({}, {
+          'prefix': '/coverage/'
+        }, options);
+        let html = new Html(res, options);
+        html.generate();
+        break;
+      }
       case 'text-summary':
-        {
-          options = this.addFileToOptions(options, 'summary.txt');
-          let textSummary = new TextSummary(res, type, options);
-          textSummary.generate();
-          break;
-        }
+      {
+        options = this.addFileToOptions(options, 'summary.txt');
+        let textSummary = new TextSummary(res, type, options);
+        textSummary.generate();
+        break;
+      }
       case 'http':
-        {
-          let http = new Http(res, options);
-          http.generate();
-          break;
-        }
+      {
+        let http = new Http(res, options);
+        http.generate();
+        break;
+      }
       default:
-        {
-          Log.error('Failed to export - this type is not implemented yet');
-          res.writeHead(400);
-          res.end('{"type":"This type [' + type + '] is not supported"}');
-        }
+      {
+        Log.error('Failed to export - this type is not implemented yet');
+        res.writeHead(400);
+        res.end('{"type":"This type [' + type + '] is not supported"}');
+      }
       }
     } catch (e) {
       Log.error('ReportService failed while creating report type [', type, ']');

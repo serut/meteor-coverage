@@ -6,16 +6,16 @@ instrumentClientJs = function (params, req, res, next) {
   if (Instrumenter.shallInstrumentClientScript(fileurl)) {
     var path,
       pathLabel;
-          // Either a package
+    // Either a package
     if (req.url.indexOf('/packages') === 0) {
       path = '../web.browser';
       pathLabel = path + fileurl;
     } else if (req.url.indexOf('/app') === 0) {
-              // Or the app/app.js
+      // Or the app/app.js
       path = '../web.browser';
       pathLabel = path + fileurl;
     } else {
-              // Or a public file
+      // Or a public file
       path = '../web.browser/app';
       pathLabel = path + fileurl;
     }
@@ -39,5 +39,5 @@ instrumentClientJs = function (params, req, res, next) {
 };
 
 export default Handlers = {
-  instrumentClientJs,
+  instrumentClientJs
 };

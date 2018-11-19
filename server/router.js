@@ -17,19 +17,19 @@ const handleRequest = (method) => (path, cb) => {
     });
 
     Promise.resolve()
-    .then(() => new Promise(resolve => {
-      bodyParser.urlencoded({ extended: false })(req, res, resolve);
-    }))
-    .then(() => new Promise(resolve => {
-      bodyParser.json({ limit: '30mb' }).call(null, req, res, resolve);
-    }))
-    .then(() => cb(queryParams, req, res, next))
-    .catch((e) => {
-      console.log('Exception undandled:');
-      console.log(e.stack);
+      .then(() => new Promise(resolve => {
+        bodyParser.urlencoded({ extended: false })(req, res, resolve);
+      }))
+      .then(() => new Promise(resolve => {
+        bodyParser.json({ limit: '30mb' }).call(null, req, res, resolve);
+      }))
+      .then(() => cb(queryParams, req, res, next))
+      .catch((e) => {
+        console.log('Exception undandled:');
+        console.log(e.stack);
 
-      next();
-    });
+        next();
+      });
   });
 };
 

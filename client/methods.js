@@ -40,7 +40,7 @@ Meteor.sendCoverage = function (callback) {
     return callback(Meteor.getStats());
   }
 
-    // Send each property alone
+  // Send each property alone
   for (var property in globalCoverage) {
     /* istanbul ignore else */
     if (globalCoverage.hasOwnProperty(property)) {

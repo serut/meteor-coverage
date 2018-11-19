@@ -6,7 +6,7 @@ const Report = Npm.require('istanbul-lib-report');
 
 
 export default ReportCommon = {
-    /**
+  /**
      * Alter fs to add a new method writer
      * Used by the istanbul-reports library
      * @param filepath
