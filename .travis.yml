@@ -31,6 +31,7 @@ before_script:
 
 script:
   - meteor npm test
+  - cat someapp/.coverage/lcov.info
   - cat someapp/.coverage/lcov.info | coveralls || cat .coverage/lcov.info || true # ignore coveralls error
   - cat someapp/.coverage/lcov.info | codecov || cat .coverage/lcov.info || true # ignore codecov error
   - cat someapp/.coverage/lcov.info | codacy-coverage || true # ignore codacy error
