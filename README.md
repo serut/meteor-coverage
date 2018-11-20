@@ -2,7 +2,7 @@
 
 A meteor package that allows you to get the statement, line, function and branch coverage of Meteor project and package.
 
-This package uses the [istanbuljs](https://github.com/istanbuljs/istanbuljs) packages and the babel plugin [babel-plugin-istanbul](https://github.com/istanbuljs/babel-plugin-istanbul) for coverage report.
+This package uses the [istanbuljs](https://github.com/istanbuljs/istanbuljs) set of packages to generate reports. Starting from Meteor 1.8, this package does not instrument your code to get coverage as you can let babel do it using the [babel plugin istanbul](https://github.com/istanbuljs/babel-plugin-istanbul).
 
 It's a debug only package, so it does not affect your production build.
 
@@ -65,7 +65,7 @@ It's a debug only package, so it does not affect your production build.
 
 ### Specific setup for Meteor apps
 
-Ensure you use at least Meteor version `v1.6.1`.
+Ensure you use at least Meteor version `v1.8`.
 
 Then, run the following  :
 
@@ -74,19 +74,25 @@ meteor add lmieulet:meteor-coverage meteortesting:mocha
 npm install --save-dev babel-plugin-istanbul
 ```
 
-And add the [`babel-plugin-istanbul`](https://github.com/istanbuljs/babel-plugin-istanbul) to your package.json file.
+In order to instrument your code, you need to add the [`babel-plugin-istanbul`](https://github.com/istanbuljs/babel-plugin-istanbul) to your babel config. If you don't have a babel config file, edit your package.json file, or use [any other babel configuration file (see .babelrc.js)](https://babeljs.io/docs/en/config-files).
 
 ```js
 {
   "name": "my-package",
   "version": "1.0.0",
   "babel": {
-    "plugins": [ "istanbul" ]
+    "env": {
+      "COVERAGE": {
+        "plugins": [
+          "istanbul"
+        ]
+      }
+    }
   }
 }
 ```
 
-We highly recommend to wrap it in an [env option](https://babeljs.io/docs/usage/babelrc/#env-option) so you can en- and disable the file-instrumentation using an env-variable. The instrumentation is the gathering of data for code-coverage which should only be gathered when you also have this plugin enabled, which only collects it and passes it on to a reporter.
+You must wrap the istanbul plugin to disable the file-instrumentation of your project when you are not running the test coverage script. The instrumentation is the gathering of data for code-coverage which should only be gathered when you also have this plugin enabled.
 
 We do not have any easy tutorial to help you to setup coverage with meteortesting. For now, [use their readme](https://github.com/meteortesting/meteor-mocha#run-with-code-coverage), the [meteor-coverage-app-exemple repository](https://github.com/serut/meteor-coverage-app-exemple/tree/master/bare-exemple) and the here under legacy tutorial that worked with spacejam to try by yourself. There is not so many difference between spacejam and meteortesting. And don't try to use that solution on Windows.   
 
