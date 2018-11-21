@@ -24,40 +24,31 @@ It's a debug only package, so it does not affect your production build.
 | ------------- |:----------:|:----------:|:----------:|
 | 1.x  | <1.6.0 | ✔ | ✘ |
 | [not supported](https://github.com/meteor/meteor/issues/9281)  | 1.6.0 <1.6.1 | ✘  | ✘  |
-| 2.x      | >=1.6.1| ✘ (maybe with cultofcoders) | ✔ |
+| 2.x      | >=1.6.1 and < 1.8| ✘ | ✔ |
+| 3.x      | >=1.8| ✘ | ✔ |
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**
 
-  - [Installation](#installation)
-    - [Specific setup for Meteor apps](#specific-setup-for-meteor-apps)
-    - [Specific setup for Meteor package](#specific-setup-for-meteor-package)
-    - [Configuration](#configuration)
-  - [Usage](#usage)
-    - [Watch mode](#watch-mode)
-    - [Using runners](#using-runners)
-    - [Run options](#run-options)
-  - [Setup spacejam](#setup-spacejam)
-  - [Advanced setup for CI](#advanced-setup-for-ci)
-    - [Coveralls](#coveralls)
-    - [Codecov](#codecov)
-  - [spacejam --coverage possibilities](#spacejam---coverage-possibilities)
-  - [Meteor --settings file](#meteor---settings-file)
-  - [Global environment variable](#global-environment-variable)
-  - [Config file](#config-file)
-  - [My files are missing from my app coverage report](#my-files-are-missing-from-my-app-coverage-report)
-  - [Istanbul html colors legend](#istanbul-html-colors-legend)
-  - [Ignore code from coverage with annotation](#ignore-code-from-coverage-with-annotation)
-  - [Meteor ignored folders and files](#meteor-ignored-folders-and-files)
-  - [How to replace spacejam](#how-to-replace-spacejam)
-  - [I want my reports referred to my original source files](#i-want-my-reports-referred-to-my-original-source-files)
-  - [Client API](#client-api)
-      - [Meteor.sendCoverage(callback)](#meteorsendcoveragecallback)
-      - [Meteor.exportCoverage(type, callback)](#meteorexportcoveragetype-callback)
-      - [Meteor.importCoverage(callback)](#meteorimportcoveragecallback)
-  - [Contributing](#contributing)
-  - [Credits](#credits)
+- [Installation](#installation)
+  - [Specific setup for Meteor apps](#specific-setup-for-meteor-apps)
+  - [Specific setup for Meteor package](#specific-setup-for-meteor-package)
+- [Advanced setup for CI](#advanced-setup-for-ci)
+  - [Coveralls](#coveralls)
+  - [Codecov](#codecov)
+- [Global environment variable](#global-environment-variable)
+- [Config file](#config-file)
+- [My files are missing from my app coverage report](#my-files-are-missing-from-my-app-coverage-report)
+- [Meteor ignored folders and files](#meteor-ignored-folders-and-files)
+- [How to use another test runner](#how-to-use-another-test-runner)
+- [I want my reports referred to my original source files](#i-want-my-reports-referred-to-my-original-source-files)
+- [Client API](#client-api)
+    - [Meteor.sendCoverage(callback)](#meteorsendcoveragecallback)
+    - [Meteor.exportCoverage(type, callback)](#meteorexportcoveragetype-callback)
+    - [Meteor.importCoverage(callback)](#meteorimportcoveragecallback)
+- [Contributing](#contributing)
+- [Credits](#credits)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -71,12 +62,13 @@ Then, run the following  :
 
 ```txt
 meteor add lmieulet:meteor-coverage meteortesting:mocha
-npm install --save-dev babel-plugin-istanbul
+meteor npm init # If the package.json file does not exist
+meteor npm install --save-dev babel-plugin-istanbul
 ```
 
 In order to instrument your code, you need to add the [`babel-plugin-istanbul`](https://github.com/istanbuljs/babel-plugin-istanbul) to your babel config. If you don't have a babel config file, edit your package.json file, or use [any other babel configuration file (see .babelrc.js)](https://babeljs.io/docs/en/config-files).
 
-```js
+```json
 {
   "name": "my-package",
   "version": "1.0.0",
@@ -92,139 +84,53 @@ In order to instrument your code, you need to add the [`babel-plugin-istanbul`](
 }
 ```
 
-You must wrap the istanbul plugin to disable the file-instrumentation of your project when you are not running the test coverage script. The instrumentation is the gathering of data for code-coverage which should only be gathered when you also have this plugin enabled.
+You must wrap the istanbul plugin with the `env` setting to disable the file-instrumentation of your project when you are not running the test coverage script. Just keep in mind that if you follow the here under script, babel will use the `istanbul` package only when `NODE_ENV=COVERAGE`.
 
-We do not have any easy tutorial to help you to setup coverage with meteortesting. For now, [use their readme](https://github.com/meteortesting/meteor-mocha#run-with-code-coverage), the [meteor-coverage-app-exemple repository](https://github.com/serut/meteor-coverage-app-exemple/tree/master/bare-exemple) and the here under legacy tutorial that worked with spacejam to try by yourself. There is not so many difference between spacejam and meteortesting. And don't try to use that solution on Windows.   
-
-### Specific setup for Meteor package
-
- In a meteor package, you need to add inside the `package.js` file:  
-
-```js
-[...]
-Package.onTest(function (api) {
-    api.use(['ecmascript', 'cultofcoders:mocha', 'practicalmeteor:chai', 'practicalmeteor:sinon', 'lmieulet:meteor-coverage@2.0.1']);
-[...]
-});
+Now, to run the coverage process, just add these new scripts inside your `package.json` in the root folder of your app:
+```json
+  "scripts": {
+    "test:unit:coverage": "NODE_ENV=COVERAGE TEST_BROWSER_DRIVER=puppeteer COVERAGE=1 COVERAGE_OUT_HTML=1 COVERAGE_APP_FOLDER=$PWD/ meteor test --once --driver-package meteortesting:mocha",
+    "test:watch:coverage": "NODE_ENV=COVERAGE COVERAGE=1 COVERAGE_VERBOSE=1 COVERAGE_APP_FOLDER=$PWD/ TEST_WATCH=1 meteor test --driver-package meteortesting:mocha"
+  }
 ```
 
-### Configuration
+You can find more options on the [meteortesting readme](https://github.com/meteortesting/meteor-mocha#run-with-code-coverage). Let's try the watch mode :
 
-Setup how you want to run your app. Actually, to let meteor-coverage start processing, you need to enable it, because it's a probe disabled by default and you need to provide the absolute path to your source folder.
+    meteor npm run test:watch:coverage
 
--   [use a test runner](#setup-spacejam), perfect for CI or prepublish hooks.  
-    OR
--   [use a meteor setting file](#meteor---settings-file) to store the coverage configuration, then run your app in watch mode with `--settings settings.coverage.json`  
-    OR
--   set these environment variables : `COVERAGE`, `COVERAGE_VERBOSE` & `COVERAGE_APP_FOLDER`.
-
-meteor-coverage ensures the output folder exist on boot, which is by default `./.coverage` inside your app.  
-For Typescript or any simular language users, you need to remap your code.
-
-## Usage
-
-### Watch mode
-
-Run the following command :
-
-    meteor [... see supported options below] \
-    --settings settings.coverage.json
-
-Then open [localhost:3000/coverage](http://localhost:3000/coverage) in your browser. A missing feature would be to save your client coverage with a widget. Instead, you need to enter this javascript in your browser console :
+Now open your [browser test page localhost:3000/](http://localhost:3000/) and the page [localhost:3000/coverage](http://localhost:3000/coverage). You can notice the client coverage is completly missing. A missing feature would be to save your client coverage with a widget. Instead, you need to enter this javascript in your browser console (in the page where tests are executed):
 
     Meteor.sendCoverage(function(stats,nbErr) {console.log(stats,nbErr);});
     # Reopen localhost:3000/coverage to see that client coverage have been saved on server
 
     # Creates an html export inside coverage_app_folder/output_folder/index.html
     Meteor.exportCoverage("html", function(err) {console.log(err)})
+    
+Refresh the [localhost:3000/coverage](http://localhost:3000/coverage) in your browser to see there is client coverage now.
+    
+### Specific setup for Meteor package
 
-### Using runners
+In a meteor package, you need to add inside the `package.js` file:  
 
-You can use spacejam to execute automatically all the actions that you needs to do in watch mode:  
+```js
+[...]
+Package.onTest(function (api) {
+    api.use(['lmieulet:meteor-packages-coverage@0.2.0', 'lmieulet:meteor-coverage@3.0.0','meteortesting:mocha']);
+    [...]
+});
+```
 
-    spacejam [... see supported options below] \
-    --coverage [out_html|out_lcovonly|out_text_summary|out_json_report|out_json_summary|in_coverage|out_coverage|out_remap] \
-    --driver-package cultofcoders:mocha-console-runner
-
-That's it !
-
-### Run options
-
-While spacejam requires mocha, meteor-coverage is agnostic on this point. If the `COVERAGE` flag is true, it instruments your app and provides an HTTP API to generate reports.
-
-These options are supported :
-
-    [run|test|test --full-app|test-packages]
-
-## Setup spacejam
-
-If you have any trouble, refer to this example of Meteor application [meteor-coverage-app-exemple](https://github.com/serut/meteor-coverage-app-exemple) to see how a test runner can execute yours tests, save coverage and send it to coveralls. Or feel free to open an issue. For now `serut/spacejam:windows-suppport-rc4` is only a fork but it will be merged someday.  
-
-Add the following dependencies in your `package.json`:
-
-    meteor npm init # If the package.json file does not exist
-    meteor npm i --save-dev https://github.com/serut/spacejam/tarball/windows-suppport-rc4
-
-Add what you need to run your app inside your `package.json`:
-
-    "scripts": {
-        [APP]
-        "test": "meteor npm run lint:fix & meteor npm run test:app-unit & ...",
-        "test:app-unit": "meteor test --driver-package cultofcoders:mocha-console-runner",
-        "test:app-unit-watch": "meteor test --driver-package cultofcoders:mocha",
-        "test:app-full-watch": "meteor test --full-app --driver-package cultofcoders:mocha",
-        "test:packages-watch": "meteor test-packages --driver-package cultofcoders:mocha",
-
-        "precoverage": "npm run lint",
-        "coverage": "meteor npm run coverage:app-unit && meteor npm run coverage:app-full",
-        "coverage:app-unit": "spacejam test --coverage 'out_lcovonly out_coverage out_html' --driver-package cultofcoders:mocha-console-runner",
-        "coverage:app-full": "spacejam test --full-app --coverage 'out_lcovonly out_coverage out_html in_coverage' --driver-package cultofcoders:mocha-console-runner",
-        "precoverage-watch": "npm run lint",
-        "coverage-watch:app-unit": "meteor test --settings settings.coverage.json --driver-package cultofcoders:mocha",
-        "coverage-watch:app-full": "meteor test --full-app --settings settings.coverage.json --driver-package cultofcoders:mocha",
-        "pretest": "npm run lint",
-        "test": "meteor npm run test:app-unit && meteor npm run test:app-full",
-        "test:app-unit": "spacejam test --driver-package cultofcoders:mocha-console-runner",
-        "test:app-full": "spacejam test --full-app --driver-package cultofcoders:mocha-console-runner",
-        "pretest-watch": "npm run lint",
-        "test-watch:app-unit": "meteor test --driver-package cultofcoders:mocha-console-runner",
-        "test-watch:app-full": "meteor test --full-app  --driver-package cultofcoders:mocha-console-runner",
-
-        [PCKGS]
-        "coverage:packages": "spacejam test-packages ./ --coverage out_lcovonly --driver-package cultofcoders:mocha-console-runner",
-        "coverage-watch": "meteor npm run lint:fix & meteor npm run coverage-watch:packages",
-        "coverage-watch:packages": "meteor test-packages --settings settings.coverage.json  --driver-package cultofcoders:mocha-console-runner",
-        "test": "meteor npm run test:packages",
-        "test:packages": "meteor test-packages ./ --coverage out_lcovonly --driver-package cultofcoders:mocha-console-runner",
-
-        "lint": "eslint . || exit 0;",
-        "lint:fix": "eslint --fix ."
-    }
-
-If you want to, you can use this syntax, the following two commands are equivalent, but the second one is shorter and thus less typing error-prone
-
-    spacejam       [..] --driver-package cultofcoders:mocha-console-runner
-    spacejam-mocha [..]
-
-Same for meteor:
-
-    meteor       --driver-package cultofcoders:mocha [...]
-    meteor-mocha
-
-You may notice that you can't execute `spacejam-mocha` on your terminal, that's because you installed it with the flag `--save-dev`.  
-The executable is in fact located in the folder `./node_modules/.bin/` and that's not mentioned inside the `package.json` because the `.bin` folder [is added to the PATH before node runs smth](https://docs.npmjs.com/misc/scripts#path)  
+Creating a Meteor package in 2018 is a nightmare, so please stay calm when you discover the following `package.json` that prevents so many issues :
+```
+  "scripts": {
+    "setup-test": "rm -rf ./someapp && meteor create --bare someapp && cd someapp && cp ../.coverage.json . && meteor npm i --save puppeteer && mkdir packages && ln -s ../../ ./packages/meteor-coverage",
+    "test": "meteor npm run setup-test && cd someapp && TEST_BROWSER_DRIVER=puppeteer COVERAGE_VERBOSE=1 COVERAGE=1 COVERAGE_OUT_LCOVONLY=1 COVERAGE_APP_FOLDER=$(pwd)/ meteor test-packages --once --driver-package meteortesting:mocha ./packages/meteor-coverage",
+    "test:watch": "cd someapp && TEST_WATCH=1 COVERAGE=1 COVERAGE_APP_FOLDER=$(pwd)/ meteor test-packages --driver-package meteortesting:mocha ./packages/meteor-coverage"
+  }
+```
+The task `setup-test` is the cutting edge workaround that creates an empty meteor app that will run your test later.  
 
 ## Advanced setup for CI
-
-Now, you can run your test (here is an extract of a [circle.yml](https://github.com/serut/meteor-coverage-app-exemple/blob/master/circle.yml)), merge coverage between tests, export the coverage report and sent it to a coverage platform:
-
-    - meteor npm install
-    # Unit test using mocha
-    - meteor npm run coverage:app-unit
-    # Integration test using mocha
-    - meteor npm run coverage:app-full
-    # Package test using mocha
-    - meteor npm run coverage:packages
 
 ### Coveralls
 
@@ -246,37 +152,6 @@ Install
 Add this after tests execution:
 
     cat .coverage/lcov.info | ./node_modules/codecov.io/bin/codecov.io.js || true # ignore codecov error
-
-## spacejam --coverage possibilities
-
--   `out_coverage` creates a dump of the coverage - used when you want to merge several coverage
--   `in_coverage` imports a coverage dump (previously create with `out_coverage`)
--   `out_lcovonly` creates a lcov report
--   `out_html` creates a html report
--   `out_json_report` creates a json report
--   `out_json_summary` creates a json_summary report
--   `out_text_summary` creates a text_summary report
--   `out_remap` remaps the coverage to all the available report formats
--   `out_teamcity` & `out_clover` are not working yet
-
-## Meteor --settings file
-
-Create the `settings.coverage.json` file with the following:
-
-```json
-{
-    "coverage": {
-        "On windows"
-        "coverage_app_folder": "C:\\Users\\you\\dev\\meteor-app\\",
-        "On unix"
-        "coverage_app_folder": "/Users/you/meteor-app/",
-        "is_coverage_active": true,
-        "verbose": false
-    }
-}
-```
-
-Note that `coverage_app_folder : /path/to/your/meteor/app/` requires to end with a trailing slash.
 
 ## Global environment variable
 
@@ -319,22 +194,6 @@ Details :
 
 If you have **internal packages** inside your app and you want to get their **server side** coverage. Open the file `.meteor/packages` and move the line `lmieulet:meteor-coverage` to be above these packages.
 
-## Istanbul html colors legend
-
--   Pink: statement not covered
--   Orange: function not covered
--   Yellow: branch not covered
--   [I] and [E] in front of if-else statements: if or else not covered respectively
--   Branch coverage display only kicks in if one or more but not all branches have been taken (if none of the branches were taken the statement coverage will show you that unambiguously)
-
-## Ignore code from coverage with annotation
-
-For example, if you code an `if` block without `else`, istanbul marks the `else` branch as not covered (although it doesn't exist), decreasing your code coverage, which is **false**.
-
-Same issue with ternary operator (`expression ? value1 : value2`) or default assignments (like `let myVar = otherVar || {}`), which always get marked as uncovered branches.
-
-The syntax can be found at [istanbul docs - ignoring code](https://github.com/gotwarlost/istanbul/blob/master/ignoring-code-for-coverage.md).
-
 ## Meteor ignored folders and files
 
 -   hidden folders like .npm, .coverage or .meteor.
@@ -342,9 +201,9 @@ The syntax can be found at [istanbul docs - ignoring code](https://github.com/go
 -   all meteor packages (bundled and/or manually installed ones) like meteor/underscore, meteor/accounts-password or aldeed:simple-schema.
 -   all tests file(s) containing `spec?|test?|specs?|tests?|app-specs?|app-tests?`  and all folder(s) named `specs?|tests?|app-specs?|app-tests?`
 
-## How to replace spacejam
+## How to use another test runner
 
-You can find [here](https://github.com/practicalmeteor/spacejam/compare/windows-suppport...serut:windows-suppport-rc4?diff=split&name=windows-suppport-rc4#diff-f388d8f4ed9765929079f40166396fdeR65) the diff between "spacejam without coverage" and "spacejam coverage", so you can build something else,  with grunt for example, that exports your test.
+You can find [here](https://github.com/practicalmeteor/spacejam/compare/windows-suppport...serut:windows-suppport-rc4?diff=split&name=windows-suppport-rc4#diff-f388d8f4ed9765929079f40166396fdeR65) the diff between "spacejam without coverage" and "spacejam coverage", so you can build something else,  with grunt for example, that exports your test. meteortesting:mocha did also the same.
 
 ## I want my reports referred to my original source files
 
