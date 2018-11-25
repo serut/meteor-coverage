@@ -89,8 +89,8 @@ You must wrap the istanbul plugin with the `env` setting to disable the file-ins
 Now, to run the coverage process, just add these new scripts inside your `package.json` in the root folder of your app:
 ```json
   "scripts": {
-    "test:unit:coverage": "NODE_ENV=COVERAGE TEST_BROWSER_DRIVER=puppeteer COVERAGE=1 COVERAGE_OUT_HTML=1 COVERAGE_APP_FOLDER=$PWD/ meteor test --once --driver-package meteortesting:mocha",
-    "test:watch:coverage": "NODE_ENV=COVERAGE COVERAGE=1 COVERAGE_VERBOSE=1 COVERAGE_APP_FOLDER=$PWD/ TEST_WATCH=1 meteor test --driver-package meteortesting:mocha"
+    "coverage:unit": "NODE_ENV=COVERAGE TEST_BROWSER_DRIVER=puppeteer COVERAGE=1 COVERAGE_OUT_HTML=1 COVERAGE_APP_FOLDER=$PWD/ meteor test --once --driver-package meteortesting:mocha",
+    "coverage:watch": "NODE_ENV=COVERAGE COVERAGE=1 COVERAGE_VERBOSE=1 COVERAGE_APP_FOLDER=$PWD/ TEST_WATCH=1 meteor test --driver-package meteortesting:mocha"
   }
 ```
 
@@ -98,7 +98,7 @@ You can find more options on the [meteortesting readme](https://github.com/meteo
 
     meteor npm run test:watch:coverage
 
-Now open your [browser test page localhost:3000/](http://localhost:3000/) and the page [localhost:3000/coverage](http://localhost:3000/coverage). You can notice the client coverage is completly missing. A missing feature would be to save your client coverage with a widget. Instead, you need to enter this javascript in your browser console (in the page where tests are executed):
+Now open your [browser test page localhost:3000/](http://localhost:3000/) and the page [localhost:3000/coverage](http://localhost:3000/coverage). You can notice the client coverage is completly missing but server one is there. A missing feature would be to save your client coverage with a widget. Instead, you need to enter this javascript in your browser console (in the page where tests are executed):
 
     Meteor.sendCoverage(function(stats,nbErr) {console.log(stats,nbErr);});
     # Reopen localhost:3000/coverage to see that client coverage have been saved on server
@@ -165,8 +165,6 @@ You can provides settings by setting these environment variables:
     -   Needs to end with a trailing slash
     -   Used when importing or exporting coverage reports
 -   `COVERAGE_VERBOSE=1` to see logs (optional)
-
-Using `spacejam --coverage`, `COVERAGE` and `COVERAGE_APP_FOLDER` are setup automatically for you.
 
 ## Config file
 
