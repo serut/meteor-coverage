@@ -1,6 +1,6 @@
 Package.describe({
   name: 'lmieulet:meteor-coverage',
-  version: '3.0.0',
+  version: '3.0.1',
   summary: 'Server and client coverage for Meteor',
   git: 'https://github.com/serut/meteor-coverage',
   documentation: 'README.md',
@@ -31,7 +31,8 @@ Package.onUse(function (api) {
     'assets/vendor/prettify.js',
     'assets/base.css',
     'assets/sort-arrow-sprite.png',
-    'assets/sorter.js'
+    'assets/sorter.js',
+    'assets/block-navigation.js'
   ], 'server');
 
   api.mainModule('server/index.js', 'server');

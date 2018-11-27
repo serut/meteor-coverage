@@ -49,6 +49,7 @@ export default class {
 
   generate() {
     const folderPath = this.options.path;
+    console.log("hey", folderPath)
     this.copyStatic();
     var coverage = Core.getCoverageObject();
 
@@ -67,7 +68,8 @@ export default class {
     // Todo : use future
     childrens.forEach(function (child) {
       var filepath = path.join(folderPath, child.getRelativeName() + '.html');
-      Log.info('Creating a new html report', filepath);
+      Log.info('Creating a new html report', filepath, child.getQualifiedName());
+      console.error("OK DUDE", child.getRelativeName())
       let fileReport = CoverageData.getFileReport(coverage, child.getRelativeName());
       report.onDetail(fileReport, ReportCommon.getContext(filepath));
     });
@@ -85,15 +87,11 @@ export default class {
     Object.defineProperty(context, 'writer', {
       value: {
         copyFile: function (sourcePath, destPath) {
-          fs.readFile(sourcePath, (err, data) => {
-            /* istanbul ignore else */
-            if (err) return console.error(err);
-            let p = path.join(folderpath, destPath);
-            fs.writeFile(p, data, (err, data) => {
-              /* istanbul ignore else */
-              if (err) return console.error(err);
-            });
-          });
+          // fix no asset while using test runner
+          // do not use async - nothing is awaiting us
+          const data = fs.readFileSync(sourcePath);
+          let p = path.join(folderpath, destPath);
+          fs.writeFileSync(p, data);
         }
       }
     });
