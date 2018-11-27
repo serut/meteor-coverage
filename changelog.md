@@ -1,3 +1,6 @@
+#### 3.1.1
+-   Fix HTML and HTTP reports type
+
 #### 3.0.0
 Move to babel instrumenter for meteor apps. 
 
