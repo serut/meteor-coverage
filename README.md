@@ -84,13 +84,13 @@ In order to instrument your code, you need to add the [`babel-plugin-istanbul`](
 }
 ```
 
-You must wrap the istanbul plugin with the `env` setting to disable the file-instrumentation of your project when you are not running the test coverage script. Just keep in mind that if you follow the here under script, babel will use the `istanbul` package only when `NODE_ENV=COVERAGE`.
+You must wrap the istanbul plugin with the `env` setting to disable the file-instrumentation of your project when you are not running the test coverage script. Just keep in mind that if you follow the here under script, babel will use the `istanbul` package only when `BABEL_ENV=COVERAGE`.
 
 Now, to run the coverage process, just add these new scripts inside your `package.json` in the root folder of your app:
 ```json
   "scripts": {
-    "coverage:unit": "NODE_ENV=COVERAGE TEST_BROWSER_DRIVER=puppeteer COVERAGE=1 COVERAGE_OUT_HTML=1 COVERAGE_APP_FOLDER=$PWD/ meteor test --once --driver-package meteortesting:mocha",
-    "coverage:watch": "NODE_ENV=COVERAGE COVERAGE=1 COVERAGE_VERBOSE=1 COVERAGE_APP_FOLDER=$PWD/ TEST_WATCH=1 meteor test --driver-package meteortesting:mocha"
+    "coverage:unit": "BABEL_ENV=COVERAGE TEST_BROWSER_DRIVER=puppeteer COVERAGE=1 COVERAGE_OUT_HTML=1 COVERAGE_APP_FOLDER=$PWD/ meteor test --once --driver-package meteortesting:mocha",
+    "coverage:watch": "BABEL_ENV=COVERAGE COVERAGE=1 COVERAGE_VERBOSE=1 COVERAGE_APP_FOLDER=$PWD/ TEST_WATCH=1 meteor test --driver-package meteortesting:mocha"
   }
 ```
 
