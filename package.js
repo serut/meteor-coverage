@@ -49,7 +49,7 @@ Package.onTest(function (api) {
   api.use(['lmieulet:meteor-coverage']);
   api.use(['meteortesting:mocha']);
   // New meteor 12/2018 unknown issue
-  api.addFiles(['client/methods.e2e.tests.js', 'client/methods.unit.tests.js', 'client/client.instrumentation.tests.js'], 'client')
+  api.addFiles(['client/methods.e2e.tests.js', 'client/methods.unit.tests.js', 'client/client.instrumentation.tests.js'], 'client');
   api.mainModule('server/tests.js', 'server');
   api.mainModule('client/main.tests.js', 'client');
 
