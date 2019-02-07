@@ -24,25 +24,6 @@ describe('meteor-coverage', function (done) {
     assert.isDefined(Meteor.sendCoverage);
   });
 
-  it('calls the callback function if there are no coverage', function () {
-    const callback = sandbox.spy();
-    sandbox.stub(Meteor, 'getCoverageObject');
-
-    Meteor.sendCoverage(callback);
-    expect(callback).to.have.been.calledWith({SUCCESS: 0, FAILED: 0, TOTAL: 0});
-  });
-
-  it('send client coverage', function () {
-    const callback = sandbox.spy();
-
-    sandbox.stub(Meteor, 'getCoverageObject').returns({'web.browser': {path: 1}});
-    sandbox.stub(HTTP, 'call').callsFake(function(verb, url, config, c) {
-      c();
-    });
-    Meteor.sendCoverage(callback);
-    expect(callback).to.have.been.calledWith({FAILED: 0, SUCCESS: 1, TOTAL: 1});
-  });
-
   it('export coverage', function () {
     const callback = sandbox.spy();
 
