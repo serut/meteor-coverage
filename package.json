@@ -28,7 +28,7 @@
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
     "publish": "METEOR_FORCE_PORTABLE=1 meteor publish",
-    "todobeforepublish": "rm -rf .npm/ node_modules/ meteor-packages-coverage/ .npm/ .vscode/ .circleci/ .github/ someapp/ .travis.yml .versions .eslint*"
+    "todobeforepublish": "rm -rf .npm/ node_modules/ meteor-legacy-coverage/ .npm/ .vscode/ .circleci/ .github/ someapp/ .travis.yml .versions .eslint*"
   },
   "repository": {
     "type": "git",
