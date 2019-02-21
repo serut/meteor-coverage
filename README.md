@@ -34,6 +34,7 @@ It's a debug only package, so it does not affect your production build.
 - [Installation](#installation)
   - [Specific setup for Meteor apps](#specific-setup-for-meteor-apps)
   - [Specific setup for Meteor package](#specific-setup-for-meteor-package)
+  - [Specific setup for Typescript](#specific-setup-for-Typescript)
 - [Advanced setup for CI](#advanced-setup-for-ci)
   - [Coveralls](#coveralls)
   - [Codecov](#codecov)
@@ -56,7 +57,7 @@ It's a debug only package, so it does not affect your production build.
 
 ### Specific setup for Meteor apps
 
-Ensure you use at least Meteor version `v1.8`.
+Ensure you use at least Meteor version `v1.8`. If you are using Typescript, jump [here](#specific-setup-for-Typescript)
 
 Then, run the following  :
 
@@ -115,7 +116,7 @@ In a meteor package, you need to add inside the `package.js` file:
 ```js
 [...]
 Package.onTest(function (api) {
-    api.use(['lmieulet:meteor-packages-coverage@0.2.0', 'lmieulet:meteor-coverage@3.0.0','meteortesting:mocha']);
+    api.use(['lmieulet:meteor-legacy-coverage@0.1.0', 'lmieulet:meteor-coverage@3.0.0','meteortesting:mocha']);
     [...]
 });
 ```
@@ -129,6 +130,17 @@ Creating a Meteor package in 2018 is a nightmare, so please stay calm when you d
   }
 ```
 The task `setup-test` is the cutting edge workaround that creates an empty meteor app that will run your test later.  
+
+### Specific setup for Typescript
+
+If you use Typescript, you cannot use babel to instrument your code, you need to rely on `lmieulet:meteor-legacy-coverage` (like packages).  
+The installation is almost the same as normal Meteor application, but you don't need to install all the babel stuff, you just need to run the following :
+
+```txt
+meteor add lmieulet:meteor-legacy-coverage
+```
+
+You can look at the [deskoh/Meteor-React-Typescript-Starter](https://github.com/deskoh/Meteor-React-Typescript-Starter) if you need to see a working exemple.
 
 ## Advanced setup for CI
 

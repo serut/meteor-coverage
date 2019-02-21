@@ -7,15 +7,14 @@ const Report = Npm.require('istanbul-lib-report');
 
 export default CoverageData = {
   getReport: function (coverage) {
-    // QUICKFIX FOR PACKAGES TESTS
-    if (Meteor.isPackageTest) {
-      if (Package['lmieulet:meteor-packages-coverage'] && Package['lmieulet:meteor-packages-coverage'].default && Package['lmieulet:meteor-packages-coverage'].default.CoverageData) {
-        // Ask for lmieulet:meteor-packages-coverage coverage report, as we are in package test
-        return Package['lmieulet:meteor-packages-coverage'].default.CoverageData.getReport(coverage);
-      }
-      throw new Error('lmieulet:meteor-packages-coverage not found. Just add this server dependency in Package.onTest in your package.js');
+    if (Package['lmieulet:meteor-legacy-coverage'] && Package['lmieulet:meteor-legacy-coverage'].default && Package['lmieulet:meteor-legacy-coverage'].default.CoverageData) {
+      // Retrieve the coverage report from the other lib, as we used the legacy system
+      return Package['lmieulet:meteor-legacy-coverage'].default.CoverageData.getReport(coverage);
+    } else if (Meteor.isPackageTest) {
+      // MANDATORY FOR PACKAGES TESTS
+      throw new Error('lmieulet:meteor-legacy-coverage not found. Just add this server dependency in Package.onTest in your package.js');
     }
-    // Used for meteor apps using babel
+    // Used for meteor apps that relies on babel
     return Coverage.createCoverageMap(coverage);
   },
   getFileReport: function (coverage, filePath) {

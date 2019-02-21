@@ -1,3 +1,6 @@
+#### 3.2.0
+-   Handle Typescript Meteor projects
+
 #### 3.1.1
 -   Fix HTML and HTTP reports type
 
