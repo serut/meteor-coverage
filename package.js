@@ -43,7 +43,7 @@ Package.onUse(function (api) {
 
 Package.onTest(function (api) {
   api.use('ecmascript');
-  api.use('lmieulet:meteor-packages-coverage@0.2.0', 'server');
+  api.use('lmieulet:meteor-legacy-coverage@0.1.0', 'server');
   api.use('http', 'client');
   api.use('webapp', 'server');
   api.use(['lmieulet:meteor-coverage']);
