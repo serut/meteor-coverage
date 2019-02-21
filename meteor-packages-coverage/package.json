@@ -1,6 +1,6 @@
 {
-  "name": "meteor-packages-coverage",
-  "version": "0.2.0",
+  "name": "meteor-legacy-coverage",
+  "version": "0.1.0",
   "description": "Instrument packages files",
   "main": "server/index.js",
   "dependencies": {

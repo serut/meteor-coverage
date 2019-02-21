@@ -1,7 +1,7 @@
 Package.describe({
-  name: 'lmieulet:meteor-packages-coverage',
-  version: '0.2.0',
-  summary: 'Instrument packages files',
+  name: 'lmieulet:meteor-legacy-coverage',
+  version: '0.1.0',
+  summary: 'Instrument packages and app files in a legacy way',
   git: 'https://github.com/serut/meteor-coverage',
   documentation: 'README.md',
   debugOnly: true // this package is not included on prod
