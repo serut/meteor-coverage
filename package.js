@@ -17,7 +17,7 @@ const dependencies = {
 };
 
 Package.onUse(function (api) {
-  api.versionsFrom('METEOR@1.8');
+  api.versionsFrom(['1.8', '2.3']);
 
   api.use(['ecmascript']);
   api.use('webapp', 'server');
