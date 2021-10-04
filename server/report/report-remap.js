@@ -56,7 +56,6 @@ export default class {
     };
     Conf.remapFormat.forEach((type) => reports[type] = allReports[type]);
     this.remapWrapper(this.pathJSON, reports, this.options).await();
-    this.res.end('{"type":"success"}');
 
     // Restore previous working directory
     process.chdir(cwd);
