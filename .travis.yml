@@ -20,7 +20,7 @@ before_install:
   # to remove your travis cache to get meteor updates
   - export PATH="$HOME/.meteor:$PATH"
   - npm install -g meteor
-
+  
   # Install dependencies
   - npm install -g eslint coveralls codecov.io codacy-coverage
   - meteor npm install
@@ -29,6 +29,7 @@ services:
   - xvfb
 
 script:
+  - ls "$HOME/.meteor"
   - meteor npm test
   - sed 's/packages\/meteor-coverage\///' someapp/.coverage/lcov.info | coveralls || true # ignore coveralls error
   - sed 's/packages\/meteor-coverage\///' someapp/.coverage/lcov.info | codecov || true # ignore codecov error
