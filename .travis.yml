@@ -25,6 +25,8 @@ before_install:
   - npm install -g eslint coveralls codecov.io codacy-coverage
   - npm list -g
   - env
+  - meteor-installer uninstall
+  - meteor-installer install
   - meteor npm install
 
 services:
