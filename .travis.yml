@@ -23,6 +23,8 @@ before_install:
   
   # Install dependencies
   - npm install -g eslint coveralls codecov.io codacy-coverage
+  - ls "$HOME/.meteor"
+  - env
   - meteor npm install
 
 services:
