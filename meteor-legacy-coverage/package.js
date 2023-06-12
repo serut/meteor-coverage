@@ -1,6 +1,6 @@
 Package.describe({
   name: 'lmieulet:meteor-legacy-coverage',
-  version: '0.1.0',
+  version: '0.2.0',
   summary: 'Instrument packages and app files in a legacy way',
   git: 'https://github.com/serut/meteor-coverage',
   documentation: 'README.md',
@@ -9,7 +9,7 @@ Package.describe({
 
 const dependencies = {
   'istanbul-lib-source-maps': '2.0.1',
-  'istanbul-lib-instrument': '3.0.0',
+  'istanbul-lib-instrument': '3.3.0',
   'istanbul-lib-hook': '2.0.1',
   'istanbul-lib-coverage': '2.0.1',
   'istanbul-lib-report': '2.0.2',
