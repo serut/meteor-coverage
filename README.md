@@ -106,9 +106,9 @@ Now open your [browser test page localhost:3000/](http://localhost:3000/) and th
 
     # Creates an html export inside coverage_app_folder/output_folder/index.html
     Meteor.exportCoverage("html", function(err) {console.log(err)})
-    
+
 Refresh the [localhost:3000/coverage](http://localhost:3000/coverage) in your browser to see there is client coverage now.
-    
+
 ### Specific setup for Meteor package
 
 In a meteor package, you need to add inside the `package.js` file:  
@@ -116,7 +116,7 @@ In a meteor package, you need to add inside the `package.js` file:
 ```js
 [...]
 Package.onTest(function (api) {
-    api.use(['lmieulet:meteor-legacy-coverage@0.1.0', 'lmieulet:meteor-coverage@3.0.0','meteortesting:mocha']);
+    api.use(['lmieulet:meteor-legacy-coverage@0.2.0', 'lmieulet:meteor-coverage@3.0.0','meteortesting:mocha']);
     [...]
 });
 ```
