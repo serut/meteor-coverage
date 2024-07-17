@@ -27,7 +27,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-20-
 
-      - run: npm ci && npm run lint
+      - run: |
+          npm ci
+          npm run lint
 
   test:
     name: Meteor package tests
@@ -60,9 +62,8 @@ jobs:
             ${{ runner.os }}-node-20-
 
       - name: Install test dependencies
-        run: |
-          cd tests/dummy_app
-          npm ci
+        run: npm ci
+
 
       - name: Run tests
         run: meteor npm run test
