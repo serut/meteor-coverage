@@ -17,6 +17,7 @@ const dependencies = {
 };
 
 Package.onUse(function (api) {
+  Npm.depends(dependencies);
   api.versionsFrom(['2.3', '3.0']);
 
   api.use(['ecmascript', 'webapp', 'http@1.0.0 || 2.0.0']);
@@ -35,11 +36,16 @@ Package.onUse(function (api) {
 
   api.mainModule('server/index.js', 'server');
   api.mainModule('client/methods.js', 'client');
-  Npm.depends(dependencies);
 });
 
 
 Package.onTest(function (api) {
+  Npm.depends({
+    ...dependencies,
+    'chai': '4.2.0',
+    'sinon': '7.1.1',
+    'sinon-chai': '3.2.0'
+  });
   api.use('ecmascript');
   api.use('lmieulet:meteor-legacy-coverage@0.4.0', 'server');
   api.use(['lmieulet:meteor-coverage@4.3.0']);
@@ -48,11 +54,4 @@ Package.onTest(function (api) {
   api.addFiles(['client/methods.e2e.tests.js', 'client/methods.unit.tests.js', 'client/client.instrumentation.tests.js'], 'client');
   api.mainModule('server/tests.js', 'server');
   api.mainModule('client/main.tests.js', 'client');
-
-  Npm.depends({
-    ...dependencies,
-    'chai': '4.2.0',
-    'sinon': '7.1.1',
-    'sinon-chai': '3.2.0'
-  });
 });
