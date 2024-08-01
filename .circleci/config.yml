@@ -10,6 +10,7 @@ jobs:
       - checkout
       - run: echo 'export PATH=/home/circleci/.meteor:$PATH' >> $BASH_ENV
       - run: npx meteor
+      - run: meteor npm config set legacy-peer-deps true
    #   - run: meteor npm install
       - run: mkdir .coverage
       - run: meteor npm test
