@@ -4,7 +4,7 @@ orbs:
 jobs:
   build:
     docker:
-      - image: cimg/node:15.0.1-browsers
+      - image: cimg/node:20.16.0-browsers
     environment:
       NPM_CONFIG_PREFIX: "~/.npm-global"
     working_directory: ~/meteor-coverage
