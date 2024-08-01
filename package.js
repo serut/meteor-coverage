@@ -11,9 +11,9 @@ const dependencies = {
   'istanbul-lib-coverage': '2.0.1',
   'istanbul-lib-report': '2.0.2',
   'istanbul-reports': '2.0.1',
-  'body-parser': '1.18.3',
+  'body-parser': '1.20.2',
   'mkdirp': '0.5.1',
-  'remap-istanbul': '0.6.4'
+  'remap-istanbul': '0.12.0'
 };
 
 Package.onUse(function (api) {
