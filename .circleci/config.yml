@@ -1,8 +1,10 @@
 version: 2
+orbs:
+  browser-tools: circleci/browser-tools@1.1.0
 jobs:
   build:
     docker:
-      - image: circleci/node:latest-browsers
+      - image: cimg/node:15.0.1-browsers
     working_directory: ~/meteor-coverage
     steps:
       - checkout
