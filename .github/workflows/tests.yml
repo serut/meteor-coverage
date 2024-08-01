@@ -70,3 +70,5 @@ jobs:
           sed 's/packages\/meteor-coverage\///' someapp/.coverage/lcov.info | codacy-coverage || true # ignore codacy error
           sed 's/packages\/meteor-coverage\///' someapp/.coverage/lcov.info | codecov || true # ignore codecov error
           sed 's/packages\/meteor-coverage\///' someapp/.coverage/lcov.info | codacy-coverage || true # ignore codacy error
+        env:
+          CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_PROJECT_TOKEN }}
