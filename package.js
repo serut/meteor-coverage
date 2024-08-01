@@ -1,6 +1,6 @@
 Package.describe({
   name: 'lmieulet:meteor-coverage',
-  version: '4.1.0',
+  version: '4.2.0',
   summary: 'Server and client coverage for Meteor',
   git: 'https://github.com/serut/meteor-coverage',
   documentation: 'README.md',
@@ -17,7 +17,7 @@ const dependencies = {
 };
 
 Package.onUse(function (api) {
-  api.versionsFrom(['2.3']);
+  api.versionsFrom(['2.3', '3.0']);
 
   api.use(['ecmascript']);
   api.use('webapp', 'server');
@@ -43,7 +43,7 @@ Package.onUse(function (api) {
 
 Package.onTest(function (api) {
   api.use('ecmascript');
-  api.use('lmieulet:meteor-legacy-coverage@0.2.0', 'server');
+  api.use('lmieulet:meteor-legacy-coverage@0.3.0', 'server');
   api.use('http', 'client');
   api.use('webapp', 'server');
   api.use(['lmieulet:meteor-coverage']);
