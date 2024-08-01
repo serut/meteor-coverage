@@ -62,7 +62,7 @@ jobs:
             ${{ runner.os }}-node-20-
 
       - name: Install test dependencies
-        run: npm ci
+        run: meteor npm ci
 
 
       - name: Run tests
