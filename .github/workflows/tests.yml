@@ -54,7 +54,13 @@ jobs:
           meteor-release: ${{ matrix.meteorRelease }}
 
       - name: Install test dependencies
-        run: npm ci
+        run: |
+          meteor --version
+          meteor npm -v
+          npm -v
+          meteor npm config set legacy-peer-deps true
+          meteor npm cache clean --force
+          npm ci
 
 
       - name: Run tests
