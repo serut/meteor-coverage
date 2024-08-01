@@ -5,8 +5,8 @@ jobs:
   build:
     docker:
       - image: cimg/node:20.16.0-browsers
-    environment:
-      NPM_CONFIG_PREFIX: "~/.npm-global"
+   # environment:
+   #   NPM_CONFIG_PREFIX: "~/.npm-global"
     working_directory: ~/meteor-coverage
     steps:
       - checkout
