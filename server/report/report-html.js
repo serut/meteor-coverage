@@ -57,20 +57,23 @@ export default class {
       this.res.status(500);
       return this.res.json({'type':'failed', 'message': 'No coverage information have been collected'});
     }
-    var root = CoverageData.getTreeReport(coverage);
+    let root = CoverageData.getTreeReport(coverage);
     let filepath = path.join(folderPath, 'index.html');
 
-    this.report.onSummary(root, ReportCommon.getContext(filepath));
+    const summaryCtx = ReportCommon.getContext(filepath);
+    this.report.onSummary(root, summaryCtx);
 
-    const childrens = root.getChildren();
+    const children = root.getChildren();
     const report = this.report;
-    // Todo : use future
-    childrens.forEach(function (child) {
-      var filepath = path.join(folderPath, child.getRelativeName() + '.html');
-      Log.info('Creating a new html report', filepath);
+
+    children.forEach(function (child) {
+      let childFilePath = path.join(folderPath, child.getRelativeName() + '.html');
+      Log.info('Creating a new html report', childFilePath);
       let fileReport = CoverageData.getFileReport(coverage, child.getRelativeName());
-      report.onDetail(fileReport, ReportCommon.getContext(filepath));
+      const reportCtx = ReportCommon.getContext(childFilePath);
+      report.onDetail(fileReport, reportCtx);
     });
+
     this.res.json({'type':'success'});
   }
 

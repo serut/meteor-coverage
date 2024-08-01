@@ -18,7 +18,6 @@ const CoverageData = {
     return Coverage.createCoverageMap(coverage);
   },
   getFileReport: function (coverage, filePath) {
-    Log.info('get gile report');
     const coverageMap = this.getReport(coverage);
     const node = Report.summarizers.flat(coverageMap);
     const children = node.getRoot().getChildren();

@@ -3,6 +3,7 @@ import Core from './../services/core';
 import ReportCommon from './report-common';
 import Conf from '../context/conf';
 import Log from '../context/log';
+
 const ReportImpl = Npm.require('istanbul-reports');
   
 /**
@@ -37,7 +38,7 @@ export default class {
   writeFile(childs) {
     for (let i = 0; i < childs.length; i++) {
       // Remove the COVERAGE_APP_FOLDER from the filepath
-      childs[i].fileCoverage.data.path = childs[i].fileCoverage.data.path.replace(Conf.COVERAGE_APP_FOLDER, '');
+      // data.path = childs[i].fileCoverage.data.path.replace(Conf.COVERAGE_APP_FOLDER, '');
       this.report.onDetail(childs[i]);
     }
     this.report.onEnd();

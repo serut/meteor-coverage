@@ -17,8 +17,9 @@ const CoverageData = {
     for (let property in report.data) {
       const acceptStatus = this.isAccepted(property);
       if (acceptStatus === true) {
+        Log.info('added', property);
         newData[property] = report.data[property];
-      } else {
+      } else if (acceptStatus !== 'should ignore') {
         Log.info('isRefused', acceptStatus);
       }
     }

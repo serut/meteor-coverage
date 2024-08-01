@@ -8,9 +8,9 @@ Package.describe({
 });
 
 const dependencies = {
-  'istanbul-lib-coverage': '2.0.1',
-  'istanbul-lib-report': '2.0.2',
-  'istanbul-reports': '2.0.1',
+  'istanbul-lib-coverage': '2.0.5',
+  'istanbul-lib-report': '2.0.8',
+  'istanbul-reports': '2.2.7',
   'body-parser': '1.20.2',
   'mkdirp': '0.5.1',
   'remap-istanbul': '0.12.0'
@@ -43,7 +43,7 @@ Package.onTest(function (api) {
   api.use('ecmascript');
   api.use('lmieulet:meteor-legacy-coverage@0.4.0', 'server');
   api.use(['lmieulet:meteor-coverage@4.3.0']);
-  api.use(['meteortesting:mocha@3.2.0']);
+  api.use(['meteortesting:mocha@3.0.0']);
   // New meteor 12/2018 unknown issue
   api.addFiles(['client/methods.e2e.tests.js', 'client/methods.unit.tests.js', 'client/client.instrumentation.tests.js'], 'client');
   api.mainModule('server/tests.js', 'server');
