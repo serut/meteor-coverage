@@ -54,8 +54,8 @@ jobs:
           meteor-release: ${{ matrix.meteorRelease }}
 
       - name: Install test dependencies
-        run: meteor npm ci
+        run: npm ci
 
 
       - name: Run tests
-        run: meteor npm run test
+        run: npm run test

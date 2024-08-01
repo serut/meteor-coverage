@@ -11,14 +11,14 @@ const dependencies = {
   'istanbul-lib-source-maps': '2.0.1',
   'istanbul-lib-instrument': '3.3.0',
   'istanbul-lib-hook': '2.0.1',
-  'istanbul-lib-coverage': '2.0.1',
-  'istanbul-lib-report': '2.0.2',
-  'istanbul-reports': '2.0.1',
-  'body-parser': '1.18.2',
+  'istanbul-lib-coverage': '2.0.5',
+  'istanbul-lib-report': '2.0.8',
+  'istanbul-reports': '2.2.7',
+  'body-parser': '1.20.2',
   'minimatch': '3.0.4',
   'mkdirp': '0.5.1',
   'homedir': '0.6.0',
-  'remap-istanbul': '0.6.4'
+  'remap-istanbul': '0.12.0'
 };
 
 Package.onUse(function (api) {
