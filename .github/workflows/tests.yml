@@ -35,6 +35,8 @@ jobs:
     name: Meteor package tests
     # needs: [lint]
     runs-on: ubuntu-latest
+    # allow usage of CODACY / CODECOV tokens
+    environment: coverage
     strategy:
       matrix:
         meteorRelease:
@@ -72,3 +74,4 @@ jobs:
           sed 's/packages\/meteor-coverage\///' someapp/.coverage/lcov.info | codacy-coverage || true # ignore codacy error
         env:
           CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_PROJECT_TOKEN }}
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
