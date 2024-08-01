@@ -60,8 +60,13 @@ jobs:
           npm -v
           meteor npm config set legacy-peer-deps true
           meteor npm cache clean --force
+          npm install -g coveralls codecov.io codacy-coverage
           npm ci
 
 
       - name: Run tests
-        run: npm run test
+        run: |
+          npm run test
+          sed 's/packages\/meteor-coverage\///' someapp/.coverage/lcov.info | codacy-coverage || true # ignore codacy error
+          sed 's/packages\/meteor-coverage\///' someapp/.coverage/lcov.info | codecov || true # ignore codecov error
+          sed 's/packages\/meteor-coverage\///' someapp/.coverage/lcov.info | codacy-coverage || true # ignore codacy error
