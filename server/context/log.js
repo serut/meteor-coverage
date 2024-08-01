@@ -5,7 +5,7 @@ const meteor_parameters = {
   VERBOSE: Meteor && Meteor.settings && Meteor.settings.coverage && Meteor.settings.coverage.verbose
 };
 
-export default Log = {
+const Log = {
   COVERAGE_VERBOSE: meteor_parameters.VERBOSE || process.env['COVERAGE_VERBOSE'] === '1' || false,
   error: function() {
     console.error(...arguments);
@@ -29,3 +29,5 @@ export default Log = {
     }
   }
 };
+
+export default Log;

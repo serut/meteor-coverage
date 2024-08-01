@@ -43,7 +43,7 @@ Meteor.sendCoverage = function (callback) {
   // Send each property alone
   for (var property in globalCoverage) {
     /* istanbul ignore else */
-    if (globalCoverage.hasOwnProperty(property)) {
+    if (Object.hasOwn(globalCoverage, property)) {
       Meteor.increaseTotal();
 
       HTTP.call('POST', '/coverage/client', {

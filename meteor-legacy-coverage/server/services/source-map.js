@@ -66,7 +66,7 @@ initialSetup = function () {
       // Find the package(s) under test (PUT)
       for (let pkg in this.resolved) {
         /* istanbul ignore else */
-        if (this.resolved.hasOwnProperty(pkg)) {
+        if (Object.hasOwn(this.resolved, pkg)) {
           let match = rgx.meteorPUT.exec(pkg);
           match && (this.PUT[match[1]] = true);
         }
@@ -97,7 +97,7 @@ initialSetup = function () {
     };
     for (let key in sidePaths) {
       /* istanbul ignore else */
-      if (sidePaths.hasOwnProperty(key)) {
+      if (Object.hasOwn(sidePaths, key)) {
         const programPath = path.join(sidePaths[key], 'program.json');
         const program = parseJSON(programPath);
         /* istanbul ignore next: file automatically created by Meteor, so really rare to enter here */

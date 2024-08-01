@@ -53,7 +53,7 @@ addClientCoverage = function (params, req, res, next) {
   var clientCoverage;
   for (var property in body) {
     /* istanbul ignore else */
-    if (body.hasOwnProperty(property)) {
+    if (Object.hasOwn(body, property)) {
       clientCoverage = body[property];
     }
   }
