@@ -65,13 +65,16 @@ jobs:
           npm install -g coveralls codecov.io codacy-coverage
           npm ci
 
-
       - name: Run tests
         run: |
           npm run test
           sed 's/packages\/meteor-coverage\///' someapp/.coverage/lcov.info | codacy-coverage || true # ignore codacy error
-          sed 's/packages\/meteor-coverage\///' someapp/.coverage/lcov.info | codecov || true # ignore codecov error
-          sed 's/packages\/meteor-coverage\///' someapp/.coverage/lcov.info | codacy-coverage || true # ignore codacy error
         env:
           CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_PROJECT_TOKEN }}
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Codecov
+        uses: codecov/codecov-action@v4.5.0
+        with:
+          # Repository Codecov token. Used to authorize report uploads
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: someapp/.coverage/lcov.info
