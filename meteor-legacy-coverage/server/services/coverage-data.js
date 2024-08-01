@@ -1,13 +1,13 @@
 import Conf from './../context/conf';
 import Instrumenter from './instrumenter';
 import SourceMap from './source-map';
-import path from 'path';
-import fs from 'fs';
+import fs from 'node:fs';
+import Log from '../context/log';
 
 const Coverage = Npm.require('istanbul-lib-coverage');
 const Report = Npm.require('istanbul-lib-report');
 
-export default CoverageData = {
+const CoverageData = {
   filterCoverageReport: function (report) {
     /* istanbul ignore else */
     if (!report.data) {
@@ -15,10 +15,11 @@ export default CoverageData = {
     }
     let newData = {};
     for (let property in report.data) {
-      if (this.isAccepted(property)) {
+      const acceptStatus = this.isAccepted(property);
+      if (acceptStatus === true) {
         newData[property] = report.data[property];
       } else {
-        Log.info('isRefused', property);
+        Log.info('isRefused', acceptStatus);
       }
     }
     report.data = newData;
@@ -28,13 +29,13 @@ export default CoverageData = {
     // Check if the file was also inside a .map
     /* istanbul ignore else */
     if (filename.indexOf(Conf.COVERAGE_APP_FOLDER) < 0) {
-      return false;
+      return 'not in app folder';
     }
 
     let isAServerSideFile = filename.indexOf('client') === -1 && filename.indexOf('web.browser') === -1;
     /* istanbul ignore else */
     if (Instrumenter.shouldIgnore(filename, isAServerSideFile)) {
-      return false;
+      return 'should ignore';
     }
 
     /* istanbul ignore else */
@@ -56,19 +57,20 @@ export default CoverageData = {
         return true;
       }
       // this is a html template transformed into js file
-      return false;
+      return 'html template transformed into js file';
     }
     /* istanbul ignore else */
     if (filename.indexOf('node_modules') > 0) {
       // this is a browser file?
-      return false;
+      return 'is node_modules file';
     }
 
     return true;
   },
   getReport: function (coverage) {
     let coverageMap = Coverage.createCoverageMap(coverage);
-    coverageMap = SourceMap.lib.transformCoverage(coverageMap).map;
+    const rawMap = SourceMap.lib.transformCoverage(coverageMap);
+    coverageMap = rawMap.map;
     coverageMap = this.filterCoverageReport(coverageMap);
     return coverageMap;
   },
@@ -96,3 +98,5 @@ export default CoverageData = {
     return Report.summarizers.flat(coverageMap);
   }
 };
+
+export default CoverageData;

@@ -1,4 +1,3 @@
-import {_} from 'meteor/underscore';
 import Log from './../context/log';
 import Conf from './../context/conf';
 import minimatch from 'minimatch';

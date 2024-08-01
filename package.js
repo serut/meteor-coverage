@@ -1,6 +1,6 @@
 Package.describe({
   name: 'lmieulet:meteor-coverage',
-  version: '4.2.0',
+  version: '4.3.0',
   summary: 'Server and client coverage for Meteor',
   git: 'https://github.com/serut/meteor-coverage',
   documentation: 'README.md',
@@ -19,9 +19,7 @@ const dependencies = {
 Package.onUse(function (api) {
   api.versionsFrom(['2.3', '3.0']);
 
-  api.use(['ecmascript']);
-  api.use('webapp', 'server');
-  api.use('http', 'client');
+  api.use(['ecmascript', 'webapp', 'http@1.0.0 || 2.0.0']);
   // Add datasets
   api.addAssets('conf/default-coverage.json', 'server');
 
@@ -43,11 +41,9 @@ Package.onUse(function (api) {
 
 Package.onTest(function (api) {
   api.use('ecmascript');
-  api.use('lmieulet:meteor-legacy-coverage@0.3.0', 'server');
-  api.use('http', 'client');
-  api.use('webapp', 'server');
-  api.use(['lmieulet:meteor-coverage']);
-  api.use(['meteortesting:mocha']);
+  api.use('lmieulet:meteor-legacy-coverage@0.4.0', 'server');
+  api.use(['lmieulet:meteor-coverage@4.3.0']);
+  api.use(['meteortesting:mocha@3.2.0']);
   // New meteor 12/2018 unknown issue
   api.addFiles(['client/methods.e2e.tests.js', 'client/methods.unit.tests.js', 'client/client.instrumentation.tests.js'], 'client');
   api.mainModule('server/tests.js', 'server');

@@ -1,7 +1,7 @@
 import CoverageData from '../services/coverage-data';
 import Core from '../services/core';
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
 import ReportCommon from './report-common';
 import Log from './../context/log';
 const Report = Npm.require('istanbul-lib-report'),
@@ -54,8 +54,8 @@ export default class {
 
     /* istanbul ignore else */
     if (!(coverage && Object.keys(coverage).length > 0)) {
-      this.res.statusCode = 500;
-      return this.res.end('{"type":"failed", "message": "No coverage information have been collected"}');
+      this.res.status(500);
+      return this.res.json({'type':'failed', 'message': 'No coverage information have been collected'});
     }
     var root = CoverageData.getTreeReport(coverage);
     let filepath = path.join(folderPath, 'index.html');
@@ -71,7 +71,7 @@ export default class {
       let fileReport = CoverageData.getFileReport(coverage, child.getRelativeName());
       report.onDetail(fileReport, ReportCommon.getContext(filepath));
     });
-    this.res.end('{"type":"success"}');
+    this.res.json({'type':'success'});
   }
 
   copyStatic() {

@@ -25,6 +25,7 @@ describe('meteor-coverage', function () {
     try {
       Meteor.sendCoverage(
         function (stats, err) {
+          console.debug(stats);
           assert.isTrue(stats.TOTAL > 0, 'no client coverage');
           assert.isTrue(stats.SUCCESS > 0, 'none of the client coverage have been saved');
           assert.isTrue(stats.FAILED === 0, 'an export failed');

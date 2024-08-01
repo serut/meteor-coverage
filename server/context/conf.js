@@ -1,4 +1,7 @@
 import Log from './log';
+import fs from 'node:fs';
+import path from 'node:path';
+
 const meteor_parameters = {
   // /:\ ES 6
   // return the value OR UNDEFINED
@@ -23,13 +26,15 @@ let configuration = {
 };
 /* istanbul ignore else */
 if (IS_COVERAGE_ACTIVE) {
-  const fs = Npm.require('fs'),
-    path = Npm.require('path');
-
   Log.info('Coverage active');
-  let coverageFile = path.join(COVERAGE_APP_FOLDER, '.coverage.json'),
-    defaultConfig = JSON.parse(Assets.getText('conf/default-coverage.json'));
+  let coverageFile = path.join(COVERAGE_APP_FOLDER, '.coverage.json');
+  const defaultConfigPath = Assets.absoluteFilePath('conf/default-coverage.json');
+  let defaultConfig = JSON.parse(fs.readFileSync(defaultConfigPath));
 
+  if (!defaultConfig) {
+    throw new Error('Expected default config at conf/default-coverage.json');
+  }
+  console.debug({ defaultConfig });
   try {
     fs.accessSync(coverageFile);
     Log.info('Reading custom configuration');
@@ -55,6 +60,7 @@ if (IS_COVERAGE_ACTIVE) {
     configuration.output = defaultConfig.output;
   }
 
+  /* istanbul ignore else */
   /* istanbul ignore else */
   if (configuration.remapFormat === undefined) {
     Log.info('Loading default configuration: remapFormat');

@@ -1,8 +1,9 @@
-import Conf from './context/conf';
+import { reportTypes } from './context/conf';
 import Core from './services/core';
 import ReportService from './report/report-service';
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
+import Log from './context/log';
 
 showCoverage = function (params, req, res, next) {
   let options = {
@@ -26,7 +27,7 @@ getAsset = function (params, req, res, next) {
             console.error(err);
             return next();
           }
-          res.end(fileContent);
+          res.json(fileContent);
         });
       });
     } else {
@@ -36,7 +37,7 @@ getAsset = function (params, req, res, next) {
           console.error(err);
           return next();
         }
-        res.end(fileContent);
+        res.json(fileContent);
       });
     }
   });
@@ -46,8 +47,8 @@ addClientCoverage = function (params, req, res, next) {
   var body = req.body;
   /* istanbul ignore else */
   if (!body) {
-    res.writeHead(400);
-    res.end();
+    res.status(400);
+    return res.end();
   }
 
   var clientCoverage;
@@ -59,24 +60,24 @@ addClientCoverage = function (params, req, res, next) {
   }
   if (clientCoverage) {
     Core.mergeCoverageWith(clientCoverage);
-    res.end('{"type":"success"}');
+    res.json('{"type":"success"}');
   } else {
-    res.writeHead(400);
-    res.end('Nothing has been imported');
+    res.status(400);
+    res.send('Nothing has been imported');
   }
 };
 
 exportFile = function (params, req, res, next) {
   var _type = params.type;
   /* istanbul ignore next: ternary operator */
-  type = Conf.reportTypes.allowed.indexOf(_type) > -1 ? _type : 'coverage';
+  type = reportTypes.allowed.indexOf(_type) > -1 ? _type : 'coverage';
   try {
     let reportService = new ReportService();
     reportService.generateReport(res, type, {});
   } catch (e) {
     Log.error('Failed to export', e, e.stack);
-    res.writeHead(400);
-    res.end('Nothing has been export');
+    res.status(400);
+    res.send('Nothing has been export');
   }
 };
 importCoverage = function (params, req, res, next) {
@@ -84,8 +85,8 @@ importCoverage = function (params, req, res, next) {
     Core.importCoverage(res);
   } catch (e) {
     Log.error('Failed to import', e, e.stack);
-    res.writeHead(400);
-    res.end('No file has been import');
+    res.status(400);
+    res.send('No file has been import');
   }
 };
 

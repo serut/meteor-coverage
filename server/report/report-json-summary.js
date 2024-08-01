@@ -21,13 +21,14 @@ export default class {
     let childs = CoverageData.getLcovonlyReport(coverage);
     this.report.onStart(null, this.context);
     /* istanbul ignore else */
+    this.res.set('Content-type', 'application/json');
+
     if (childs.length === 0) {
-      this.res.setHeader('Content-type', 'text/plain');
-      this.res.statusCode = 500;
-      return this.res.end('{"type":"No coverage to export"}');
+      this.res.status(500);
+      return this.res.json({'type':'No coverage to export'});
     }
     this.writeFile(childs);
-    this.res.end('{"type":"success"}');
+    this.res.json({'type':'success'});
   }
 
   writeFile (childs) {

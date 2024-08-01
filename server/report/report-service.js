@@ -8,7 +8,8 @@ import Http from './report-http';
 import ReportCoverage from './report-coverage';
 import ReportRemap from './report-remap';
 import TextSummary from './report-text-summary';
-import path from 'path';
+import path from 'node:path';
+import fs from 'node:fs';
 
 export default class {
   generateReport(res, type, options) {
@@ -85,18 +86,17 @@ export default class {
         http.generate();
         break;
       }
-      default:
-      {
+      default: {
         Log.error('Failed to export - this type is not implemented yet');
-        res.writeHead(400);
-        res.end('{"type":"This type [' + type + '] is not supported"}');
-      }
-      }
+        res.status(400);
+        res.json({'type':'This type [\' + type + \'] is not supported'});
+        return;
+      }}
     } catch (e) {
       Log.error('ReportService failed while creating report type [', type, ']');
       console.error(e, e.stack);
-      res.writeHead(400);
-      res.end('{"type":"error","message":"Unexpected error"}');
+      res.status(400);
+      res.json({'type':'error','message':'Unexpected error'});
     }
   }
   addFileToOptions(options, filename) {

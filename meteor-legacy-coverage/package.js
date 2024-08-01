@@ -1,6 +1,6 @@
 Package.describe({
   name: 'lmieulet:meteor-legacy-coverage',
-  version: '0.3.0',
+  version: '0.4.0',
   summary: 'Instrument packages and app files in a legacy way',
   git: 'https://github.com/serut/meteor-coverage',
   documentation: 'README.md',
@@ -22,10 +22,11 @@ const dependencies = {
 };
 
 Package.onUse(function (api) {
-  api.versionsFrom(['1.6.1', '3.0']);
+  api.versionsFrom(['1.6.1', '2.3', '3.0']);
 
-  api.use(['ecmascript']);
-  api.use('webapp', 'server');
+  api.use(['ecmascript', 'webapp']);
+  api.use(['meteortesting:mocha@3.0.0']);
+
   // Add datasets
   api.addAssets('conf/default-coverage.json', 'server');
 
