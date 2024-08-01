@@ -41,7 +41,6 @@ Package.onUse(function (api) {
 
 Package.onTest(function (api) {
   Npm.depends({
-    ...dependencies,
     'chai': '4.2.0',
     'sinon': '7.1.1',
     'sinon-chai': '3.2.0'
