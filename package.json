@@ -8,17 +8,17 @@
     "istanbul-lib-coverage": "^2.0.1",
     "istanbul-lib-report": "^2.0.2",
     "istanbul-reports": "^2.0.1",
-    "mkdirp": "0.5.1",
+    "mkdirp": "^0.5.6",
     "remap-istanbul": "0.12.0"
   },
   "devDependencies": {
-    "babel-eslint": "^8.2.6",
+    "@babel/core": "^7.25.2",
+    "@babel/eslint-parser": "^7.25.1",
+    "@babel/preset-env": "^7.25.3",
     "chai": "^4.5.0",
     "eslint": "^8.57.0",
-    "eslint-plugin-babel": "^5.3.1",
     "eslint-plugin-import": "^2.29.1",
-    "eslint-plugin-mocha": "^10.5.0",
-    "eslint-plugin-promise": "^7.0.0"
+    "eslint-plugin-mocha": "^10.5.0"
   },
   "scripts": {
     "setup-test": "rm -rf ./someapp && meteor create --bare someapp && cd someapp && cp ../.coverage.json . && meteor npm i --save puppeteer && mkdir packages && ln -s ../../ ./packages/meteor-coverage",
@@ -34,6 +34,7 @@
     "type": "git",
     "url": "git+https://github.com/serut/meteor-coverage.git"
   },
+  "babel": {},
   "author": "Léo Mieulet",
   "license": "MIT",
   "bugs": {
