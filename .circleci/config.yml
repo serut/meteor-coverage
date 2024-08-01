@@ -5,10 +5,13 @@ jobs:
   build:
     docker:
       - image: cimg/node:15.0.1-browsers
+    environment:
+      NPM_CONFIG_PREFIX: "~/.npm-global"
     working_directory: ~/meteor-coverage
     steps:
       - checkout
-      - run: sudo npm install --unsafe-perm -g meteor
+      - echo 'export PATH=~/.npm-global/bin:$PATH' >> $BASH_ENV
+      - run: npm install --unsafe-perm -g meteor
       - run: meteor npm install
       - run: mkdir .coverage
       - run: meteor npm test
