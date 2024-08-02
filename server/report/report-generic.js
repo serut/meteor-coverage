@@ -32,7 +32,7 @@ export default class {
     }
 
     this.writeFile(childs);
-    this.res.json({'type':'success'});
+    this.res.json({ type: 'success' });
   }
 
   writeFile(childs) {

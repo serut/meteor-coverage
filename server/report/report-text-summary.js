@@ -22,7 +22,7 @@ export default class {
     let coverage = Core.getCoverageObject();
     var root = CoverageData.getTreeReport(coverage);
     this.report.onStart(root, this.context);
-    this.res.json({'type':'success'});
+    this.res.json({ type: 'success' });
   }
 
   getContext(filepath) {

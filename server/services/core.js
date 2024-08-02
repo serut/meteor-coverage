@@ -54,7 +54,7 @@ importCoverage = function (res, options = {}) {
           Core.mergeCoverageWith(coverageObj[property]);
         }
       }
-      res.json({'type':'success'});
+      res.json({ type: 'success' });
     });
   });
 };

@@ -21,11 +21,11 @@ export default class {
     if (childs.length === 0) {
       this.res.set('Content-type', 'text/plain');
       this.res.status(500);
-      return this.res.json({'type':'No coverage to export'});
+      return this.res.json({ type: 'No coverage to export' });
     }
 
     this.writeFile(childs);
-    this.res.json({'type':'success'});
+    this.res.json({ type: 'success' });
   }
 
   writeFile (childs) {

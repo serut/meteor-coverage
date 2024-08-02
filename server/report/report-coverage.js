@@ -17,7 +17,7 @@ export default class {
       if (err) {
         instance.res.json({ type: 'failed', message: 'failed to write report file: ' + reportPath });
       } else {
-        instance.res.json({'type':'success'});
+        instance.res.json({ type: 'success' });
       }
     });
   }

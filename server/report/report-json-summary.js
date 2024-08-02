@@ -28,7 +28,7 @@ export default class {
       return this.res.json({'type':'No coverage to export'});
     }
     this.writeFile(childs);
-    this.res.json({'type':'success'});
+    this.res.json({ type: 'success' });
   }
 
   writeFile (childs) {

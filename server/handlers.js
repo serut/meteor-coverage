@@ -60,7 +60,7 @@ addClientCoverage = function (params, req, res, next) {
   }
   if (clientCoverage) {
     Core.mergeCoverageWith(clientCoverage);
-    res.json('{"type":"success"}');
+    res.json({ type: 'success' });
   } else {
     res.status(400);
     res.send('Nothing has been imported');

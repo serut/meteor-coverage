@@ -89,14 +89,14 @@ export default class {
       default:
         Log.error('Failed to export - this type is not implemented yet');
         res.status(400);
-        res.json({'type':'This type [\' + type + \'] is not supported'});
+        res.json({ type: 'This type [\' + type + \'] is not supported' });
         return;
       }
     } catch (e) {
       Log.error('ReportService failed while creating report type [', type, ']');
       console.error(e, e.stack);
       res.status(400);
-      res.json({'type':'error','message':'Unexpected error'});
+      res.json({ type: 'error','message':'Unexpected error'});
     }
   }
   addFileToOptions(options, filename) {

@@ -55,7 +55,10 @@ export default class {
     /* istanbul ignore else */
     if (!(coverage && Object.keys(coverage).length > 0)) {
       this.res.status(500);
-      return this.res.json({'type':'failed', 'message': 'No coverage information have been collected'});
+      return this.res.json({
+        type:'failed',
+        message: 'No coverage information have been collected'
+      });
     }
     let root = CoverageData.getTreeReport(coverage);
     let filepath = path.join(folderPath, 'index.html');
@@ -74,7 +77,7 @@ export default class {
       report.onDetail(fileReport, reportCtx);
     });
 
-    this.res.json({'type':'success'});
+    this.res.json({ type: 'success' });
   }
 
   copyStatic() {
