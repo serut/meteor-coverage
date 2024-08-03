@@ -22,7 +22,7 @@ const dependencies = {
 };
 
 Package.onUse(function (api) {
-  api.versionsFrom(['1.6.1', '2.3', '3.0']);
+  api.versionsFrom(['3.0']);
 
   api.use(['ecmascript', 'webapp']);
   api.use(['meteortesting:mocha@3.0.0']);
