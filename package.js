@@ -17,8 +17,7 @@ const dependencies = {
 };
 
 Package.onUse(function (api) {
-  Npm.depends(dependencies);
-  api.versionsFrom(['2.3', '3.0']);
+  api.versionsFrom(['3.0']);
 
   api.use(['ecmascript', 'webapp', 'http@1.0.0 || 2.0.0']);
   // Add datasets
@@ -36,6 +35,7 @@ Package.onUse(function (api) {
 
   api.mainModule('server/index.js', 'server');
   api.mainModule('client/methods.js', 'client');
+  Npm.depends(dependencies);
 });
 
 
