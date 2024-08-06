@@ -1,29 +1,31 @@
 {
   "name": "meteor-coverage",
-  "version": "4.1.0",
+  "version": "5.0.0",
   "description": "A meteor package that allows you to get the statement, line, function and branch coverage of Meteor project.   This package uses the [istanbuljs](https://github.com/istanbuljs/istanbuljs) packages for coverage report.   It's a debug only package, so it does not affect your production build.",
   "main": "server/index.js",
   "dependencies": {
-    "body-parser": "1.18.3",
-    "istanbul-lib-coverage": "^2.0.1",
-    "istanbul-lib-report": "^2.0.2",
-    "istanbul-reports": "^2.0.1",
-    "mkdirp": "0.5.1",
+    "body-parser": "^1.20.2",
+    "istanbul-lib-coverage": "^2.0.5",
+    "istanbul-lib-report": "^2.0.8",
+    "istanbul-reports": "^2.2.7",
+    "mkdirp": "^0.5.1",
     "remap-istanbul": "0.12.0"
   },
   "devDependencies": {
-    "babel-eslint": "^8.2.6",
+    "@babel/core": "^7.25.2",
+    "@babel/eslint-parser": "^7.25.1",
+    "@babel/preset-env": "^7.25.3",
     "chai": "^4.2.0",
-    "eslint": "^4.19.1",
-    "eslint-plugin-babel": "^5.2.1",
-    "eslint-plugin-import": "^2.14.0",
-    "eslint-plugin-mocha": "^5.2.0",
-    "eslint-plugin-promise": "^4.0.1"
+    "eslint": "^8.57.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-mocha": "^10.5.0"
   },
   "scripts": {
-    "setup-test": "rm -rf ./someapp && meteor create --bare someapp && cd someapp && cp ../.coverage.json . && meteor npm i --save puppeteer && mkdir packages && ln -s ../../ ./packages/meteor-coverage",
-    "test": "meteor npm run setup-test && cd someapp && TEST_BROWSER_DRIVER=puppeteer COVERAGE_VERBOSE=1 COVERAGE=1 COVERAGE_OUT_LCOVONLY=1 COVERAGE_APP_FOLDER=$(pwd)/ meteor test-packages --once --driver-package meteortesting:mocha ./packages/meteor-coverage",
-    "test:watch": "cd someapp && TEST_WATCH=1 COVERAGE_VERBOSE=1 COVERAGE=1 COVERAGE_APP_FOLDER=$(pwd)/ meteor test-packages --driver-package meteortesting:mocha ./packages/meteor-coverage",
+    "setup-test": "rm -rf ./someapp && meteor create --release 3.0.1 --bare someapp && cd someapp && cp ../.coverage.json . && meteor npm i --save puppeteer && mkdir packages && ln -s ../../ ./packages/meteor-coverage && ln -s ../../meteor-legacy-coverage ./packages/meteor-legacy-coverage",
+    "test": "meteor npm run setup-test && meteor npm run test:once",
+    "test:once": "cd someapp && BABEL_ENV=COVERAGE TEST_BROWSER_DRIVER=puppeteer COVERAGE_VERBOSE=1 COVERAGE=1 COVERAGE_OUT_LCOVONLY=1 COVERAGE_APP_FOLDER=$(pwd)/ meteor test-packages --once --driver-package meteortesting:mocha ./packages/meteor-coverage",
+    "test:watch": "cd someapp && BABEL_ENV=COVERAGE TEST_WATCH=1 COVERAGE_VERBOSE=1 COVERAGE=1 COVERAGE_APP_FOLDER=$(pwd)/ meteor test-packages --driver-package meteortesting:mocha ./packages/meteor-coverage",
+    "test:headless": "cd someapp && BABEL_ENV=COVERAGE TEST_BROWSER_DRIVER=puppeteer COVERAGE_VERBOSE=1 COVERAGE=1 COVERAGE_OUT_LCOVONLY=1 COVERAGE_APP_FOLDER=$(pwd)/ meteor test-packages --driver-package meteortesting:mocha ./packages/meteor-coverage",
     "start": "meteor npm run lint:fix & meteor npm run test:watch",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
@@ -34,6 +36,7 @@
     "type": "git",
     "url": "git+https://github.com/serut/meteor-coverage.git"
   },
+  "babel": {},
   "author": "Léo Mieulet",
   "license": "MIT",
   "bugs": {

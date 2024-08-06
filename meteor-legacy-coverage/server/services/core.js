@@ -48,7 +48,7 @@ importCoverage = function (res, options = {}) {
       let coverageObj = JSON.parse(fileContent);
       for (let property in coverageObj) {
         /* istanbul ignore else */
-        if (coverageObj.hasOwnProperty(property)) {
+        if (Object.hasOwn(coverageObj, property)) {
           Core.mergeCoverageWith(coverageObj[property]);
         }
       }

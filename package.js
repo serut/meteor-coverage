@@ -1,6 +1,6 @@
 Package.describe({
   name: 'lmieulet:meteor-coverage',
-  version: '4.1.0',
+  version: '4.3.0',
   summary: 'Server and client coverage for Meteor',
   git: 'https://github.com/serut/meteor-coverage',
   documentation: 'README.md',
@@ -8,20 +8,18 @@ Package.describe({
 });
 
 const dependencies = {
-  'istanbul-lib-coverage': '2.0.1',
-  'istanbul-lib-report': '2.0.2',
-  'istanbul-reports': '2.0.1',
-  'body-parser': '1.18.3',
+  'istanbul-lib-coverage': '2.0.5',
+  'istanbul-lib-report': '2.0.8',
+  'istanbul-reports': '2.2.7',
+  'body-parser': '1.20.2',
   'mkdirp': '0.5.1',
-  'remap-istanbul': '0.6.4'
+  'remap-istanbul': '0.12.0'
 };
 
 Package.onUse(function (api) {
-  api.versionsFrom(['2.3']);
+  api.versionsFrom(['3.0']);
 
-  api.use(['ecmascript']);
-  api.use('webapp', 'server');
-  api.use('http', 'client');
+  api.use(['ecmascript', 'webapp', 'http@1.0.0 || 2.0.0']);
   // Add datasets
   api.addAssets('conf/default-coverage.json', 'server');
 
@@ -42,21 +40,18 @@ Package.onUse(function (api) {
 
 
 Package.onTest(function (api) {
-  api.use('ecmascript');
-  api.use('lmieulet:meteor-legacy-coverage@0.2.0', 'server');
-  api.use('http', 'client');
-  api.use('webapp', 'server');
-  api.use(['lmieulet:meteor-coverage']);
-  api.use(['meteortesting:mocha']);
-  // New meteor 12/2018 unknown issue
-  api.addFiles(['client/methods.e2e.tests.js', 'client/methods.unit.tests.js', 'client/client.instrumentation.tests.js'], 'client');
-  api.mainModule('server/tests.js', 'server');
-  api.mainModule('client/main.tests.js', 'client');
-
   Npm.depends({
     ...dependencies,
     'chai': '4.2.0',
     'sinon': '7.1.1',
     'sinon-chai': '3.2.0'
   });
+  api.use('ecmascript');
+  api.use('lmieulet:meteor-legacy-coverage@0.4.0', 'server');
+  api.use(['lmieulet:meteor-coverage@4.3.0']);
+  api.use(['meteortesting:mocha@3.0.0']);
+  // New meteor 12/2018 unknown issue
+  api.addFiles(['client/methods.e2e.tests.js', 'client/methods.unit.tests.js', 'client/client.instrumentation.tests.js'], 'client');
+  api.mainModule('server/tests.js', 'server');
+  api.mainModule('client/main.tests.js', 'client');
 });

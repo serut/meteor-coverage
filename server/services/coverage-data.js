@@ -1,11 +1,11 @@
 import Conf from './../context/conf';
-import path from 'path';
-import fs from 'fs';
+import path from 'node:path';
+import Log from '../context/log';
 
 const Coverage = Npm.require('istanbul-lib-coverage');
 const Report = Npm.require('istanbul-lib-report');
 
-export default CoverageData = {
+const CoverageData = {
   getReport: function (coverage) {
     if (Package['lmieulet:meteor-legacy-coverage'] && Package['lmieulet:meteor-legacy-coverage'].default && Package['lmieulet:meteor-legacy-coverage'].default.CoverageData) {
       // Retrieve the coverage report from the other lib, as we used the legacy system
@@ -20,12 +20,12 @@ export default CoverageData = {
   getFileReport: function (coverage, filePath) {
     const coverageMap = this.getReport(coverage);
     const node = Report.summarizers.flat(coverageMap);
-    const childs = node.getRoot().getChildren();
+    const children = node.getRoot().getChildren();
     let child;
-    for (let i = 0; i < childs.length; i++) {
+    for (let i = 0; i < children.length; i++) {
       /* istanbul ignore else */
-      if (childs[i].getRelativeName() === filePath) {
-        child = childs[i];
+      if (children[i].getRelativeName() === filePath) {
+        child = children[i];
         // fix the path if possible
         if (child && child.fileCoverage && 
           child.fileCoverage.data && child.fileCoverage.data.path &&
@@ -48,3 +48,5 @@ export default CoverageData = {
     return Report.summarizers.flat(coverageMap);
   }
 };
+
+export default CoverageData;

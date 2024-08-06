@@ -1,7 +1,7 @@
 import CoverageData from '../services/coverage-data';
 import Core from '../services/core';
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
 import ReportCommon from './report-common';
 import Log from './../context/log';
 const Report = Npm.require('istanbul-lib-report'),
@@ -54,24 +54,30 @@ export default class {
 
     /* istanbul ignore else */
     if (!(coverage && Object.keys(coverage).length > 0)) {
-      this.res.statusCode = 500;
-      return this.res.end('{"type":"failed", "message": "No coverage information have been collected"}');
+      this.res.status(500);
+      return this.res.json({
+        type:'failed',
+        message: 'No coverage information have been collected'
+      });
     }
-    var root = CoverageData.getTreeReport(coverage);
+    let root = CoverageData.getTreeReport(coverage);
     let filepath = path.join(folderPath, 'index.html');
 
-    this.report.onSummary(root, ReportCommon.getContext(filepath));
+    const summaryCtx = ReportCommon.getContext(filepath);
+    this.report.onSummary(root, summaryCtx);
 
-    const childrens = root.getChildren();
+    const children = root.getChildren();
     const report = this.report;
-    // Todo : use future
-    childrens.forEach(function (child) {
-      var filepath = path.join(folderPath, child.getRelativeName() + '.html');
-      Log.info('Creating a new html report', filepath);
+
+    children.forEach(function (child) {
+      let childFilePath = path.join(folderPath, child.getRelativeName() + '.html');
+      Log.info('Creating a new html report', childFilePath);
       let fileReport = CoverageData.getFileReport(coverage, child.getRelativeName());
-      report.onDetail(fileReport, ReportCommon.getContext(filepath));
+      const reportCtx = ReportCommon.getContext(childFilePath);
+      report.onDetail(fileReport, reportCtx);
     });
-    this.res.end('{"type":"success"}');
+
+    this.res.json({ type: 'success' });
   }
 
   copyStatic() {

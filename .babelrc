@@ -1,0 +1,7 @@
+{
+  "env": {
+    "COVERAGE": {
+      "plugins":["istanbul"]
+    }
+  }
+}

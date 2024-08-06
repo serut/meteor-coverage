@@ -1,6 +1,8 @@
 import Conf from './../context/conf';
-import path from 'path';
-import fs from 'fs';
+import path from 'node:path';
+import fs from 'node:fs';
+import Log from '../context/log';
+
 const Coverage = Npm.require('istanbul-lib-coverage');
 
 let mergeCoverageWith, importCoverage, getCoverageObject;
@@ -36,23 +38,23 @@ importCoverage = function (res, options = {}) {
   fs.exists(reportPath, function (exists) {
     /* istanbul ignore else */
     if (!exists) {
-      res.end(JSON.stringify({ type: 'failed', message: 'report file not found: reportPath=' + reportPath + ' COVERAGE_APP_FOLDER=' + Conf.COVERAGE_APP_FOLDER }));
+      res.json({ type: 'failed', message: 'report file not found: reportPath=' + reportPath + ' COVERAGE_APP_FOLDER=' + Conf.COVERAGE_APP_FOLDER });
       return;
     }
     fs.readFile(reportPath, 'utf8', function (err, fileContent) {
       /* istanbul ignore else */
       if (err) {
-        res.end(JSON.stringify({ type: 'failed', message: 'failed to read report file: ' + reportPath }));
+        res.json({ type: 'failed', message: 'failed to read report file: ' + reportPath });
         return;
       }
       let coverageObj = JSON.parse(fileContent);
       for (let property in coverageObj) {
         /* istanbul ignore else */
-        if (coverageObj.hasOwnProperty(property)) {
+        if (Object.hasOwn(coverageObj, property)) {
           Core.mergeCoverageWith(coverageObj[property]);
         }
       }
-      res.end('{"type":"success"}');
+      res.json({ type: 'success' });
     });
   });
 };
