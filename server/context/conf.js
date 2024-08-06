@@ -34,7 +34,7 @@ if (IS_COVERAGE_ACTIVE) {
   if (!defaultConfig) {
     throw new Error('Expected default config at conf/default-coverage.json');
   }
-  console.debug({ defaultConfig });
+
   try {
     fs.accessSync(coverageFile);
     Log.info('Reading custom configuration');

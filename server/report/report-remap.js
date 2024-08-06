@@ -2,6 +2,7 @@ import Conf from './../context/conf';
 import ReportCommon from './report-common';
 import IstanbulGenericReporter from './report-generic';
 import path from 'node:path';
+import Log from '../context/log';
 const remapIstanbul = Npm.require('remap-istanbul');
 const MemoryStore = Npm.require('istanbul/lib/store/memory');
 
@@ -57,6 +58,7 @@ export default class {
     const res = this.res;
     this.remapWrapper(this.pathJSON, reports, this.options)
       .catch(e => {
+        Log.error(e)
         res.status(500);
         res.send(e.message);
       })

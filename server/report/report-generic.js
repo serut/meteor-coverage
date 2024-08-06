@@ -35,13 +35,14 @@ export default class {
     this.res.json({ type: 'success' });
   }
 
-  writeFile(childs) {
-    for (let i = 0; i < childs.length; i++) {
+  writeFile(children) {
+    for (let i = 0; i < children.length; i++) {
       // Remove the COVERAGE_APP_FOLDER from the filepath
-      childs[i].fileCoverage.data.path = childs[i].fileCoverage.data.path.replace(Conf.COVERAGE_APP_FOLDER, '');
-      this.report.onDetail(childs[i]);
+      try {
+        children[i].fileCoverage.data.path = children[i].fileCoverage.data.path.replace(Conf.COVERAGE_APP_FOLDER, '');
+      } catch {}
+      this.report.onDetail(children[i]);
     }
     this.report.onEnd();
   }
-
 }

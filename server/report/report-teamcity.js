@@ -31,7 +31,9 @@ export default class {
   writeFile (childs) {
     for (var i = 0; i < childs.length; i++) {
       // Remove the COVERAGE_APP_FOLDER from the filepath
-      childs[i].fileCoverage.data.path = childs[i].fileCoverage.data.path.replace(Conf.COVERAGE_APP_FOLDER, '');
+      try {
+        childs[i].fileCoverage.data.path = childs[i].fileCoverage.data.path.replace(Conf.COVERAGE_APP_FOLDER, '');
+      } catch {}
     }
     this.report.onStart(childs, this.context);
   }
