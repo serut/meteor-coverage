@@ -109,27 +109,73 @@ Now open your [browser test page localhost:3000/](http://localhost:3000/) and th
 
 Refresh the [localhost:3000/coverage](http://localhost:3000/coverage) in your browser to see there is client coverage now.
 
-### Specific setup for Meteor package
+### Specific setup for Meteor packages
 
-In a meteor package, you need to add inside the `package.js` file:  
+
+#### 1. Add Test Dependencies
+In a Meteor package, you need to add inside the `package.js` file the following dependencies:  
 
 ```js
 [...]
 Package.onTest(function (api) {
-    api.use(['lmieulet:meteor-legacy-coverage@0.2.0', 'lmieulet:meteor-coverage@3.0.0','meteortesting:mocha']);
+    api.use(['lmieulet:meteor-legacy-coverage@0.4.0', 'lmieulet:meteor-coverage@4.3.0','meteortesting:mocha@3.0.0']);
     [...]
 });
 ```
 
-Creating a Meteor package in 2018 is a nightmare, so please stay calm when you discover the following `package.json` that prevents so many issues :
+#### 2. Add Coverage Config
+Additionally, you need to add the `coverage.json` file at the top-level of your package (where `package.js`) is located
+with the following minimal content:
+
+```json
+{
+  "include": [
+    "**/packages/namespace_packagename.js",
+    "**/namespace:packagename/**"
+  ]
+}
 ```
+
+Where `namespace` is the name of the package owner and `packagename` the name of the package, 
+similar to `lmieulet:meteor-coverage`.
+
+#### 3. Add `.babelrc`
+
+In order to get your package instrumented by istanbul you need to make sure to have the babel environment
+defined within the package!
+
+Add the `.babelrc` file at the top-level of your package (where `package.js`) is located
+with the following minimal content:
+
+```json
+{
+  "env": {
+    "COVERAGE": {
+      "plugins":["istanbul"]
+    }
+  }
+}
+```
+
+With this, babel will only instrument your packages during tests that contain `BABEL_ENV=COVERAGE` as environment 
+variable!
+
+> Note, for package tests it's not sufficient to have a `"babel"` entry in `package.json`. You have to add the
+> `.babelrc` file to make it work!
+
+#### 4. Run the tests
+The best way to manage your package tests is using a `package.json` file that prevents so many issues :
+
+```json
   "scripts": {
     "setup-test": "rm -rf ./someapp && meteor create --bare someapp && cd someapp && cp ../.coverage.json . && meteor npm i --save puppeteer && mkdir packages && ln -s ../../ ./packages/meteor-coverage",
-    "test": "meteor npm run setup-test && cd someapp && TEST_BROWSER_DRIVER=puppeteer COVERAGE_VERBOSE=1 COVERAGE=1 COVERAGE_OUT_LCOVONLY=1 COVERAGE_APP_FOLDER=$(pwd)/ meteor test-packages --once --driver-package meteortesting:mocha ./packages/meteor-coverage",
-    "test:watch": "cd someapp && TEST_WATCH=1 COVERAGE=1 COVERAGE_APP_FOLDER=$(pwd)/ meteor test-packages --driver-package meteortesting:mocha ./packages/meteor-coverage"
+    "test": "meteor npm run setup-test && cd someapp && BABEL_ENV=COVERAGE TEST_BROWSER_DRIVER=puppeteer COVERAGE_VERBOSE=1 COVERAGE=1 COVERAGE_OUT_LCOVONLY=1 COVERAGE_APP_FOLDER=$(pwd)/ meteor test-packages --once --driver-package meteortesting:mocha ./packages/meteor-coverage",
+    "test:watch": "cd someapp && BABEL_ENV=COVERAGE TEST_WATCH=1 COVERAGE=1 COVERAGE_APP_FOLDER=$(pwd)/ meteor test-packages --driver-package meteortesting:mocha ./packages/meteor-coverage",
+    "test:headless": "cd someapp && BABEL_ENV=COVERAGE TEST_BROWSER_DRIVER=puppeteer COVERAGE_VERBOSE=1 COVERAGE=1 COVERAGE_OUT_LCOVONLY=1 COVERAGE_APP_FOLDER=$(pwd)/ meteor test-packages --driver-package meteortesting:mocha ./packages/meteor-coverage"
   }
 ```
 The task `setup-test` is the cutting edge workaround that creates an empty meteor app that will run your test later.  
+
 
 ### Specific setup for Typescript
 
