@@ -53,7 +53,6 @@ fileMatch = function (filePath, pattern) {
 };
 
 shouldIgnore = function (filePath, isAServerSideFile) {
-  if (isAServerSideFile) debugger
   // Force the inclusion of any file using config file
   /* istanbul ignore else */
   if (Conf.include) {
