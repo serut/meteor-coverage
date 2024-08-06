@@ -40,7 +40,9 @@ export default class {
       // Remove the COVERAGE_APP_FOLDER from the filepath
       try {
         children[i].fileCoverage.data.path = children[i].fileCoverage.data.path.replace(Conf.COVERAGE_APP_FOLDER, '');
-      } catch {}
+      } catch {
+        // eslint-disable no-empty
+      }
       this.report.onDetail(children[i]);
     }
     this.report.onEnd();

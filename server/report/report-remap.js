@@ -58,7 +58,7 @@ export default class {
     const res = this.res;
     this.remapWrapper(this.pathJSON, reports, this.options)
       .catch(e => {
-        Log.error(e)
+        Log.error(e);
         res.status(500);
         res.send(e.message);
       })
