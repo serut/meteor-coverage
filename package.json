@@ -23,9 +23,9 @@
   "scripts": {
     "setup-test": "rm -rf ./someapp && meteor create --release 3.0.1 --bare someapp && cd someapp && cp ../.coverage.json . && meteor npm i --save puppeteer && mkdir packages && ln -s ../../ ./packages/meteor-coverage && ln -s ../../meteor-legacy-coverage ./packages/meteor-legacy-coverage",
     "test": "meteor npm run setup-test && meteor npm run test:once",
-    "test:once": "cd someapp && TEST_BROWSER_DRIVER=puppeteer COVERAGE_VERBOSE=1 COVERAGE=1 COVERAGE_OUT_LCOVONLY=1 COVERAGE_APP_FOLDER=$(pwd)/ meteor test-packages --once --driver-package meteortesting:mocha ./packages/meteor-coverage",
-    "test:watch": "cd someapp && TEST_WATCH=1 COVERAGE_VERBOSE=1 COVERAGE=1 COVERAGE_APP_FOLDER=$(pwd)/ meteor test-packages --driver-package meteortesting:mocha ./packages/meteor-coverage",
-    "test:headless": "cd someapp && TEST_BROWSER_DRIVER=puppeteer COVERAGE_VERBOSE=1 COVERAGE=1 COVERAGE_OUT_LCOVONLY=1 COVERAGE_APP_FOLDER=$(pwd)/ meteor test-packages --driver-package meteortesting:mocha ./packages/meteor-coverage",
+    "test:once": "cd someapp && BABEL_ENV=COVERAGE TEST_BROWSER_DRIVER=puppeteer COVERAGE_VERBOSE=1 COVERAGE=1 COVERAGE_OUT_LCOVONLY=1 COVERAGE_APP_FOLDER=$(pwd)/ meteor test-packages --once --driver-package meteortesting:mocha ./packages/meteor-coverage",
+    "test:watch": "cd someapp && BABEL_ENV=COVERAGE TEST_WATCH=1 COVERAGE_VERBOSE=1 COVERAGE=1 COVERAGE_APP_FOLDER=$(pwd)/ meteor test-packages --driver-package meteortesting:mocha ./packages/meteor-coverage",
+    "test:headless": "cd someapp && BABEL_ENV=COVERAGE TEST_BROWSER_DRIVER=puppeteer COVERAGE_VERBOSE=1 COVERAGE=1 COVERAGE_OUT_LCOVONLY=1 COVERAGE_APP_FOLDER=$(pwd)/ meteor test-packages --driver-package meteortesting:mocha ./packages/meteor-coverage",
     "start": "meteor npm run lint:fix & meteor npm run test:watch",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
