@@ -118,7 +118,7 @@ In a Meteor package, you need to add inside the `package.js` file the following 
 ```js
 [...]
 Package.onTest(function (api) {
-    api.use(['lmieulet:meteor-legacy-coverage@0.4.0', 'lmieulet:meteor-coverage@4.3.0','meteortesting:mocha@3.0.0']);
+    api.use(['lmieulet:meteor-legacy-coverage@1.0.0', 'lmieulet:meteor-coverage@5.0.0','meteortesting:mocha@3.0.0']);
     [...]
 });
 ```
