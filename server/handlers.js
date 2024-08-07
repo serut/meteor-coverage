@@ -4,6 +4,7 @@ import ReportService from './report/report-service';
 import fs from 'node:fs';
 import path from 'node:path';
 import Log from './context/log';
+import { Response } from './services/response';
 
 showCoverage = function (params, req, res, next) {
   let options = {
@@ -24,20 +25,20 @@ getAsset = function (params, req, res, next) {
         fs.readFile(assetsDir + '/vendor/' + filename, function (err, fileContent) {
           /* istanbul ignore else */
           if (err) {
-            console.error(err);
+            Log.error(err);
             return next();
           }
-          res.json(fileContent);
+          Response.send({ res, message: fileContent });
         });
       });
     } else {
       fs.readFile(assetsDir + '/' + filename, function (err, fileContent) {
         /* istanbul ignore else */
         if (err) {
-          console.error(err);
+          Log.error(err);
           return next();
         }
-        res.json(fileContent);
+        Response.send({ res, message: fileContent });
       });
     }
   });
@@ -47,8 +48,11 @@ addClientCoverage = function (params, req, res, next) {
   var body = req.body;
   /* istanbul ignore else */
   if (!body) {
-    res.status(400);
-    return res.end();
+    return Response.send({
+      res,
+      status: 400,
+      end: true
+    });
   }
 
   var clientCoverage;
@@ -60,10 +64,16 @@ addClientCoverage = function (params, req, res, next) {
   }
   if (clientCoverage) {
     Core.mergeCoverageWith(clientCoverage);
-    res.json({ type: 'success' });
+    Response.send({
+      res,
+      json: { type: 'success' }
+    });
   } else {
-    res.status(400);
-    res.send('Nothing has been imported');
+    Response.send({
+      res,
+      status: 400,
+      message: 'Nothing has been imported'
+    });
   }
 };
 
@@ -76,8 +86,11 @@ exportFile = function (params, req, res, next) {
     reportService.generateReport(res, type, {});
   } catch (e) {
     Log.error('Failed to export', e, e.stack);
-    res.status(400);
-    res.send('Nothing has been export');
+    Response.send({
+      res,
+      status: 400,
+      message: 'Nothing has been export'
+    });
   }
 };
 importCoverage = function (params, req, res, next) {
@@ -85,8 +98,11 @@ importCoverage = function (params, req, res, next) {
     Core.importCoverage(res);
   } catch (e) {
     Log.error('Failed to import', e, e.stack);
-    res.status(400);
-    res.send('No file has been import');
+    Response.send({
+      res,
+      status: 400,
+      message: 'No file has been import'
+    });
   }
 };
 

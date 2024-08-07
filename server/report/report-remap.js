@@ -3,6 +3,8 @@ import ReportCommon from './report-common';
 import IstanbulGenericReporter from './report-generic';
 import path from 'node:path';
 import Log from '../context/log';
+import { Response } from '../services/response';
+
 const remapIstanbul = Npm.require('remap-istanbul');
 const MemoryStore = Npm.require('istanbul/lib/store/memory');
 
@@ -59,11 +61,15 @@ export default class {
     this.remapWrapper(this.pathJSON, reports, this.options)
       .catch(e => {
         Log.error(e);
-        res.status(500);
-        res.send(e.message);
+        Response.send({
+          res,
+          status: 500,
+          type: 'text/plain',
+          message: e.message
+        });
       })
       .finally(() => {
-      // Restore previous working directory
+        // Restore previous working directory
         process.chdir(cwd);
       });
   }
@@ -82,7 +88,7 @@ export default class {
     }
 
     let p = Object.keys(reports).map((reportType) => {
-      let reportOptions = Object.assign({}, this.options, {verbose: reportType !== 'html'});
+      let reportOptions = Object.assign({}, options, {verbose: reportType !== 'html'});
       return remapIstanbul.writeReport(collector, reportType, reportOptions, reports[reportType], sourceStore);
     });
 

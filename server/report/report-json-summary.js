@@ -2,6 +2,9 @@ import Conf from './../context/conf';
 import CoverageData from './../services/coverage-data';
 import Core from './../services/core';
 import ReportCommon from './report-common';
+import Log from '../context/log';
+import { Response } from '../services/response';
+
 const ReportImpl = Npm.require('istanbul-reports');
 
 export default class {
@@ -18,28 +21,35 @@ export default class {
 
   generate() {
     const coverage = Core.getCoverageObject();
-    let childs = CoverageData.getLcovonlyReport(coverage);
+    let children = CoverageData.getLcovonlyReport(coverage);
     this.report.onStart(null, this.context);
-    /* istanbul ignore else */
-    this.res.set('Content-type', 'application/json');
 
-    if (childs.length === 0) {
-      this.res.status(500);
-      return this.res.json({'type':'No coverage to export'});
-    }
-    this.writeFile(childs);
-    this.res.json({ type: 'success' });
+    if (children.length === 0) {
+      return Response.send({
+        res: this.res,
+        status: 500,
+        type: 'application/json',
+        json: {'type':'No coverage to export'}
+      });
+    } 
+    this.writeFile(children);
+    Response.send({
+      res: this.res,
+      type: 'application/json',
+      json: { type: 'success' }
+    });
+    
   }
 
-  writeFile (childs) {
-    for (let i = 0; i < childs.length; i++) {
+  writeFile (children) {
+    for (let i = 0; i < children.length; i++) {
       // Remove the COVERAGE_APP_FOLDER from the filepath
       try {
-        childs[i].fileCoverage.data.path = childs[i].fileCoverage.data.path.replace(Conf.COVERAGE_APP_FOLDER, '');
-      } catch {
-        // eslint-disable no-empty
+        children[i].fileCoverage.data.path = children[i].fileCoverage.data.path.replace(Conf.COVERAGE_APP_FOLDER, '');
+      } catch (e) {
+        Log.error(e);
       }
-      this.report.onDetail(childs[i]);
+      this.report.onDetail(children[i]);
     }
     ///Todo: not working
     //this.report.onSummary(childs);

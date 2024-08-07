@@ -2,6 +2,7 @@ import Conf from './../context/conf';
 import CoverageData from './../services/coverage-data';
 import Core from './../services/core';
 import ReportCommon from './report-common';
+import { Response } from '../services/response';
 
 const ReportImpl = Npm.require('istanbul-reports');
 
@@ -19,13 +20,22 @@ export default class {
     var childs = CoverageData.getLcovonlyReport(coverage);
 
     if (childs.length === 0) {
-      this.res.set('Content-type', 'text/plain');
-      this.res.status(500);
-      return this.res.json({ type: 'No coverage to export' });
+      Response.send({
+        res: this.res,
+        status: 500,
+        type: 'application/json',
+        json: { type: 'No coverage to export' }
+      });
+    } else {
+      this.writeFile(childs);
+      Response.send({
+        res: this.res,
+        status: 500,
+        type: 'application/json',
+        json: { type: 'success' }
+      });
     }
 
-    this.writeFile(childs);
-    this.res.json({ type: 'success' });
   }
 
   writeFile (childs) {
