@@ -21,26 +21,6 @@ hookLoader = function (opts) {
     throw 'Instrumenter already defined ! You cannot call this method twice';
   }
   instrumenter = Instrument.createInstrumenter(opts);
-  Hook.hookRunInThisContext(
-    shallInstrumentServerScript,
-    function (code, options) {
-      var filename = typeof options === 'string' ? options : options.filename;
-      return instrumenter.instrumentSync(code, filename);
-    },
-    {
-      verbose: opts.verbose
-    }
-  );
-  Hook.hookRequire(
-    shallInstrumentServerScript,
-    function (code, options) {
-      var filename = typeof options === 'string' ? options : options.filename;
-      return instrumenter.instrumentSync(code, filename);
-    },
-    {
-      verbose: opts.verbose
-    }
-  );
 };
 
 instrumentJs = function (content, path, callback) {
