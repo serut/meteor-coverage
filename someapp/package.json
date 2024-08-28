@@ -7,6 +7,6 @@
   "dependencies": {
     "@babel/runtime": "^7.23.5",
     "meteor-node-stubs": "^1.2.7",
-    "puppeteer": "^22.15.0"
+    "puppeteer": "^23.2.0"
   }
 }
