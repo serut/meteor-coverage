@@ -44,7 +44,7 @@ Package.onTest(function (api) {
     ...dependencies,
     'chai': '4.2.0',
     'sinon': '7.1.1',
-    'sinon-chai': '3.2.0'
+    'sinon-chai': '3.5.0'
   });
   api.use('ecmascript');
   api.use('lmieulet:meteor-legacy-coverage@0.4.0', 'server');
