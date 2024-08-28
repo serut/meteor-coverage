@@ -1,3 +1,9 @@
+#### 5.0.0
+- Full Meteor 3.0 compatibility. This is breaking. There is no backwards compatibility, due to:
+- Express has replaced connect as `WebApp` handlers.
+- Require .babelrc to instrument using istanbul
+- Update docs
+
 #### 3.2.0
 -   Handle Typescript Meteor projects
 

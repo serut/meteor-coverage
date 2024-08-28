@@ -1,6 +1,7 @@
 import CoverageData from '../services/coverage-data';
 import Conf from '../context/conf';
 import Core from '../services/core';
+import { Response } from '../services/response';
 // If we change Npm.require('istanbul-reports') into import a from 'istanbul-reports'
 // the __dirname change and the  istanbul dependency fails
 // See istanbul-reports
@@ -43,10 +44,13 @@ export default class {
     var coverage = Core.getCoverageObject();
     /* istanbul ignore else */
     if (!(coverage && Object.keys(coverage).length > 0)) {
-      this.res.setHeader('Content-type', 'text/plain');
-      return this.res.end('No coverage information has been collected');
+      return Response.send({
+        res: this.res,
+        type: 'text/plain',
+        message: 'No coverage information has been collected'
+      });
     }
-    this.res.setHeader('Content-type', 'text/html');
+    this.res.set('Content-type', 'text/html');
     this.alterFS(this.res);
     var context = this.getContext(this.res);
     var report = ReportImpl.create('html', this.opts);
@@ -79,7 +83,9 @@ export default class {
   // istanbul-reports expect to save HTML report to the file system and not over network
   alterFS(res) {
     res.close = function () {
-      this.end();
+      if (!res.headersSent) {
+        this.end();
+      }
     };
   }
 

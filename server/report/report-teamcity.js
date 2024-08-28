@@ -2,6 +2,7 @@ import Conf from './../context/conf';
 import CoverageData from './../services/coverage-data';
 import Core from './../services/core';
 import ReportCommon from './report-common';
+import { Response } from '../services/response';
 
 const ReportImpl = Npm.require('istanbul-reports');
 
@@ -19,19 +20,32 @@ export default class {
     var childs = CoverageData.getLcovonlyReport(coverage);
 
     if (childs.length === 0) {
-      this.res.setHeader('Content-type', 'text/plain');
-      this.res.statusCode = 500;
-      return this.res.end('{"type":"No coverage to export"}');
+      Response.send({
+        res: this.res,
+        status: 500,
+        type: 'application/json',
+        json: { type: 'No coverage to export' }
+      });
+    } else {
+      this.writeFile(childs);
+      Response.send({
+        res: this.res,
+        status: 500,
+        type: 'application/json',
+        json: { type: 'success' }
+      });
     }
 
-    this.writeFile(childs);
-    this.res.end('{"type":"success"}');
   }
 
   writeFile (childs) {
     for (var i = 0; i < childs.length; i++) {
       // Remove the COVERAGE_APP_FOLDER from the filepath
-      childs[i].fileCoverage.data.path = childs[i].fileCoverage.data.path.replace(Conf.COVERAGE_APP_FOLDER, '');
+      try {
+        childs[i].fileCoverage.data.path = childs[i].fileCoverage.data.path.replace(Conf.COVERAGE_APP_FOLDER, '');
+      } catch {
+        // eslint-disable no-empty
+      }
     }
     this.report.onStart(childs, this.context);
   }

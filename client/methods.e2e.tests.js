@@ -25,6 +25,7 @@ describe('meteor-coverage', function () {
     try {
       Meteor.sendCoverage(
         function (stats, err) {
+          console.debug(stats);
           assert.isTrue(stats.TOTAL > 0, 'no client coverage');
           assert.isTrue(stats.SUCCESS > 0, 'none of the client coverage have been saved');
           assert.isTrue(stats.FAILED === 0, 'an export failed');
@@ -43,7 +44,7 @@ describe('meteor-coverage', function () {
     import: ['coverage']
   };
   for (let operation in coverage) {
-    if (coverage.hasOwnProperty(operation)) {
+    if (Object.hasOwn(coverage, operation)) {
       coverage[operation].forEach(function (reportType) {
         it(`${operation} [${reportType}]`, function (done) {
           testCoverage.call(this, done, operation, reportType); // pass mocha context
@@ -58,7 +59,7 @@ describe('meteor-coverage', function () {
     pending: ['clover', 'cobertura', 'lcov', 'text', 'text-lcov']
   };
   for (let group in reportTypes) {
-    if (reportTypes.hasOwnProperty(group)) {
+    if (Object.hasOwn(reportTypes,group)) {
       reportTypes[group].forEach(function (reportType) {
         it(`export [${reportType}] should fail`, function (done) {
           this.timeout(0);

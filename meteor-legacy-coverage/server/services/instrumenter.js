@@ -1,4 +1,3 @@
-import {_} from 'meteor/underscore';
 import Log from './../context/log';
 import Conf from './../context/conf';
 import minimatch from 'minimatch';
@@ -22,16 +21,6 @@ hookLoader = function (opts) {
     throw 'Instrumenter already defined ! You cannot call this method twice';
   }
   instrumenter = Instrument.createInstrumenter(opts);
-  Hook.hookRunInThisContext(
-    shallInstrumentServerScript,
-    function (code, options) {
-      var filename = typeof options === 'string' ? options : options.filename;
-      return instrumenter.instrumentSync(code, filename);
-    },
-    {
-      verbose: opts.verbose
-    }
-  );
 };
 
 instrumentJs = function (content, path, callback) {
@@ -42,13 +31,14 @@ instrumentJs = function (content, path, callback) {
 fileMatch = function (filePath, pattern) {
   return minimatch(filePath, pattern, {dot: true});
 };
+
 shouldIgnore = function (filePath, isAServerSideFile) {
   // Force the inclusion of any file using config file
   /* istanbul ignore else */
   if (Conf.include) {
     /* istanbul ignore else */
     if (Conf.include.some(pattern => Instrumenter.fileMatch(filePath, pattern))) {
-      Log.info('[Accepted][include]: ', filePath);
+      Log.info(`[Accepted][include.${isAServerSideFile ? 'server' : 'client'}]: `, filePath);
       return false;
     }
   }
@@ -80,7 +70,7 @@ shouldIgnore = function (filePath, isAServerSideFile) {
     }
   }
 
-  Log.info('[Accepted][*]: ', filePath);
+  Log.info('[Accepted][*]: ', filePath, { isAServerSideFile });
   return false;
 };
 
@@ -118,6 +108,7 @@ shallInstrumentServerScript = function (file) {
     Log.info('[ServerSide][node_modules] file ignored: ' + file);
     return false;
   }
+
   if (file.indexOf('packages') === 1) {
     /* istanbul ignore else */
     if (!Instrumenter.shouldIgnore(file, true)) {

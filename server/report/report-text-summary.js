@@ -1,9 +1,10 @@
-import Conf from '../context/conf';
 import CoverageData from '../services/coverage-data';
 import Core from '../services/core';
 import ReportCommon from './report-common';
-import path from 'path';
-import fs from 'fs';
+import path from 'node:path';
+import fs from 'node:fs';
+import { Response } from '../services/response';
+
 var Report = Npm.require('istanbul-lib-report'),
   ReportImpl = Npm.require('istanbul-reports');
   
@@ -15,14 +16,18 @@ export default class {
 
     this.report.file = this.options.path;
     this.context = this.getContext(this.report.file);
-
   }
 
   generate() {
     let coverage = Core.getCoverageObject();
     var root = CoverageData.getTreeReport(coverage);
     this.report.onStart(root, this.context);
-    this.res.end('{"type":"success"}');
+
+    Response.send({
+      res: this.res,
+      type: 'application/json',
+      json: { type: 'success' }
+    });
   }
 
   getContext(filepath) {

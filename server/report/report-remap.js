@@ -1,11 +1,12 @@
 import Conf from './../context/conf';
-import Log from './../context/log';
 import ReportCommon from './report-common';
 import IstanbulGenericReporter from './report-generic';
-import path from 'path';
+import path from 'node:path';
+import Log from '../context/log';
+import { Response } from '../services/response';
+
 const remapIstanbul = Npm.require('remap-istanbul');
 const MemoryStore = Npm.require('istanbul/lib/store/memory');
-
 
 export default class {
   constructor(res, type, options) {
@@ -54,16 +55,29 @@ export default class {
       'json-summary': this.getFilePath('summary.json'),
       'json': this.getFilePath('report.json')
     };
-    Conf.remapFormat.forEach((type) => reports[type] = allReports[type]);
-    this.remapWrapper(this.pathJSON, reports, this.options).await();
 
-    // Restore previous working directory
-    process.chdir(cwd);
+    Conf.remapFormat.forEach((type) => reports[type] = allReports[type]);
+    const res = this.res;
+    this.remapWrapper(this.pathJSON, reports, this.options)
+      .catch(e => {
+        Log.error(e);
+        Response.send({
+          res,
+          status: 500,
+          type: 'text/plain',
+          message: e.message
+        });
+      })
+      .finally(() => {
+        // Restore previous working directory
+        process.chdir(cwd);
+      });
   }
 
   remapWrapper(sources, reports, options) {
     let sourceStore = new MemoryStore();
-    let collector = remapIstanbul.remap(remapIstanbul.loadCoverage(sources), {
+    const loaded = remapIstanbul.loadCoverage(sources);
+    let collector = remapIstanbul.remap(loaded, {
       sources: sourceStore,
       warn: function() {}
     });
@@ -74,7 +88,7 @@ export default class {
     }
 
     let p = Object.keys(reports).map((reportType) => {
-      let reportOptions = Object.assign({}, this.options, {verbose: reportType === 'html' ? false : true});
+      let reportOptions = Object.assign({}, options, {verbose: reportType !== 'html'});
       return remapIstanbul.writeReport(collector, reportType, reportOptions, reports[reportType], sourceStore);
     });
 

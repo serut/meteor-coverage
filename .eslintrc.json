@@ -1,14 +1,24 @@
 {
   "extends": ["eslint:recommended"],
-  "plugins": ["babel", "mocha", "import"],
-  "parser": "babel-eslint",
+  "plugins": ["mocha", "import"],
+  "parser": "@babel/eslint-parser",
   "env":{
-    "es6": true
+    "es6": true,
+    "mocha": true,
+    "meteor": true
   },
   "parserOptions": {
     "ecmaVersion": 6,
-    "sourceType": "module"
+    "sourceType": "module",
+    "requireConfigFile": false,
+    "babelOptions": {
+      "babelrc": false,
+      "configFile": false,
+      // your babel options
+      "presets": ["@babel/preset-env"]
+    }
   },
+  "ignorePatterns": ["someapp/**/*"],
   "rules": {
     "no-useless-escape": [0],
     "consistent-return": [0],

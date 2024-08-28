@@ -35,6 +35,8 @@ jobs:
     name: Meteor package tests
     # needs: [lint]
     runs-on: ubuntu-latest
+    # allow usage of CODACY / CODECOV tokens
+    environment: coverage
     strategy:
       matrix:
         meteorRelease:
@@ -53,17 +55,26 @@ jobs:
         with:
           meteor-release: ${{ matrix.meteorRelease }}
 
-      - name: cache dependencies
-        uses: actions/cache@v3
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-20-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-20-
-
       - name: Install test dependencies
-        run: npm ci
-
+        run: |
+          meteor --version
+          meteor npm -v
+          npm -v
+          meteor npm config set legacy-peer-deps true
+          meteor npm cache clean --force
+          npm install -g coveralls codecov.io codacy-coverage
+          npm ci
 
       - name: Run tests
-        run: meteor npm run test
+        run: |
+          npm run test
+          sed 's/packages\/meteor-coverage\///' someapp/.coverage/lcov.info | codacy-coverage || true # ignore codacy error
+        env:
+          CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_PROJECT_TOKEN }}
+
+      - name: Codecov
+        uses: codecov/codecov-action@v4.5.0
+        with:
+          # Repository Codecov token. Used to authorize report uploads
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: someapp/.coverage/lcov.info

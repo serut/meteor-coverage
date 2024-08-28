@@ -1,10 +1,10 @@
 import Handlers from './handlers';
 import Conf from './context/conf';
 import bodyParser from 'body-parser';
-import url from 'url';
+import url from 'node:url';
 
 const handleRequest = (method) => (path, cb) => {
-  WebApp.rawConnectHandlers.use(path, (req, res, next) => {
+  WebApp.rawHandlers.use(path, (req, res, next) => {
     if (req.method !== method) {
       next();
       return;

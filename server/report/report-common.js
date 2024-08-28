@@ -1,6 +1,6 @@
-import fs from 'fs';
+import fs from 'node:fs';
 import mkdirp from 'mkdirp';
-import path from 'path';
+import path from 'node:path';
 import Log from './../context/log';
 const Report = Npm.require('istanbul-lib-report');
 
@@ -69,3 +69,4 @@ export default ReportCommon = {
     return succeed;
   }
 };
+

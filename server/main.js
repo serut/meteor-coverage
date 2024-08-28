@@ -4,6 +4,7 @@ import Router from './router';
 import ReportService from './report/report-service';
 import Boot from './boot.js';
 
+
 Boot.startup();
 
 export default {

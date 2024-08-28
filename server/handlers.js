@@ -1,8 +1,10 @@
-import Conf from './context/conf';
+import { reportTypes } from './context/conf';
 import Core from './services/core';
 import ReportService from './report/report-service';
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
+import Log from './context/log';
+import { Response } from './services/response';
 
 showCoverage = function (params, req, res, next) {
   let options = {
@@ -23,20 +25,20 @@ getAsset = function (params, req, res, next) {
         fs.readFile(assetsDir + '/vendor/' + filename, function (err, fileContent) {
           /* istanbul ignore else */
           if (err) {
-            console.error(err);
+            Log.error(err);
             return next();
           }
-          res.end(fileContent);
+          Response.send({ res, message: fileContent });
         });
       });
     } else {
       fs.readFile(assetsDir + '/' + filename, function (err, fileContent) {
         /* istanbul ignore else */
         if (err) {
-          console.error(err);
+          Log.error(err);
           return next();
         }
-        res.end(fileContent);
+        Response.send({ res, message: fileContent });
       });
     }
   });
@@ -46,37 +48,49 @@ addClientCoverage = function (params, req, res, next) {
   var body = req.body;
   /* istanbul ignore else */
   if (!body) {
-    res.writeHead(400);
-    res.end();
+    return Response.send({
+      res,
+      status: 400,
+      end: true
+    });
   }
 
   var clientCoverage;
   for (var property in body) {
     /* istanbul ignore else */
-    if (body.hasOwnProperty(property)) {
+    if (Object.hasOwn(body, property)) {
       clientCoverage = body[property];
     }
   }
   if (clientCoverage) {
     Core.mergeCoverageWith(clientCoverage);
-    res.end('{"type":"success"}');
+    Response.send({
+      res,
+      json: { type: 'success' }
+    });
   } else {
-    res.writeHead(400);
-    res.end('Nothing has been imported');
+    Response.send({
+      res,
+      status: 400,
+      message: 'Nothing has been imported'
+    });
   }
 };
 
 exportFile = function (params, req, res, next) {
   var _type = params.type;
   /* istanbul ignore next: ternary operator */
-  type = Conf.reportTypes.allowed.indexOf(_type) > -1 ? _type : 'coverage';
+  type = reportTypes.allowed.indexOf(_type) > -1 ? _type : 'coverage';
   try {
     let reportService = new ReportService();
     reportService.generateReport(res, type, {});
   } catch (e) {
     Log.error('Failed to export', e, e.stack);
-    res.writeHead(400);
-    res.end('Nothing has been export');
+    Response.send({
+      res,
+      status: 400,
+      message: 'Nothing has been export'
+    });
   }
 };
 importCoverage = function (params, req, res, next) {
@@ -84,8 +98,11 @@ importCoverage = function (params, req, res, next) {
     Core.importCoverage(res);
   } catch (e) {
     Log.error('Failed to import', e, e.stack);
-    res.writeHead(400);
-    res.end('No file has been import');
+    Response.send({
+      res,
+      status: 400,
+      message: 'No file has been import'
+    });
   }
 };
 

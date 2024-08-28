@@ -33,8 +33,9 @@ if (IS_COVERAGE_ACTIVE) {
     path = Npm.require('path');
 
   Log.info('Coverage active');
-  let coverageFile = path.join(COVERAGE_APP_FOLDER, '.coverage.json'),
-    defaultConfig = JSON.parse(Assets.getText('conf/default-coverage.json'));
+  let coverageFile = path.join(COVERAGE_APP_FOLDER, '.coverage.json');
+  const defaultConfigPath = Assets.absoluteFilePath('conf/default-coverage.json');
+  let defaultConfig = JSON.parse(fs.readFileSync(defaultConfigPath));
 
   try {
     fs.accessSync(coverageFile);

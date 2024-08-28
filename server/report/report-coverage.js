@@ -1,4 +1,5 @@
-import fs from 'fs';
+import fs from 'node:fs';
+import { Response } from '../services/response';
 
 export default class {
   constructor(res, options) {
@@ -15,9 +16,15 @@ export default class {
     fs.writeFile(reportPath, coverageReport, function (err) {
       /* istanbul ignore else */
       if (err) {
-        instance.res.end(JSON.stringify({ type: 'failed', message: 'failed to write report file: ' + reportPath }));
+        Response.send({
+          res: instance.res,
+          json: { type: 'failed', message: 'failed to write report file: ' + reportPath }
+        });
       } else {
-        instance.res.end('{"type":"success"}');
+        Response.send({
+          res: instance.res,
+          json: { type: 'success' }
+        });
       }
     });
   }
