@@ -2,42 +2,43 @@
 
 A meteor package that allows you to get the statement, line, function and branch coverage of Meteor project and package.
 
-This package uses the [istanbuljs](https://github.com/istanbuljs/istanbuljs) set of packages to generate reports. Starting from Meteor 1.8, this package does not instrument your code to get coverage as you can let babel do it using the [babel plugin istanbul](https://github.com/istanbuljs/babel-plugin-istanbul).
+This package uses the [istanbuljs](https://github.com/istanbuljs/istanbuljs) set of packages to generate reports.
+Starting from Meteor 1.8, this package does not instrument your code to get coverage as you can let babel do it using
+the [babel plugin istanbul](https://github.com/istanbuljs/babel-plugin-istanbul).
 
 It's a debug only package, so it does not affect your production build.
 
 ## CI Platforms supported
 
-|                                                                                       |                                                                         Travis                                                                        |                                                                                                                                          Circle CI |                                                                                                                                                                                      Coveralls |                                                                                                                                                      Codecov |                                                                                                                                                                                                                                                                                                       Codacy |
-| ------------------------------------------------------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------: | -------------------------------------------------------------------------------------------------------------------------------------------------: | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | -----------------------------------------------------------------------------------------------------------------------------------------------------------: | -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-| lmieulet:meteor-coverage                                                              |             [![Build Status](https://app.travis-ci.com/serut/meteor-coverage.svg?branch=master)](https://app.travis-ci.com/serut/meteor-coverage)             |                         [![Circle CI](https://circleci.com/gh/serut/meteor-coverage.svg?style=svg)](https://circleci.com/gh/serut/meteor-coverage) |                         [![Coverage Status](https://coveralls.io/repos/github/serut/meteor-coverage/badge.svg?branch=master)](https://coveralls.io/github/serut/meteor-coverage?branch=master) |                         [![codecov](https://codecov.io/gh/serut/meteor-coverage/branch/master/graph/badge.svg)](https://codecov.io/gh/serut/meteor-coverage) | [![Codacy Badge](https://app.codacy.com/project/badge/Grade/481a0d40fbe742c6a62f3a87da367015)](https://www.codacy.com/gh/serut/meteor-coverage/dashboard) [![Codacy Badge](https://api.codacy.com/project/badge/Coverage/3679340dded44b84a44ca65862855216)](https://www.codacy.com/app/l-mieulet/meteor-coverage) |
-| [meteor-coverage-app-exemple](https://github.com/serut/meteor-coverage-app-exemple)   | [![Build Status](https://travis-ci.org/serut/meteor-coverage-app-exemple.svg?branch=master)](https://travis-ci.org/serut/meteor-coverage-app-exemple) | [![Circle CI](https://circleci.com/gh/serut/meteor-coverage-app-exemple.svg?style=svg)](https://circleci.com/gh/serut/meteor-coverage-app-exemple) | [![Coverage Status](https://coveralls.io/repos/github/serut/meteor-coverage-app-exemple/badge.svg?branch=master)](https://coveralls.io/github/serut/meteor-coverage-app-exemple?branch=master) | [![codecov](https://codecov.io/gh/serut/meteor-coverage-app-exemple/branch/master/graph/badge.svg)](https://codecov.io/gh/serut/meteor-coverage-app-exemple) |                                                                                                                                            [![Codacy Badge](https://api.codacy.com/project/badge/Grade/1a2997c614cf4da09452f47d70d72352)](https://www.codacy.com/app/l-mieulet/meteor-coverage-app-exemplee) |
-
+|                                                                                     |                                                                        Travis                                                                         |                                                                                                                                          Circle CI |                                                                                                                                                                                      Coveralls |                                                                                                                                                      Codecov |                                                                                                                                                                                                                                                                                                            Codacy |
+|-------------------------------------------------------------------------------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------:|---------------------------------------------------------------------------------------------------------------------------------------------------:|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|-------------------------------------------------------------------------------------------------------------------------------------------------------------:|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+| lmieulet:meteor-coverage                                                            |         [![Build Status](https://app.travis-ci.com/serut/meteor-coverage.svg?branch=master)](https://app.travis-ci.com/serut/meteor-coverage)         |                         [![Circle CI](https://circleci.com/gh/serut/meteor-coverage.svg?style=svg)](https://circleci.com/gh/serut/meteor-coverage) |                         [![Coverage Status](https://coveralls.io/repos/github/serut/meteor-coverage/badge.svg?branch=master)](https://coveralls.io/github/serut/meteor-coverage?branch=master) |                         [![codecov](https://codecov.io/gh/serut/meteor-coverage/branch/master/graph/badge.svg)](https://codecov.io/gh/serut/meteor-coverage) | [![Codacy Badge](https://app.codacy.com/project/badge/Grade/481a0d40fbe742c6a62f3a87da367015)](https://www.codacy.com/gh/serut/meteor-coverage/dashboard) [![Codacy Badge](https://api.codacy.com/project/badge/Coverage/3679340dded44b84a44ca65862855216)](https://www.codacy.com/app/l-mieulet/meteor-coverage) |
+| [meteor-coverage-app-exemple](https://github.com/serut/meteor-coverage-app-exemple) | [![Build Status](https://travis-ci.org/serut/meteor-coverage-app-exemple.svg?branch=master)](https://travis-ci.org/serut/meteor-coverage-app-exemple) | [![Circle CI](https://circleci.com/gh/serut/meteor-coverage-app-exemple.svg?style=svg)](https://circleci.com/gh/serut/meteor-coverage-app-exemple) | [![Coverage Status](https://coveralls.io/repos/github/serut/meteor-coverage-app-exemple/badge.svg?branch=master)](https://coveralls.io/github/serut/meteor-coverage-app-exemple?branch=master) | [![codecov](https://codecov.io/gh/serut/meteor-coverage-app-exemple/branch/master/graph/badge.svg)](https://codecov.io/gh/serut/meteor-coverage-app-exemple) |                                                                                                                                                 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/1a2997c614cf4da09452f47d70d72352)](https://www.codacy.com/app/l-mieulet/meteor-coverage-app-exemplee) |
 
 [![Dependency Status](https://img.shields.io/david/serut/meteor-coverage.svg)](https://david-dm.org/serut/meteor-coverage)
 [![devDependency Status](https://img.shields.io/david/dev/serut/meteor-coverage.svg)](https://david-dm.org/serut/meteor-coverage?type=dev)
 
-
 ## Compatibility
 
-| meteor-coverage | Meteor | spacejam & practicalmeteor | meteortesting:mocha |
-| ------------- |:----------:|:----------:|:----------:|
-| 1.x  | <1.6.0 | ✔ | ✘ |
-| [not supported](https://github.com/meteor/meteor/issues/9281)  | 1.6.0 <1.6.1 | ✘  | ✘  |
-| 2.x      | >=1.6.1 and < 1.8| ✘ | ✔ |
-| 3.x      | >=1.8| ✘ | ✔ |
+| meteor-coverage                                               |      Meteor       | spacejam & practicalmeteor | meteortesting:mocha |
+|---------------------------------------------------------------|:-----------------:|:--------------------------:|:-------------------:|
+| 1.x                                                           |      <1.6.0       |             ✔              |          ✘          |
+| [not supported](https://github.com/meteor/meteor/issues/9281) |   1.6.0 <1.6.1    |             ✘              |          ✘          |
+| 2.x                                                           | >=1.6.1 and < 1.8 |             ✘              |          ✔          |
+| 3.x                                                           |       >=1.8       |             ✘              |          ✔          |
+| 5.x                                                           |        >=3        |             ✘              |          ✔          |
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**
 
 - [Installation](#installation)
-  - [Specific setup for Meteor apps](#specific-setup-for-meteor-apps)
-  - [Specific setup for Meteor package](#specific-setup-for-meteor-package)
-  - [Specific setup for Typescript](#specific-setup-for-Typescript)
+    - [Specific setup for Meteor apps](#specific-setup-for-meteor-apps)
+    - [Specific setup for Meteor package](#specific-setup-for-meteor-package)
+    - [Specific setup for Typescript](#specific-setup-for-Typescript)
 - [Advanced setup for CI](#advanced-setup-for-ci)
-  - [Coveralls](#coveralls)
-  - [Codecov](#codecov)
+    - [Coveralls](#coveralls)
+    - [Codecov](#codecov)
 - [Global environment variable](#global-environment-variable)
 - [Config file](#config-file)
 - [My files are missing from my app coverage report](#my-files-are-missing-from-my-app-coverage-report)
@@ -67,7 +68,10 @@ meteor npm init # If the package.json file does not exist
 meteor npm install --save-dev babel-plugin-istanbul
 ```
 
-In order to instrument your code, you need to add the [`babel-plugin-istanbul`](https://github.com/istanbuljs/babel-plugin-istanbul) to your babel config. If you don't have a babel config file, edit your package.json file, or use [any other babel configuration file (see .babelrc.js)](https://babeljs.io/docs/en/config-files).
+In order to instrument your code, you need to add
+the [`babel-plugin-istanbul`](https://github.com/istanbuljs/babel-plugin-istanbul) to your babel config. If you don't
+have a babel config file, edit your package.json file, or
+use [any other babel configuration file (see .babelrc.js)](https://babeljs.io/docs/en/config-files).
 
 ```json
 {
@@ -85,21 +89,29 @@ In order to instrument your code, you need to add the [`babel-plugin-istanbul`](
 }
 ```
 
-You must wrap the istanbul plugin with the `env` setting to disable the file-instrumentation of your project when you are not running the test coverage script. Just keep in mind that if you follow the here under script, babel will use the `istanbul` package only when `BABEL_ENV=COVERAGE`.
+You must wrap the istanbul plugin with the `env` setting to disable the file-instrumentation of your project when you
+are not running the test coverage script. Just keep in mind that if you follow the here under script, babel will use
+the `istanbul` package only when `BABEL_ENV=COVERAGE`.
 
 Now, to run the coverage process, just add these new scripts inside your `package.json` in the root folder of your app:
+
 ```json
   "scripts": {
-    "coverage:unit": "BABEL_ENV=COVERAGE TEST_BROWSER_DRIVER=puppeteer COVERAGE=1 COVERAGE_OUT_HTML=1 COVERAGE_APP_FOLDER=$PWD/ meteor test --once --driver-package meteortesting:mocha",
-    "coverage:watch": "BABEL_ENV=COVERAGE COVERAGE=1 COVERAGE_VERBOSE=1 COVERAGE_APP_FOLDER=$PWD/ TEST_WATCH=1 meteor test --driver-package meteortesting:mocha"
-  }
+"coverage:unit": "BABEL_ENV=COVERAGE TEST_BROWSER_DRIVER=puppeteer COVERAGE=1 COVERAGE_OUT_HTML=1 COVERAGE_APP_FOLDER=$PWD/ meteor test --once --driver-package meteortesting:mocha",
+"coverage:watch": "BABEL_ENV=COVERAGE COVERAGE=1 COVERAGE_VERBOSE=1 COVERAGE_APP_FOLDER=$PWD/ TEST_WATCH=1 meteor test --driver-package meteortesting:mocha"
+}
 ```
 
-You can find more options on the [meteortesting readme](https://github.com/meteortesting/meteor-mocha#run-with-code-coverage). Let's try the watch mode :
+You can find more options on
+the [meteortesting readme](https://github.com/meteortesting/meteor-mocha#run-with-code-coverage). Let's try the watch
+mode :
 
     meteor npm run test:watch:coverage
 
-Now open your [browser test page localhost:3000/](http://localhost:3000/) and the page [localhost:3000/coverage](http://localhost:3000/coverage). You can notice the client coverage is completly missing but server one is there. A missing feature would be to save your client coverage with a widget. Instead, you need to enter this javascript in your browser console (in the page where tests are executed):
+Now open your [browser test page localhost:3000/](http://localhost:3000/) and the
+page [localhost:3000/coverage](http://localhost:3000/coverage). You can notice the client coverage is completly missing
+but server one is there. A missing feature would be to save your client coverage with a widget. Instead, you need to
+enter this javascript in your browser console (in the page where tests are executed):
 
     Meteor.sendCoverage(function(stats,nbErr) {console.log(stats,nbErr);});
     # Reopen localhost:3000/coverage to see that client coverage have been saved on server
@@ -107,23 +119,25 @@ Now open your [browser test page localhost:3000/](http://localhost:3000/) and th
     # Creates an html export inside coverage_app_folder/output_folder/index.html
     Meteor.exportCoverage("html", function(err) {console.log(err)})
 
-Refresh the [localhost:3000/coverage](http://localhost:3000/coverage) in your browser to see there is client coverage now.
+Refresh the [localhost:3000/coverage](http://localhost:3000/coverage) in your browser to see there is client coverage
+now.
 
 ### Specific setup for Meteor packages
 
-
 #### 1. Add Test Dependencies
-In a Meteor package, you need to add inside the `package.js` file the following dependencies:  
+
+In a Meteor package, you need to add inside the `package.js` file the following dependencies:
 
 ```js
 [...]
 Package.onTest(function (api) {
-    api.use(['lmieulet:meteor-legacy-coverage@1.0.0', 'lmieulet:meteor-coverage@5.0.0','meteortesting:mocha@3.0.0']);
+    api.use(['lmieulet:meteor-legacy-coverage@0.4.0', 'lmieulet:meteor-coverage@5.0.0','meteortesting:mocha@3.0.0']);
     [...]
 });
 ```
 
 #### 2. Add Coverage Config
+
 Additionally, you need to add the `coverage.json` file at the top-level of your package (where `package.js`) is located
 with the following minimal content:
 
@@ -136,7 +150,7 @@ with the following minimal content:
 }
 ```
 
-Where `namespace` is the name of the package owner and `packagename` the name of the package, 
+Where `namespace` is the name of the package owner and `packagename` the name of the package,
 similar to `lmieulet:meteor-coverage`.
 
 #### 3. Add `.babelrc`
@@ -151,42 +165,48 @@ with the following minimal content:
 {
   "env": {
     "COVERAGE": {
-      "plugins":["istanbul"]
+      "plugins": [
+        "istanbul"
+      ]
     }
   }
 }
 ```
 
-With this, babel will only instrument your packages during tests that contain `BABEL_ENV=COVERAGE` as environment 
+With this, babel will only instrument your packages during tests that contain `BABEL_ENV=COVERAGE` as environment
 variable!
 
 > Note, for package tests it's not sufficient to have a `"babel"` entry in `package.json`. You have to add the
 > `.babelrc` file to make it work!
 
 #### 4. Run the tests
+
 The best way to manage your package tests is using a `package.json` file that prevents so many issues :
 
 ```json
   "scripts": {
-    "setup-test": "rm -rf ./someapp && meteor create --bare someapp && cd someapp && cp ../.coverage.json . && meteor npm i --save puppeteer && mkdir packages && ln -s ../../ ./packages/meteor-coverage",
-    "test": "meteor npm run setup-test && cd someapp && BABEL_ENV=COVERAGE TEST_BROWSER_DRIVER=puppeteer COVERAGE_VERBOSE=1 COVERAGE=1 COVERAGE_OUT_LCOVONLY=1 COVERAGE_APP_FOLDER=$(pwd)/ meteor test-packages --once --driver-package meteortesting:mocha ./packages/meteor-coverage",
-    "test:watch": "cd someapp && BABEL_ENV=COVERAGE TEST_WATCH=1 COVERAGE=1 COVERAGE_APP_FOLDER=$(pwd)/ meteor test-packages --driver-package meteortesting:mocha ./packages/meteor-coverage",
-    "test:headless": "cd someapp && BABEL_ENV=COVERAGE TEST_BROWSER_DRIVER=puppeteer COVERAGE_VERBOSE=1 COVERAGE=1 COVERAGE_OUT_LCOVONLY=1 COVERAGE_APP_FOLDER=$(pwd)/ meteor test-packages --driver-package meteortesting:mocha ./packages/meteor-coverage"
-  }
+"setup-test": "rm -rf ./someapp && meteor create --bare someapp && cd someapp && cp ../.coverage.json . && meteor npm i --save puppeteer && mkdir packages && ln -s ../../ ./packages/meteor-coverage",
+"test": "meteor npm run setup-test && cd someapp && BABEL_ENV=COVERAGE TEST_BROWSER_DRIVER=puppeteer COVERAGE_VERBOSE=1 COVERAGE=1 COVERAGE_OUT_LCOVONLY=1 COVERAGE_APP_FOLDER=$(pwd)/ meteor test-packages --once --driver-package meteortesting:mocha ./packages/meteor-coverage",
+"test:watch": "cd someapp && BABEL_ENV=COVERAGE TEST_WATCH=1 COVERAGE=1 COVERAGE_APP_FOLDER=$(pwd)/ meteor test-packages --driver-package meteortesting:mocha ./packages/meteor-coverage",
+"test:headless": "cd someapp && BABEL_ENV=COVERAGE TEST_BROWSER_DRIVER=puppeteer COVERAGE_VERBOSE=1 COVERAGE=1 COVERAGE_OUT_LCOVONLY=1 COVERAGE_APP_FOLDER=$(pwd)/ meteor test-packages --driver-package meteortesting:mocha ./packages/meteor-coverage"
+}
 ```
-The task `setup-test` is the cutting edge workaround that creates an empty meteor app that will run your test later.  
 
+The task `setup-test` is the cutting edge workaround that creates an empty meteor app that will run your test later.
 
 ### Specific setup for Typescript
 
-If you use Typescript, you cannot use babel to instrument your code, you need to rely on `lmieulet:meteor-legacy-coverage` (like packages).  
-The installation is almost the same as normal Meteor application, but you don't need to install all the babel stuff, you just need to run the following :
+If you use Typescript, you cannot use babel to instrument your code, you need to rely
+on `lmieulet:meteor-legacy-coverage` (like packages).  
+The installation is almost the same as normal Meteor application, but you don't need to install all the babel stuff, you
+just need to run the following :
 
 ```txt
 meteor add lmieulet:meteor-legacy-coverage
 ```
 
-You can look at the [deskoh/Meteor-React-Typescript-Starter](https://github.com/deskoh/Meteor-React-Typescript-Starter) if you need to see a working exemple.
+You can look at the [deskoh/Meteor-React-Typescript-Starter](https://github.com/deskoh/Meteor-React-Typescript-Starter)
+if you need to see a working exemple.
 
 ## Advanced setup for CI
 
@@ -216,23 +236,27 @@ Add this after tests execution:
 **Deprecated**
 You can provides settings by setting these environment variables:
 
--   `COVERAGE=1` to enable coverage
--   `COVERAGE_APP_FOLDER=/path/to/your/meteor/app/`  
-    -   Used to see if you have a customized `.coverage.json` file
-    -   Used by istanbul in reports if the file has source map
-    -   Needs to end with a trailing slash
-    -   Used when importing or exporting coverage reports
--   `COVERAGE_VERBOSE=1` to see logs (optional)
+- `COVERAGE=1` to enable coverage
+- `COVERAGE_APP_FOLDER=/path/to/your/meteor/app/`
+    - Used to see if you have a customized `.coverage.json` file
+    - Used by istanbul in reports if the file has source map
+    - Needs to end with a trailing slash
+    - Used when importing or exporting coverage reports
+- `COVERAGE_VERBOSE=1` to see logs (optional)
 
 ## Config file
 
-If you have packages used by your project (ex: aldeed:simple-schema) or libraries on your client side (ex: OpenLayers, Jquery), you can hide the coverage of these files from reports. You can specify which files will not be covered in a `.coverage.json` file inside the `COVERAGE_APP_FOLDER` folder.
+If you have packages used by your project (ex: aldeed:simple-schema) or libraries on your client side (ex: OpenLayers,
+Jquery), you can hide the coverage of these files from reports. You can specify which files will not be covered in
+a `.coverage.json` file inside the `COVERAGE_APP_FOLDER` folder.
 
-If you do not have this file, this package will use the default one (`conf/default-coverage.json`). If you do not define a key in the `.coverage.json` file, the default one will be used.
+If you do not have this file, this package will use the default one (`conf/default-coverage.json`). If you do not define
+a key in the `.coverage.json` file, the default one will be used.
 
-Exemple:  
+Example:
 
-```json{
+```json
+{
   "--": "Meteor app does not require any specific configuration",
   "--": "If you want to instrument a package, you need to add the following",
   "remapFormat": ["html", "cobertura", "clover", "json", "json-summary", "lcovonly", "teamcity", "text", "text-summary"],
@@ -242,46 +266,70 @@ Exemple:
 
 Details :
 
--   The glob syntax can be found [here](http://www.linuxjournal.com/content/bash-extended-globbing).
--   To create your custom config file, run the project with `COVERAGE_VERBOSE=1` env variable and use logs to see which filenames were hooked or hidden. PR welcome.
--   The output folder needs to starts with a dot to exclude that folder from Meteor build.
+- The glob syntax can be found [here](http://www.linuxjournal.com/content/bash-extended-globbing).
+- To create your custom config file, run the project with `COVERAGE_VERBOSE=1` env variable and use logs to see which
+  filenames were hooked or hidden. PR welcome.
+- The output folder needs to starts with a dot to exclude that folder from Meteor build.
 
 ## My files are missing from my app coverage report
 
-If you have **internal packages** inside your app and you want to get their **server side** coverage. Open the file `.meteor/packages` and move the line `lmieulet:meteor-coverage` to be above these packages.
+If you have **internal packages** inside your app and you want to get their **server side** coverage. Open the
+file `.meteor/packages` and move the line `lmieulet:meteor-coverage` to be above these packages.
 
 ## Meteor ignored folders and files
 
--   hidden folders like .npm, .coverage or .meteor.
--   special folders like node_modules.
--   all meteor packages (bundled and/or manually installed ones) like meteor/underscore, meteor/accounts-password or aldeed:simple-schema.
--   all tests file(s) containing `spec?|test?|specs?|tests?|app-specs?|app-tests?`  and all folder(s) named `specs?|tests?|app-specs?|app-tests?`
+- hidden folders like .npm, .coverage or .meteor.
+- special folders like node_modules.
+- all meteor packages (bundled and/or manually installed ones) like meteor/underscore, meteor/accounts-password or
+  aldeed:simple-schema.
+- all tests file(s) containing `spec?|test?|specs?|tests?|app-specs?|app-tests?`  and all folder(s)
+  named `specs?|tests?|app-specs?|app-tests?`
 
 ## How to use another test runner
 
-You can find [here](https://github.com/practicalmeteor/spacejam/compare/windows-suppport...serut:windows-suppport-rc4?diff=split&name=windows-suppport-rc4#diff-f388d8f4ed9765929079f40166396fdeR65) the diff between "spacejam without coverage" and "spacejam coverage", so you can build something else,  with grunt for example, that exports your test. meteortesting:mocha did also the same.
+You can
+find [here](https://github.com/practicalmeteor/spacejam/compare/windows-suppport...serut:windows-suppport-rc4?diff=split&name=windows-suppport-rc4#diff-f388d8f4ed9765929079f40166396fdeR65)
+the diff between "spacejam without coverage" and "spacejam coverage", so you can build something else, with grunt for
+example, that exports your test. meteortesting:mocha did also the same.
 
 ## I want my reports referred to my original source files
 
-If you are using a language that compiles to JavaScript (there are [lots of them](https://github.com/jashkenas/coffeescript/wiki/list-of-languages-that-compile-to-js)), you may want to see your coverage reports referred to the original source files (prior to compilation).
+If you are using a language that compiles to JavaScript (there
+are [lots of them](https://github.com/jashkenas/coffeescript/wiki/list-of-languages-that-compile-to-js)), you may want
+to see your coverage reports referred to the original source files (prior to compilation).
 
-To remap your source files, you have to provide the report type `out_remap` explicitly when using `spacejam`: `spacejam-mocha --coverage out_remap`
+To remap your source files, you have to provide the report type `out_remap` explicitly when
+using `spacejam`: `spacejam-mocha --coverage out_remap`
 
-You'll get your remapped coverage reports at `./.coverage/.remap` (or `custom_output/.remap` if you're customized the output folder through the file `.coverage.json`).
+You'll get your remapped coverage reports at `./.coverage/.remap` (or `custom_output/.remap` if you're customized the
+output folder through the file `.coverage.json`).
 
-The coverage is remapped to **all the available reports** (listed in the following example) by default. If you only want some of them, you need to request them explicitly through the key `remap.format` in `.coverage.json` like this:
+The coverage is remapped to **all the available reports** (listed in the following example) by default. If you only want
+some of them, you need to request them explicitly through the key `remap.format` in `.coverage.json` like this:
 
 ```json
 {
   "remap": {
-    "format": ["html", "clover", "cobertura", "json", "json-summary", "lcovonly", "teamcity", "text", "text-summary"]
+    "format": [
+      "html",
+      "clover",
+      "cobertura",
+      "json",
+      "json-summary",
+      "lcovonly",
+      "teamcity",
+      "text",
+      "text-summary"
+    ]
   }
 }
 ```
 
 If you want to remap the coverage with `Meteor.exportCoverage()`, then you must use the report type `remap`.
 
-This feature has only been tested with TypeScript, but it should work for any language compiled to JavaScript, just **make sure you generate source maps (\*.js.map) for all the compiled files and that source maps are located next to their respective compiled JavaScript file (\*.js)**, just like this:
+This feature has only been tested with TypeScript, but it should work for any language compiled to JavaScript, just *
+*make sure you generate source maps (\*.js.map) for all the compiled files and that source maps are located next to
+their respective compiled JavaScript file (\*.js)**, just like this:
 
     COVERAGE_APP_FOLDER
     ├── tsconfig.json
@@ -298,22 +346,27 @@ This feature has only been tested with TypeScript, but it should work for any la
 
 #### Meteor.sendCoverage(callback)
 
-Run the following command in your browser and the client coverage will be saved into the server coverage report.  
+Run the following command in your browser and the client coverage will be saved into the server coverage report.
 
 ```js
 Meteor.sendCoverage(function(stats,nbErr) {console.log(stats,nbErr);});
 ```
 
-Why? When a browser opens the client side of your application, this package intercepts all queries matching `*.js` to respond the instrumented version of the original script, if they are not ignored by the configuration file. All these instrumented scripts are autonomous and they save the coverage in a global variable when you execute a line of a file. This global variable needs to be sent back to the server to create a full coverage report.
+Why? When a browser opens the client side of your application, this package intercepts all queries matching `*.js` to
+respond the instrumented version of the original script, if they are not ignored by the configuration file. All these
+instrumented scripts are autonomous and they save the coverage in a global variable when you execute a line of a file.
+This global variable needs to be sent back to the server to create a full coverage report.
 
 #### Meteor.exportCoverage(type, callback)
 
--   type: the type of report you want to create inside your `COVERAGE_APP_FOLDER`
+- type: the type of report you want to create inside your `COVERAGE_APP_FOLDER`
 
-    -   Default: `coverage`, used to dump the coverage object in a file because when there are several types of test, we want to merge results, and the server reloads between each one.
-    -   Allowed values: `coverage`, `html`, `json`, `json-summary`, `lcovonly`, `remap`, `text-summary`
-    -   **Not working values:** `clover`, `cobertura`, `lcov`, `teamcity`, `text`, `text-lcov`, PR welcome
-    -   Except for `coverage`, the file generation is handled by  [istanbuljs/istanbul-reports](https://github.com/istanbuljs/istanbul-reports)
+    - Default: `coverage`, used to dump the coverage object in a file because when there are several types of test, we
+      want to merge results, and the server reloads between each one.
+    - Allowed values: `coverage`, `html`, `json`, `json-summary`, `lcovonly`, `remap`, `text-summary`
+    - **Not working values:** `clover`, `cobertura`, `lcov`, `teamcity`, `text`, `text-lcov`, PR welcome
+    - Except for `coverage`, the file generation is handled
+      by  [istanbuljs/istanbul-reports](https://github.com/istanbuljs/istanbul-reports)
 
 ```js
 Meteor.exportCoverage(null, function(err) {console.log(err)})
@@ -329,7 +382,7 @@ Meteor.importCoverage(function(err) {console.log(err)})
 
 ## Contributing
 
-Anyone is welcome to contribute.  
+Anyone is welcome to contribute.
 
     # You should fork this repo first
     git clone https://github.com/serut/meteor-coverage
@@ -345,8 +398,9 @@ Anyone is welcome to contribute.
 
 This package would not exist without the amazing work of:
 
--   [Contributors](https://github.com/serut/meteor-coverage/graphs/contributors) and testers for their help
--   [Xolv.io](http://xolv.io) and their work on the original [meteor-coverage](https://github.com/xolvio/meteor-coverage) package;
--   All contributors of [istanbuljs](https://github.com/istanbuljs/istanbuljs) project.
+- [Contributors](https://github.com/serut/meteor-coverage/graphs/contributors) and testers for their help
+- [Xolv.io](http://xolv.io) and their work on the original [meteor-coverage](https://github.com/xolvio/meteor-coverage)
+  package;
+- All contributors of [istanbuljs](https://github.com/istanbuljs/istanbuljs) project.
 
 All of them were very helpful in the development of this package. Merci !  

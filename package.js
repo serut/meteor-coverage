@@ -1,6 +1,6 @@
 Package.describe({
   name: 'lmieulet:meteor-coverage',
-  version: '4.3.0',
+  version: '5.0.0-rc.0',
   summary: 'Server and client coverage for Meteor',
   git: 'https://github.com/serut/meteor-coverage',
   documentation: 'README.md',
@@ -48,7 +48,7 @@ Package.onTest(function (api) {
   });
   api.use('ecmascript');
   api.use('lmieulet:meteor-legacy-coverage@0.4.0', 'server');
-  api.use(['lmieulet:meteor-coverage@4.3.0']);
+  api.use(['lmieulet:meteor-coverage@5.0.0-rc.0']);
   api.use(['meteortesting:mocha@3.0.0']);
   // New meteor 12/2018 unknown issue
   api.addFiles(['client/methods.e2e.tests.js', 'client/methods.unit.tests.js', 'client/client.instrumentation.tests.js'], 'client');
