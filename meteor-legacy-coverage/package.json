@@ -4,7 +4,7 @@
   "description": "Instrument packages files",
   "main": "server/index.js",
   "dependencies": {
-    "body-parser": "1.18.2",
+    "body-parser": "1.20.3",
     "homedir": "0.6.0",
     "istanbul-lib-coverage": "^2.0.1",
     "istanbul-lib-hook": "^2.0.1",
