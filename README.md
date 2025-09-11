@@ -2,7 +2,12 @@
 
 A meteor package that allows you to get the statement, line, function and branch coverage of Meteor project and package.
 
-This package uses the [istanbuljs](https://github.com/istanbuljs/istanbuljs) set of packages to generate reports. Starting from Meteor 1.8, this package does not instrument your code to get coverage as you can let babel do it using the [babel plugin istanbul](https://github.com/istanbuljs/babel-plugin-istanbul).
+This package uses the [istanbuljs](https://github.com/istanbuljs/istanbuljs) set of packages to generate reports. 
+
+Starting from Meteor 1.8, this package does not instrument your code to get coverage:
+* For Meteor < 3.3, you can let babel do it using the [babel plugin istanbul](https://github.com/istanbuljs/babel-plugin-istanbul).
+* For Meteor = 3.3 with new Meteor bundler (SWC) disabled, [babel plugin istanbul](https://github.com/istanbuljs/babel-plugin-istanbul) is still relevant
+* For Meteor >= 3.3 with new Meteor bundler (SWC) enable, use [swc-plugin-coverage-instrument](https://github.com/kwonoj/swc-plugin-coverage-instrument)
 
 It's a debug only package, so it does not affect your production build.
 
